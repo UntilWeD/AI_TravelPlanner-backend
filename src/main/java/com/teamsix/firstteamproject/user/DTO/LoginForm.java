@@ -1,4 +1,4 @@
-package com.teamsix.domain.user.DTO;
+package com.teamsix.firstteamproject.user.DTO;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
