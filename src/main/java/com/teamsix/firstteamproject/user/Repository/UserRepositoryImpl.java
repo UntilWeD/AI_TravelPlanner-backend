@@ -1,5 +1,6 @@
 package com.teamsix.firstteamproject.user.Repository;
 
+import com.teamsix.firstteamproject.user.DTO.RegistryForm;
 import com.teamsix.firstteamproject.user.Entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +21,16 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public User saveUser(User user) {
+    public RegistryForm saveUser(RegistryForm registryForm) {
         log.info("[UserRepository] Executing the saveUser method ");
 
-        String sql = "INSERT INTO user(email, pw, name) VALUES(?, ?, ?)";
+        String sql = "INSERT INTO user(id, email, pw, name) VALUES(?, ?, ?, ?)";
         jdbcTemplate.update(sql,
-                user.getId(), user.getEmail(), user.getPw(), user.getName());
+                registryForm.getId(), registryForm.getEmail(), registryForm.getPw(), registryForm.getName());
 
-        log.info("[UserRepository] We Saved this User = {}", user);
+        log.info("[UserRepository] We Saved this User = {}", registryForm);
 
-        return user;
+        return registryForm;
     }
 
     @Override

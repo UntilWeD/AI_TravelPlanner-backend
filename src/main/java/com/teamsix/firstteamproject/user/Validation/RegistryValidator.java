@@ -1,29 +1,30 @@
 package com.teamsix.firstteamproject.user.Validation;
 
+import com.teamsix.firstteamproject.user.DTO.RegistryForm;
 import com.teamsix.firstteamproject.user.Entity.User;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
-public class UserValidator implements Validator {
+public class RegistryValidator implements Validator {
     @Override
     public boolean supports(Class<?> clazz) {
-        return User.class.isAssignableFrom(clazz);
+        return RegistryForm.class.isAssignableFrom(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        User user = (User) target;
+        RegistryForm user = (RegistryForm) target;
 
-        //username
-        if(user.getName().length() > 10 || user.getName().length() <= 0){
-            errors.rejectValue("username", "length");
+        //name
+        if(user.getName().length() < 10 && user.getName().length() < 0){
+            errors.rejectValue("name", "length");
         }
 
-        //pasword
-        if(user.getPw().length() > 20 || user.getPw().length()  < 6){
-            errors.rejectValue("password", "length");
+        //pw
+        if(user.getPw().length() < 15 && user.getPw().length()  < 6){
+            errors.rejectValue("pw", "length");
         }
 
         //TODO

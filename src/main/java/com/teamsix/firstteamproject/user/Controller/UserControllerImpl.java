@@ -1,9 +1,9 @@
 package com.teamsix.firstteamproject.user.Controller;
 
 import com.teamsix.firstteamproject.user.DTO.LoginForm;
-import com.teamsix.firstteamproject.user.Entity.User;
+import com.teamsix.firstteamproject.user.DTO.RegistryForm;
 import com.teamsix.firstteamproject.user.Service.UserServiceImpl;
-import com.teamsix.firstteamproject.user.Validation.UserValidator;
+import com.teamsix.firstteamproject.user.Validation.RegistryValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,27 +22,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UserControllerImpl implements UserController{
 
     private final UserServiceImpl userService;
-    private final UserValidator userValidator;
+    private final RegistryValidator registryValidator;
 
 
     @ResponseBody
     @Override
     @PostMapping("/register")
-    public ResponseEntity<User> register(@ModelAttribute User user, BindingResult bindingResult, Model model) {
+    public ResponseEntity<RegistryForm> register(@ModelAttribute RegistryForm registryForm, BindingResult bindingResult, Model model) {
         log.info("[UserControllerImpl] Executing register method ");
 
-        userValidator.validate(user, bindingResult);
+        registryValidator.validate(registryForm, bindingResult);
 
         if(bindingResult.hasErrors()){
             log.info("The user registration information does not comply with the form! : {}", bindingResult);
             return ResponseEntity.badRequest().body(null);
         }
 
-        User savedUser = userService.register(user);
+        RegistryForm registeredUser = userService.register(registryForm);
 
-        model.addAttribute("user", savedUser);
+        model.addAttribute("user", registeredUser);
 
-        return ResponseEntity.ok(savedUser);
+        return ResponseEntity.ok(registeredUser);
     }
 
     @ResponseBody

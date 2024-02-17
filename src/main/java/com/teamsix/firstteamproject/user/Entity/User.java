@@ -1,11 +1,8 @@
 package com.teamsix.firstteamproject.user.Entity;
 
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+
 @Data
 public class User {
 

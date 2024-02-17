@@ -1,6 +1,7 @@
 package com.teamsix.firstteamproject.user.Service;
 
 import com.teamsix.firstteamproject.user.DTO.LoginForm;
+import com.teamsix.firstteamproject.user.DTO.RegistryForm;
 import com.teamsix.firstteamproject.user.Entity.User;
 import com.teamsix.firstteamproject.user.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +16,12 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
 
     @Override
-    public User register(User user) {
-        log.info("register user = {}", user);
+    public RegistryForm register(RegistryForm registryForm) {
+        log.info("register user = {}", registryForm);
 
-        User savedUser = userRepository.saveUser(user);
+        RegistryForm registedUser = userRepository.saveUser(registryForm);
 
-        return savedUser;
+        return registedUser;
     }
 
     @Override
