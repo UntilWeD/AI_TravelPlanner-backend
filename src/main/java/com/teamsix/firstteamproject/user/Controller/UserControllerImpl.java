@@ -7,7 +7,6 @@ import com.teamsix.firstteamproject.user.Validation.RegistryValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +25,7 @@ public class UserControllerImpl implements UserController{
     @Override
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/register")
-    public ResponseEntity<RegistryForm> register(@ModelAttribute RegistryForm registryForm, BindingResult bindingResult, Model model) {
+    public ResponseEntity<RegistryForm> register(@RequestBody RegistryForm registryForm, BindingResult bindingResult, Model model) {
         log.info("[UserControllerImpl] Executing register method ");
         log.info("[UserControllerImpl] {} ", registryForm.toString());
 
@@ -49,8 +48,6 @@ public class UserControllerImpl implements UserController{
     @PostMapping("/login")
     public String login(@ModelAttribute("loginForm") LoginForm loginForm, BindingResult bindingResult) {
         log.info("로그인 컨트롤러 메서드 실행 loginForm : {}", loginForm);
-
-
 
 
         return null;
