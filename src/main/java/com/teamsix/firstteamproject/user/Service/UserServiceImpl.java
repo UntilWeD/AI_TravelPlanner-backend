@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -25,9 +27,24 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User login(LoginForm loginForm) {
+    public Optional<User> login(LoginForm loginForm) {
+        Optional<User> loginUser = userRepository.findUserByEmail(loginForm.email);
 
-        return null;
+        //TODO
+        //Spring에서 배운거 써먹기 (validator, error) 사용하기
+        if(loginUser.get() == null){
+            log.info("해당 데이터 베이스에 없는 사용자 id입니다. ");
+            return null;
+        }
+
+        if(loginUser.get().getPw().equals(loginForm.pw)){
+            log.info("Login Successfull!");
+            return loginUser;
+        } else {
+            log.info("Login Failed!..");
+            return null;
+        }
+
     }
 
     @Override
