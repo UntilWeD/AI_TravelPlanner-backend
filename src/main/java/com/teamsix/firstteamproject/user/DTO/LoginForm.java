@@ -11,4 +11,5 @@ public class LoginForm {
 
     @NotBlank
     public String pw;
+
 }
