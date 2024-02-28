@@ -6,6 +6,7 @@ import com.teamsix.firstteamproject.user.Entity.User;
 import com.teamsix.firstteamproject.user.Service.UserServiceImpl;
 import com.teamsix.firstteamproject.user.Validation.RegistryValidator;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,6 @@ public class UserControllerImpl implements UserController{
 
     @ResponseBody
     @Override
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/register")
     public ResponseEntity<RegistryForm> register(@RequestBody RegistryForm registryForm, BindingResult bindingResult) {
         log.info("[UserControllerImpl] Executing register method ");
@@ -48,8 +48,8 @@ public class UserControllerImpl implements UserController{
     @ResponseBody
     @Override
     @PostMapping("/login")
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    public ResponseEntity<User> login(@RequestBody LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request) {
+    public ResponseEntity<User> login(@RequestBody LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request,
+    HttpServletResponse response) {
         log.info("로그인 컨트롤러 메서드 실행 loginForm : {}", loginForm);
 
         Optional<User> loginedUser = userService.login(loginForm);
@@ -63,6 +63,8 @@ public class UserControllerImpl implements UserController{
 
             session.setAttribute("loginedUser", loginedUser.get());
             session.setMaxInactiveInterval(1800);
+
+            log.info("response = {}",response);
 
             return ResponseEntity.ok().body(loginedUser.get());
         }
