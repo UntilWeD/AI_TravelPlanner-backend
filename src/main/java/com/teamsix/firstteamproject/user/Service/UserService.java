@@ -10,5 +10,8 @@ public interface UserService {
     public RegistryForm register(RegistryForm registryForm);
     public Optional<User> login(LoginForm loginForm);
     public void logout(User user);
+    public Optional<User> setEmailVerify(Long userId);
+
+
 
 }

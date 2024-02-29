@@ -60,5 +60,26 @@ public class UserRepositoryImpl implements UserRepository{
         return findUser;
     }
 
+    @Override
+    public Optional<User> setEmailVerifiedById(Long userId) {
+        log.info("[UserRepository] setEmailVerifiedById Method is Executing.. Id : {}", userId);
+
+        String sql = "UPDATE user SET email_verification= true WHERE id = ? AND emailVerified = false";
+        jdbcTemplate.update(sql, userId);
+
+        log.info("Value is changed");
+
+        sql = "SELECT * FROM user WHERE number = ?";
+        Optional<User> findUser = null;
+
+        try{
+            findUser = Optional.of(jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), userId));
+            return findUser;
+        } catch (Exception e){
+            log.info("[UserRepostiory] While finding findUser, Error appeared...");
+            return Optional.empty();
+        }
+    }
+
 
 }

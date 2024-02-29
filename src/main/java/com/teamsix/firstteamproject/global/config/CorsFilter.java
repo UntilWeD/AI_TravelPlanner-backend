@@ -7,8 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Collection;
 
-@Component
+//@Component
 @Slf4j
 public class CorsFilter implements Filter {
     @Override
@@ -30,6 +31,13 @@ public class CorsFilter implements Filter {
 
         log.info(" response = {}", response);
         log.info(" res = {}", res);
+
+        log.info("=== HTTP Response Headers ===");
+        Collection<String> headerNames = response.getHeaderNames();
+        for (String headerName : headerNames) {
+            log.info("{}: {}", headerName, response.getHeader(headerName));
+        }
+        log.info("=============================");
 
         if("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);

@@ -12,4 +12,7 @@ public interface UserRepository {
     public User deleteUser(User user);
 
     public Optional<User> findUserByEmail(String email);
+
+    //다른기능
+    public Optional<User> setEmailVerifiedById(Long userId);
 }

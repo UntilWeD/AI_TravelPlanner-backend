@@ -59,10 +59,6 @@ public class UserControllerImpl implements UserController{
             return ResponseEntity.badRequest().body(null);
         } else{
             log.info("[UserControllerImpl] Login Sucessful");
-            HttpSession session = request.getSession(true);
-
-            session.setAttribute("loginedUser", loginedUser.get());
-            session.setMaxInactiveInterval(1800);
 
             log.info("response = {}",response);
 

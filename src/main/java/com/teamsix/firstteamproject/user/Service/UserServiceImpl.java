@@ -52,4 +52,16 @@ public class UserServiceImpl implements UserService{
 
 
     }
+
+    @Override
+    public Optional<User> setEmailVerify(Long userId) {
+        log.info("[UserService] setEmailVerify Method is Executing...");
+        Optional<User> findUser = userRepository.setEmailVerifiedById(userId);
+
+        if(findUser.isEmpty()){
+            log.info("해당 유저는 존재하지 않습니다.");
+            return null;
+        }
+        return findUser;
+    }
 }
