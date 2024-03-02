@@ -8,9 +8,6 @@ import lombok.Getter;
 @Data
 public class RegistryForm {
 
-    @Null
-    private Long id;
-
     @NotNull
     private String name;
 

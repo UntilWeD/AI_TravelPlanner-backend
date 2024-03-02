@@ -8,12 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/user")
 @Slf4j
 @Validated
@@ -44,6 +41,16 @@ public class EmailControllerImpl implements EmailController {
     @PostMapping("/resend-email")
     public ResponseEntity resendEmail(@RequestBody String email){
         log.info("[EmailController] User's request to resend email.");
+
+        emailTokenService.resendEmailToken(email);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @Override
+    @GetMapping ("/send-email")
+    public ResponseEntity sendEmail(@RequestBody String email){
+        log.info("[EmailController] User's request to send email.");
 
         emailTokenService.resendEmailToken(email);
 
