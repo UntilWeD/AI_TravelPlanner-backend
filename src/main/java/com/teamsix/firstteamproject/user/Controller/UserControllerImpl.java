@@ -29,7 +29,7 @@ public class UserControllerImpl implements UserController{
     @ResponseBody
     @Override
     @PostMapping("/register")
-    public ResponseEntity<RegistryForm> register(@RequestBody RegistryForm registryForm, BindingResult bindingResult) {
+    public ResponseEntity<RegistryForm> register(@ModelAttribute RegistryForm registryForm, BindingResult bindingResult) {
         log.info("[UserControllerImpl] Executing register method ");
         log.info("[UserControllerImpl] {} ", registryForm.toString());
 

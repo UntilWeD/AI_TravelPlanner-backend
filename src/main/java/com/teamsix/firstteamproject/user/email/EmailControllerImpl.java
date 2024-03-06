@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
+
 @RestController
 @RequestMapping("/user")
 @Slf4j
@@ -51,9 +53,25 @@ public class EmailControllerImpl implements EmailController {
     @GetMapping ("/send-email")
     public ResponseEntity sendEmail(@RequestBody String email){
         log.info("[EmailController] User's request to send email.");
+        try{
+            email = extractEmail(URLDecoder.decode(email, "UTF-8"));
+        } catch (Exception e){
+            log.info("[EmailControllerImpl] 디코딩 중 에러발생");
+        }
 
         emailTokenService.resendEmailToken(email);
 
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    public static String extractEmail(String input) {
+        // 입력 문자열이 null이거나 "email="을 포함하지 않으면 입력 문자열 그대로 반환
+        if (input == null || !input.contains("email=")) {
+            return input;
+        }
+
+        // "email=" 다음의 문자열을 추출하여 반환
+        int startIndex = input.indexOf("email=") + "email=".length();
+        return input.substring(startIndex);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.net.URLDecoder;
 import java.util.Optional;
 
 @Repository
@@ -49,9 +50,11 @@ public class UserRepositoryImpl implements UserRepository{
     public Optional<User> findUserByEmail(String email) {
         String sql = "SELECT * FROM user WHERE email = ?";
 
+
         Optional<User> findUser =null;
 
         try{
+            log.info("{}", URLDecoder.decode(email, "UTF-8"));
             findUser = Optional.of(jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), email));
         } catch (Exception ex){
             log.info("[유저리포지토리] findUser를 찾는 도중 오류가 발생하였습니다.");
