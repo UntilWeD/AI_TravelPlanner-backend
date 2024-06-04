@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,7 +57,7 @@ public class EmailControllerImpl implements EmailController {
         try{
             email = extractEmail(URLDecoder.decode(email, "UTF-8"));
         } catch (Exception e){
-            log.info("[EmailControllerImpl] 디코딩 중 에러발생");
+            log.info("[EmailController] 디코딩 중 에러발생");
         }
 
         emailTokenService.resendEmailToken(email);
@@ -73,5 +74,20 @@ public class EmailControllerImpl implements EmailController {
         // "email=" 다음의 문자열을 추출하여 반환
         int startIndex = input.indexOf("email=") + "email=".length();
         return input.substring(startIndex);
+    }
+
+
+    // 아이디 및 비밀번호 찾는 메서드들
+
+    @Override
+    public ResponseEntity findPasswordByEmail(String email, BindingResult bindingResult) {
+        log.info("[EmailController]findPasswordByEmail is Executing...");
+
+
+
+
+
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

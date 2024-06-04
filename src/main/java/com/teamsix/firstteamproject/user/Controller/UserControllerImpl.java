@@ -7,7 +7,6 @@ import com.teamsix.firstteamproject.user.Service.UserServiceImpl;
 import com.teamsix.firstteamproject.user.Validation.RegistryValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +29,8 @@ public class UserControllerImpl implements UserController{
     @Override
     @PostMapping("/register")
     public ResponseEntity<RegistryForm> register(@ModelAttribute RegistryForm registryForm, BindingResult bindingResult) {
-        log.info("[UserControllerImpl] Executing register method ");
-        log.info("[UserControllerImpl] {} ", registryForm.toString());
+        log.info("[UserController] Executing register method ");
+        log.info("[UserController] {} ", registryForm.toString());
 
         registryValidator.validate(registryForm, bindingResult);
 
@@ -66,4 +65,8 @@ public class UserControllerImpl implements UserController{
         }
 
     }
+
+
+
+
 }

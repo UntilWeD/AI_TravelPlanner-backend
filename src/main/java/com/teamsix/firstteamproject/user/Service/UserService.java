@@ -13,5 +13,4 @@ public interface UserService {
     public Optional<User> setEmailVerify(Long userId);
 
 
-
 }
