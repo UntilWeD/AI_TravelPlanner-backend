@@ -2,11 +2,16 @@ package com.teamsix.firstteamproject.user.Service;
 
 import com.teamsix.firstteamproject.user.DTO.LoginForm;
 import com.teamsix.firstteamproject.user.DTO.RegistryForm;
+import com.teamsix.firstteamproject.user.Entity.JwtToken;
 import com.teamsix.firstteamproject.user.Entity.User;
 import com.teamsix.firstteamproject.user.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -14,7 +19,8 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService{
-
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
 
     @Override
@@ -26,24 +32,23 @@ public class UserServiceImpl implements UserService{
         return registedUser;
     }
 
+    @Transactional
     @Override
-    public Optional<User> login(LoginForm loginForm) {
-        Optional<User> loginUser = userRepository.findUserByEmail(loginForm.email);
+    public JwtToken signIn(LoginForm loginForm) {
 
-        //TODO
-        //Spring에서 배운거 써먹기 (validator, error) 사용하기
-        if(loginUser.get() == null){
-            log.info("해당 데이터 베이스에 없는 사용자 id입니다. ");
-            return null;
-        }
+        //1. username + password를 기반으로 Authentication 객체 생성
+        //이때 authentication은 인증 여부를 확인하는 authenticated 값이 false
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginForm.email, loginForm.pw);
 
-        if(loginUser.get().getPw().equals(loginForm.pw)){
-            log.info("Login Successfull!");
-            return loginUser;
-        } else {
-            log.info("Login Failed!..");
-            return null;
-        }
+        //2. 실제 검증. authenticate() 메서드를 통해 요청된 User에 대한 검증 진행
+        // authenticated메서드가 실행될 때 CustomUserDetailsService에서 만든 loadUserByUsername 메서드 실행
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        //3. 인증 정보를 기반으로 JWT 토큰 생성
+        JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
+
+        return jwtToken;
 
     }
 

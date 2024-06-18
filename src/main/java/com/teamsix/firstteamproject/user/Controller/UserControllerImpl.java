@@ -2,6 +2,7 @@ package com.teamsix.firstteamproject.user.Controller;
 
 import com.teamsix.firstteamproject.user.DTO.LoginForm;
 import com.teamsix.firstteamproject.user.DTO.RegistryForm;
+import com.teamsix.firstteamproject.user.Entity.JwtToken;
 import com.teamsix.firstteamproject.user.Entity.User;
 import com.teamsix.firstteamproject.user.Service.UserServiceImpl;
 import com.teamsix.firstteamproject.user.Validation.RegistryValidator;
@@ -46,12 +47,12 @@ public class UserControllerImpl implements UserController{
 
     @ResponseBody
     @Override
-    @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request,
-    HttpServletResponse response) {
+    @PostMapping("/signIn")
+    public ResponseEntity<User> signIn(@RequestBody LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request,
+                                       HttpServletResponse response) {
         log.info("로그인 컨트롤러 메서드 실행 loginForm : {}", loginForm);
 
-        Optional<User> loginedUser = userService.login(loginForm);
+        JwtToken jwtToken = userService.signIn(loginForm);
 
         if(loginedUser == null){
             log.info("[UserControllerImpl] Login Error");
