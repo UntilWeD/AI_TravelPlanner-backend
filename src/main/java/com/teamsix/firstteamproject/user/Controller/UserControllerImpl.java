@@ -48,23 +48,14 @@ public class UserControllerImpl implements UserController{
     @ResponseBody
     @Override
     @PostMapping("/signIn")
-    public ResponseEntity<User> signIn(@RequestBody LoginForm loginForm, BindingResult bindingResult, HttpServletRequest request,
-                                       HttpServletResponse response) {
+    public ResponseEntity<JwtToken> signIn(@RequestBody LoginForm loginForm, BindingResult bindingResult) {
         log.info("로그인 컨트롤러 메서드 실행 loginForm : {}", loginForm);
 
         JwtToken jwtToken = userService.signIn(loginForm);
 
-        if(loginedUser == null){
-            log.info("[UserControllerImpl] Login Error");
-            return ResponseEntity.badRequest().body(null);
-        } else{
-            log.info("[UserControllerImpl] Login Sucessful");
+        log.info("jwtToken accessToken = {}, refreshToken = {}", jwtToken.getAccessToken(), jwtToken.getRefreshToken());
 
-            log.info("response = {}",response);
-
-            return ResponseEntity.ok().body(loginedUser.get());
-        }
-
+        return ResponseEntity.ok().body(jwtToken);
     }
 
 

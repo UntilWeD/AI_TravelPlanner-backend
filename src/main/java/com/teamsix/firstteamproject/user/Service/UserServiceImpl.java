@@ -20,7 +20,7 @@ import java.util.Optional;
 @Slf4j
 public class UserServiceImpl implements UserService{
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
 
     @Override

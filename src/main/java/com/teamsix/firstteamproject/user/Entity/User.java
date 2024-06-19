@@ -1,9 +1,7 @@
 package com.teamsix.firstteamproject.user.Entity;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.FetchType;
-import lombok.Builder;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,9 +12,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+
+@AllArgsConstructor
+@Getter
 @Builder
-@Data
+@Setter
 public class User implements UserDetails {
+
+
 
     //유저 식별번호
     private Long id;
@@ -27,6 +30,8 @@ public class User implements UserDetails {
     //로그인에 사용
     private String email;
     private String pw;
+
+    private boolean email_verification;
 
 
     @Builder.Default
@@ -51,7 +56,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return email;
     }
 
     @Override

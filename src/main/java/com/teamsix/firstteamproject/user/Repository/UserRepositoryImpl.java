@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -53,11 +54,17 @@ public class UserRepositoryImpl implements UserRepository{
 
         Optional<User> findUser =null;
 
+
         try{
-            log.info("{}", URLDecoder.decode(email, "UTF-8"));
-            findUser = Optional.of(jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), email));
+            String queryEmail = URLDecoder.decode(email, "UTF-8");
+            log.info("queryemail = {} ", queryEmail);
+            findUser = Optional.of(jdbcTemplate.queryForObject(sql, new UserRowMapper(), queryEmail));
+
+            log.info("email = {} ", findUser.get().getEmail());
+            log.info("pw = {} ", findUser.get().getPw());
         } catch (Exception ex){
             log.info("[유저리포지토리] findUser를 찾는 도중 오류가 발생하였습니다.");
+            log.info("Error :  ", ex);
         }
 
         return findUser;
@@ -83,6 +90,8 @@ public class UserRepositoryImpl implements UserRepository{
             return Optional.empty();
         }
     }
+
+
 
 
 }
