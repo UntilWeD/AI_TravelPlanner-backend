@@ -1,5 +1,6 @@
 package com.teamsix.firstteamproject.user.Controller;
 
+import com.teamsix.firstteamproject.global.util.SecurityUtil;
 import com.teamsix.firstteamproject.user.DTO.LoginForm;
 import com.teamsix.firstteamproject.user.DTO.RegistryForm;
 import com.teamsix.firstteamproject.user.Entity.JwtToken;
@@ -24,6 +25,11 @@ public class UserControllerImpl implements UserController{
 
     private final UserServiceImpl userService;
     private final RegistryValidator registryValidator;
+
+    @GetMapping("/test")
+    public String test(){
+        return SecurityUtil.getCurrentUsername();
+    }
 
 
     @ResponseBody
