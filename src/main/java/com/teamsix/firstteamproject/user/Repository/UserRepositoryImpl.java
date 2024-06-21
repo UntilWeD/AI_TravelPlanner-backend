@@ -28,9 +28,9 @@ public class UserRepositoryImpl implements UserRepository{
     public RegistryForm saveUser(RegistryForm registryForm) {
         log.info("[UserRepository] Executing the saveUser method ");
 
-        String sql = "INSERT INTO user(id, email, pw, name) VALUES(?, ?, ?, ?)";
+        String sql = "INSERT INTO user(id, email, pw, name, email_verification, roles) VALUES(?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,
-                null, registryForm.getEmail(), registryForm.getPw(), registryForm.getName());
+                null, registryForm.getEmail(), registryForm.getPw(), registryForm.getName(), null, "USER");
 
         log.info("[UserRepository] We Saved this User = {}", registryForm);
 

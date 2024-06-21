@@ -10,9 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -22,12 +22,17 @@ public class UserServiceImpl implements UserService{
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public RegistryForm register(RegistryForm registryForm) {
         log.info("register user = {}", registryForm);
 
+        //닉네임 중복 체크 메서드 필요(나중에 jpa로?)
+
+        registryForm.setPw(passwordEncoder.encode(registryForm.getPw()));
         RegistryForm registedUser = userRepository.saveUser(registryForm);
+
 
         return registedUser;
     }

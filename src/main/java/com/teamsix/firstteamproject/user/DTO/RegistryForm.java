@@ -2,10 +2,12 @@ package com.teamsix.firstteamproject.user.DTO;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 @Data
+@ToString
+@Builder
+@AllArgsConstructor
 public class RegistryForm {
 
     @NotNull
@@ -17,4 +19,5 @@ public class RegistryForm {
 
     @NotNull
     private String pw;
+
 }
