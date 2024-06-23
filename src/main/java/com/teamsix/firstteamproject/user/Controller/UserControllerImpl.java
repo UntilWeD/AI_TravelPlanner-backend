@@ -4,18 +4,14 @@ import com.teamsix.firstteamproject.global.util.SecurityUtil;
 import com.teamsix.firstteamproject.user.DTO.LoginForm;
 import com.teamsix.firstteamproject.user.DTO.RegistryForm;
 import com.teamsix.firstteamproject.user.Entity.JwtToken;
-import com.teamsix.firstteamproject.user.Entity.User;
 import com.teamsix.firstteamproject.user.Service.UserServiceImpl;
 import com.teamsix.firstteamproject.user.Validation.RegistryValidator;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 
 @Slf4j
 @RequestMapping("/user")
@@ -35,7 +31,7 @@ public class UserControllerImpl implements UserController{
     @ResponseBody
     @Override
     @PostMapping("/register")
-    public ResponseEntity<RegistryForm> register(@ModelAttribute RegistryForm registryForm, BindingResult bindingResult) {
+    public ResponseEntity<RegistryForm> register(@RequestBody RegistryForm registryForm, BindingResult bindingResult) {
         log.info("[UserController] Executing register method ");
         log.info("[UserController] {} ", registryForm.toString());
 
