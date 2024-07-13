@@ -49,10 +49,6 @@ class UserControllerImplTest {
     }
 
     @Test
-    void test1() {
-    }
-
-    @Test
     void register() {
         //API 요청설정
         String url = "http://localhost:" + randomServerPort + "/user/registry";

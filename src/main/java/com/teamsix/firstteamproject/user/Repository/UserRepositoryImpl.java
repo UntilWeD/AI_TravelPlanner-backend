@@ -32,7 +32,7 @@ public class UserRepositoryImpl implements UserRepository{
         log.info("[UserRepository] Executing the saveUser method ");
 
         String sql = "INSERT INTO user(id, email, pw, name, email_verification, roles) " +
-                "VALUES(:id, :email, :pw, :name, :email_verification, roles)";
+                "VALUES(:id, :email, :pw, :name, :email_verification, :roles)";
 
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("email", registryForm.getEmail())
@@ -86,7 +86,7 @@ public class UserRepositoryImpl implements UserRepository{
 
         log.info("Value is changed");
 
-        sql = "SELECT * FROM user WHERE number = ?";
+        sql = "SELECT * FROM user WHERE id = :userId";
 
         try{
             Optional<User> findUser = Optional.of(template.queryForObject(sql, param, new BeanPropertyRowMapper<>(User.class)));
