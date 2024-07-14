@@ -1,6 +1,6 @@
 package com.teamsix.firstteamproject.user.email;
 
-import com.teamsix.firstteamproject.user.Repository.UserRepository;
+import com.teamsix.firstteamproject.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;

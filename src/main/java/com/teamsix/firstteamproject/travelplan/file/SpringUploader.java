@@ -1,6 +1,6 @@
 package com.teamsix.firstteamproject.travelplan.file;
 
-import com.teamsix.firstteamproject.travelplan.DTO.UploadFile;
+import com.teamsix.firstteamproject.travelplan.dto.UploadFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

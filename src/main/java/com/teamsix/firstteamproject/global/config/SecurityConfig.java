@@ -1,7 +1,7 @@
 package com.teamsix.firstteamproject.global.config;
 
-import com.teamsix.firstteamproject.user.Service.JwtAuthenticationFilter;
-import com.teamsix.firstteamproject.user.Service.JwtTokenProvider;
+import com.teamsix.firstteamproject.user.service.JwtAuthenticationFilter;
+import com.teamsix.firstteamproject.user.service.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +35,7 @@ public class SecurityConfig {
                             // 해당 API에 대해서는 모든 요청을 허가
                             .requestMatchers("/user/signIn").permitAll()
                             .requestMatchers("/user/register").permitAll()
+                            .requestMatchers("/travelplan/*").permitAll()
                             // USER 권한이 있어야 요청할 수 있음
                             .requestMatchers("/user/test").hasRole("USER")
                             // 이 밖에 모든 요청에 대해서 인증을 필요로 한다는 설정

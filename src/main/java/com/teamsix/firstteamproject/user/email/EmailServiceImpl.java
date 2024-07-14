@@ -1,8 +1,8 @@
 package com.teamsix.firstteamproject.user.email;
 
-import com.teamsix.firstteamproject.user.Entity.User;
-import com.teamsix.firstteamproject.user.Repository.UserRepository;
-import com.teamsix.firstteamproject.user.Service.UserService;
+import com.teamsix.firstteamproject.user.entity.User;
+import com.teamsix.firstteamproject.user.repository.UserRepository;
+import com.teamsix.firstteamproject.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
