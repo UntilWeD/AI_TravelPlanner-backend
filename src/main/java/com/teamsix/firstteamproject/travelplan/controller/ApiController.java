@@ -1,6 +1,7 @@
 package com.teamsix.firstteamproject.travelplan.controller;
 
 import com.teamsix.firstteamproject.travelplan.dto.Restaurant.RestaurantCond;
+import com.teamsix.firstteamproject.travelplan.dto.Restaurant.RestaurantResponse;
 import com.teamsix.firstteamproject.travelplan.service.RestaurantApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,18 +12,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/travelplan")
+
 public class ApiController {
 
     @Autowired
     private RestaurantApiService restaurantApiService;
 
     @PostMapping("/restaurant")
-    public ResponseEntity<String> restaurantRequest(@RequestBody RestaurantCond restaurantCond){
 
-        String result = restaurantApiService.getRestaurantDetails(restaurantCond);
+    public ResponseEntity<RestaurantResponse> restaurantRequest(@RequestBody RestaurantCond restaurantCond){
 
 
-        return ResponseEntity.ok(result);
+        RestaurantResponse restaurantResponse = restaurantApiService.getRestaurantDetails(restaurantCond);
+        return ResponseEntity.ok().body(restaurantResponse);
     }
 
 

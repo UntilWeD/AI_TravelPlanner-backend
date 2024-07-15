@@ -1,23 +1,58 @@
 package com.teamsix.firstteamproject.travelplan.service;
 
 import com.teamsix.firstteamproject.travelplan.dto.Restaurant.RestaurantCond;
+import com.teamsix.firstteamproject.travelplan.dto.Restaurant.RestaurantDto;
+import com.teamsix.firstteamproject.travelplan.dto.Restaurant.RestaurantResponse;
 import com.teamsix.firstteamproject.travelplan.util.WebClientUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestTemplate;
+
+import org.springframework.web.util.UriComponentsBuilder;
+
 
 @Service
+@Slf4j
 public class RestaurantApiService {
 
+    @Value("${restaurantApi.serviceKey}")
+    private String serviceKey;
+
+    @Value("${restaurantApi.baseUrl}")
+    private String baseUrl;
+
+    private final RestTemplate restTemplate;
+
+    public RestaurantApiService(RestTemplateBuilder builder) {
+        restTemplate = builder.build();
+    }
+
+    public RestaurantResponse getRestaurantDetails(RestaurantCond rCond){
+
+        String url = UriComponentsBuilder.fromHttpUrl(baseUrl)
+                .queryParam("serviceKey", serviceKey)
+                .queryParam("numOfRows", rCond.getNumOfRows())
+                .queryParam("pageNo", rCond.getPageNo())
+                .queryParam("areaNm", rCond.getAreaNm())
+                .queryParam("clNm", rCond.getClNm())
+                .build().toUriString();
 
 
-    private String serviceKey = "f2e31414-ca97-44d0-bd13-847862a15093";
+        return restTemplate.getForObject(url, RestaurantResponse.class);
 
 
-    public String getRestaurantDetails(RestaurantCond rCond){
+    }
+
+
+    /*
+    public void getRestaurantDetails(RestaurantCond rCond){
 
         WebClient webClient = WebClientUtil.getBaseUrl("http://api.kcisa.kr/openapi/API_CNV_063/request");
 
-        return webClient.get()
+        Mono<RestaurantResponse> restaurantResponseMonoList = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .queryParam("serviceKey", serviceKey)
                         .queryParam("numOfRows", rCond.getNumOfRows())
@@ -25,10 +60,13 @@ public class RestaurantApiService {
                         .queryParam("areaNm", rCond.getAreaNm())
                         .queryParam("clNm", rCond.getClNm()).build())
                 .retrieve()
-                .bodyToMono(String.class)
-                .block();
+                .bodyToMono(RestaurantResponse.class);
+
+        Flux<RestaurantDto> restaurantFlux = restaurantResponseMonoList
+                .flatMapIterable(response -> response.getBody().getItems().getItem());
 
 
     }
+    */
 
 }
