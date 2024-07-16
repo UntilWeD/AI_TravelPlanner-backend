@@ -1,13 +1,10 @@
 package com.teamsix.firstteamproject.travelplan.service;
 
-import com.teamsix.firstteamproject.travelplan.dto.Restaurant.RestaurantCond;
-import com.teamsix.firstteamproject.travelplan.dto.Restaurant.RestaurantDto;
-import com.teamsix.firstteamproject.travelplan.dto.Restaurant.RestaurantResponse;
-import com.teamsix.firstteamproject.travelplan.util.WebClientUtil;
+import com.teamsix.firstteamproject.travelplan.dto.restaurant.RestaurantCond;
+import com.teamsix.firstteamproject.travelplan.dto.restaurant.RestaurantResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -40,10 +37,7 @@ public class RestaurantApiService {
                 .queryParam("clNm", rCond.getClNm())
                 .build().toUriString();
 
-
         return restTemplate.getForObject(url, RestaurantResponse.class);
-
-
     }
 
 

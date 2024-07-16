@@ -1,30 +1,43 @@
 package com.teamsix.firstteamproject.travelplan.controller;
 
-import com.teamsix.firstteamproject.travelplan.dto.Restaurant.RestaurantCond;
-import com.teamsix.firstteamproject.travelplan.dto.Restaurant.RestaurantResponse;
+
+import com.teamsix.firstteamproject.travelplan.dto.amadeus.AmadeusAccessToken;
+import com.teamsix.firstteamproject.travelplan.dto.amadeus.AmadeusCond;
+import com.teamsix.firstteamproject.travelplan.dto.amadeus.FlightResponse;
+import com.teamsix.firstteamproject.travelplan.dto.restaurant.RestaurantCond;
+import com.teamsix.firstteamproject.travelplan.dto.restaurant.RestaurantResponse;
+import com.teamsix.firstteamproject.travelplan.service.AmadeusApiService;
 import com.teamsix.firstteamproject.travelplan.service.RestaurantApiService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
-@Controller
+@RestController
 @RequestMapping("/travelplan")
-
+@Slf4j
 public class ApiController {
 
-    @Autowired
-    private RestaurantApiService restaurantApiService;
+    private final RestaurantApiService restaurantApiService;
+    private final AmadeusApiService amadeusApiService;
+
+
+    public ApiController(RestaurantApiService restaurantApiService, AmadeusApiService amadeusApiService) {
+        this.restaurantApiService = restaurantApiService;
+        this.amadeusApiService = amadeusApiService;
+    }
+
+
 
     @PostMapping("/restaurant")
-
     public ResponseEntity<RestaurantResponse> restaurantRequest(@RequestBody RestaurantCond restaurantCond){
+        return ResponseEntity.ok().body(restaurantApiService.getRestaurantDetails(restaurantCond));
+    }
 
-
-        RestaurantResponse restaurantResponse = restaurantApiService.getRestaurantDetails(restaurantCond);
-        return ResponseEntity.ok().body(restaurantResponse);
+    @PostMapping("flight-offers")
+    public Mono<FlightResponse> flightRequest(@RequestBody AmadeusCond cond){
+        log.info("[flightRequest] method Start!");
+        return amadeusApiService.getFlightOffers(cond);
     }
 
 

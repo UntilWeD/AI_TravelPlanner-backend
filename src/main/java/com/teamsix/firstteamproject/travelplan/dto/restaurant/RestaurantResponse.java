@@ -1,4 +1,4 @@
-package com.teamsix.firstteamproject.travelplan.dto.Restaurant;
+package com.teamsix.firstteamproject.travelplan.dto.restaurant;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -54,7 +54,6 @@ public class RestaurantResponse {
     public static class Items {
         private List<Item> item;
 
-        // getters and setters
     }
 
     @Getter

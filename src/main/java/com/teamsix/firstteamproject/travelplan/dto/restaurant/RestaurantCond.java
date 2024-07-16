@@ -1,4 +1,4 @@
-package com.teamsix.firstteamproject.travelplan.dto.Restaurant;
+package com.teamsix.firstteamproject.travelplan.dto.restaurant;
 
 import lombok.Builder;
 import lombok.Getter;
