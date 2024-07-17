@@ -4,6 +4,7 @@ package com.teamsix.firstteamproject.travelplan.dto.amadeus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -29,10 +30,17 @@ public class AmadeusAccessToken {
     private String access_token;
 
     //만료일
-    private String expires_in;
+    private long expires_in;
 
     //상태 (approved, expired)
     private String state;
     private String scope;
+
+    private Instant issuedAt; // 토큰이 발급된 시각 ( epoch 시각 )
+
+
+    public boolean isExpired(){
+        return issuedAt.plusSeconds(expires_in).isBefore(Instant.now());
+    }
 
 }

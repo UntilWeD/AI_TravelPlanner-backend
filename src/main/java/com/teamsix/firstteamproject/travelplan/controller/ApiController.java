@@ -1,7 +1,6 @@
 package com.teamsix.firstteamproject.travelplan.controller;
 
 
-import com.teamsix.firstteamproject.travelplan.dto.amadeus.AmadeusAccessToken;
 import com.teamsix.firstteamproject.travelplan.dto.amadeus.AmadeusCond;
 import com.teamsix.firstteamproject.travelplan.dto.amadeus.FlightResponse;
 import com.teamsix.firstteamproject.travelplan.dto.restaurant.RestaurantCond;

@@ -13,20 +13,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.time.Instant;
+
 @Service
 @Slf4j
 public class AmadeusApiService {
 
     @Value("${amadeus.ApiKey}")
     private String apiKey;
-
     @Value("${amadeus.Secret}")
     private String secretKey;
-
     @Value("test.api.amadeus.com")
     private String baseUrl;
 
     private final WebClient flightWebClient;
+    private AmadeusAccessToken currentToken;
 
     public AmadeusApiService(@Qualifier("flightWebClient")WebClient flightWebClient) {
         this.flightWebClient = flightWebClient;
@@ -35,9 +36,8 @@ public class AmadeusApiService {
     // granttype, client_id, client_secret
     // x-www-form-urlencoded 타입
 
-
     // block을 쓰지않고 값을 꺼낼수는 없을까?
-    // 동적 파라미터 미적용
+    // 동적 파라미터 미구현
     public Mono<FlightResponse> getFlightOffers(AmadeusCond cond){
         String accessToken = getAccessToken().block().getAccess_token();
 
@@ -52,14 +52,27 @@ public class AmadeusApiService {
     }
 
     // 리팩토링 필요
+    // 만료체크 로직 미구현
     private Mono<AmadeusAccessToken> getAccessToken(){
-        return flightWebClient.post()
-                .uri("/security/oauth2/token")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .bodyValue("grant_type=client_credentials&client_id=" + apiKey + "&client_secret=" + secretKey)
-                .retrieve()
-                .bodyToMono(AmadeusAccessToken.class);
+        if(currentToken == null || currentToken.isExpired()){
+            log.info("[AmadeusApiService] getAccessToken Method is Starting!");
+            return flightWebClient.post()
+                    .uri("/security/oauth2/token")
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                    .bodyValue("grant_type=client_credentials&client_id=" + apiKey + "&client_secret=" + secretKey)
+                    .retrieve()
+                    .bodyToMono(AmadeusAccessToken.class)
+                    .doOnNext(token ->{
+                        token.setIssuedAt(Instant.now());
+                        currentToken = token;
+                    });
+        } else {
+            return Mono.just(currentToken);
+        }
+
     }
+
+
 
 
 }
