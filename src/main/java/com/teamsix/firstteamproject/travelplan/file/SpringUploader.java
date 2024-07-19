@@ -13,7 +13,8 @@ import java.util.UUID;
 
 @Component
 public class SpringUploader {
-    @Value("${file.dir}")
+
+    //@Value("${file.dir}")
     private String fileDir;
 
     public String getFullpath(String filename){
