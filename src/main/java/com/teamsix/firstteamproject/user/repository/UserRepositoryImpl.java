@@ -31,8 +31,8 @@ public class UserRepositoryImpl implements UserRepository{
     public RegistryForm saveUser(RegistryForm registryForm) {
         log.info("[UserRepository] Executing the saveUser method ");
 
-        String sql = "INSERT INTO user(id, email, pw, name, email_verification, roles) " +
-                "VALUES(:id, :email, :pw, :name, :email_verification, :roles)";
+        String sql = "INSERT INTO user(email, pw, name) " +
+                "VALUES(:email, :pw, :name)";
 
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("email", registryForm.getEmail())
