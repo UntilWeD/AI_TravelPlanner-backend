@@ -1,23 +1,25 @@
 package com.teamsix.firstteamproject.user.email;
 
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("/user")
 @Slf4j
 @Validated
 @RequiredArgsConstructor
+@Tag(name = "Email Authentication API", description = "Email Authentication")
 public class EmailControllerImpl implements EmailController {
 
     private  final EmailService emailService;
@@ -40,6 +42,7 @@ public class EmailControllerImpl implements EmailController {
         }
     }
 
+    @Operation(summary = "이메일 인증 재요청", description = "이메일인증을 미뤘던 사용자에게 다시 메일을 보낼때")
     @Override
     @PostMapping("/resend-email")
     public ResponseEntity resendEmail(@RequestBody String email){
@@ -50,12 +53,14 @@ public class EmailControllerImpl implements EmailController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+
+    @Operation(summary = "이메일 인증 요청", description = "재인증하고 차이가 뭐지, 좀 봐야할듯")
     @Override
     @GetMapping ("/send-email")
     public ResponseEntity sendEmail(@RequestBody String email){
         log.info("[EmailController] User's request to send email.");
         try{
-            email = extractEmail(URLDecoder.decode(email, "UTF-8"));
+            email = extractEmail(URLDecoder.decode(email, StandardCharsets.UTF_8));
         } catch (Exception e){
             log.info("[EmailController] 디코딩 중 에러발생");
         }
