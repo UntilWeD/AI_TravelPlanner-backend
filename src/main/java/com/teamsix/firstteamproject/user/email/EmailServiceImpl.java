@@ -13,7 +13,6 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class EmailServiceImpl implements EmailService {
 
     private final EmailTokenService emailTokenService;
@@ -23,13 +22,16 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public boolean verifyEmail(String token) {
-        log.info("[EmailSenderService] verifyEmail is Executing");
+        log.info("[EmailServiceImpl] verifyEmail is Executing");
 
         //이메일 토큰을 찾아온다
         EmailToken findEmailToken = emailTokenService.findByIdAndExpirationDateAfterAndExpired(token);
 
         //고유 유저 아이디 찾기
         Long userId = findEmailToken.getUserId();
+
+        log.info("[EmailServiceImpl] userId = {}", userId);
+
         Optional<User> findUser = userService.setEmailVerify(userId);
 
         findEmailToken.setTokenToUsed(); // 사용완료

@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService{
         return registedUser;
     }
 
-    @Transactional
+
     @Override
     public JwtToken signIn(LoginForm loginForm) {
 

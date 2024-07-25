@@ -36,7 +36,7 @@ public class EmailTokenServiceImpl implements EmailTokenService{
         mailMessage.setSubject("회원가입 이메일 인증");
         mailMessage.setText("" +
                 "아래에 링크를 클릭해주셔서 이메일인증을 마무리 해주세요."+
-                "http://localhost:8000/userlogin/confirm-email?token="+emailToken.getId());
+                "http://localhost:8080/user/email/confirm-email?token="+emailToken.getId());
         emailSenderService.sendEmail(mailMessage);
 
         return emailToken.getId();

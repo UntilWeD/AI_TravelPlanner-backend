@@ -15,7 +15,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user/email")
 @Slf4j
 @Validated
 @RequiredArgsConstructor
@@ -27,7 +27,7 @@ public class EmailControllerImpl implements EmailController {
 
     @Override
     @GetMapping("/confirm-email")
-    public ResponseEntity viewConfirmEmail(String token) {
+    public ResponseEntity viewConfirmEmail(@RequestParam String token) {
         try{
             //이메일 인증 로직을 실행합니다.
             log.info("[EmailControllerImpl]token = {}", token);
@@ -38,6 +38,7 @@ public class EmailControllerImpl implements EmailController {
 
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e){
+            log.info("Excetipn e = {} ", e);
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
@@ -57,13 +58,14 @@ public class EmailControllerImpl implements EmailController {
     @Operation(summary = "이메일 인증 요청", description = "재인증하고 차이가 뭐지, 좀 봐야할듯")
     @Override
     @GetMapping ("/send-email")
-    public ResponseEntity sendEmail(@RequestBody String email){
+    public ResponseEntity sendEmail(@RequestParam String email){
         log.info("[EmailController] User's request to send email.");
         try{
             email = extractEmail(URLDecoder.decode(email, StandardCharsets.UTF_8));
         } catch (Exception e){
             log.info("[EmailController] 디코딩 중 에러발생");
         }
+        log.info("email = {} ", email);
 
         emailTokenService.resendEmailToken(email);
 

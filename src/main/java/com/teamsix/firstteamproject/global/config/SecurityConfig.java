@@ -35,6 +35,7 @@ public class SecurityConfig {
                             // 해당 API에 대해서는 모든 요청을 허가
                             .requestMatchers("/user/signIn").permitAll()
                             .requestMatchers("/user/register").permitAll()
+                            .requestMatchers("/user/email/*").permitAll()
                             .requestMatchers("/travelplan/*").permitAll()
                             .requestMatchers( "/","/swagger-ui/**", "/v3/api-docs/**").permitAll()
                             // USER 권한이 있어야 요청할 수 있음

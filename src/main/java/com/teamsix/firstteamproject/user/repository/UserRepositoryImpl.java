@@ -6,17 +6,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.sql.DataSource;
 import java.util.Map;
 import java.util.Optional;
 
 @Repository
 @Slf4j
+@Transactional(readOnly = false)
 public class UserRepositoryImpl implements UserRepository{
 
     private final NamedParameterJdbcTemplate template;
@@ -59,13 +61,15 @@ public class UserRepositoryImpl implements UserRepository{
         String sql = "SELECT * FROM user WHERE email = :email";
 
         try{
-            log.info("email = {} ", email);
-            SqlParameterSource param = new BeanPropertySqlParameterSource(email);
+            SqlParameterSource param = new MapSqlParameterSource()
+                    .addValue("email", email);
+
             Optional<User> findUser =  Optional.of(template.queryForObject(
                     sql, param, new BeanPropertyRowMapper<>(User.class)));
 
             log.info("email = {} ", findUser.get().getEmail());
             log.info("pw = {} ", findUser.get().getPw());
+
             return findUser;
         } catch (EmptyResultDataAccessException ex){
             log.info("[유저리포지토리] findUser를 찾는 도중 오류가 발생하였습니다.");
@@ -80,8 +84,9 @@ public class UserRepositoryImpl implements UserRepository{
     public Optional<User> setEmailVerifiedById(Long userId) {
         log.info("[UserRepository] setEmailVerifiedById Method is Executing.. Id : {}", userId);
 
-        String sql = "UPDATE user SET email_verification= true WHERE id = :userId AND emailVerified = false";
-        Map<String, Object> param = Map.of("id", userId);
+        String sql = "UPDATE user SET email_verification= true WHERE id = :userId";
+        Map<String, Object> param = Map.of("userId", userId);
+
         template.update(sql, param);
 
         log.info("Value is changed");
