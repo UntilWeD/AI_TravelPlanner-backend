@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,18 +34,14 @@ public class User implements UserDetails {
 
     private boolean email_verification;
 
-
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
+    private String role;
 
 
     // roles 필드를 GrantedAuthority 객체의 컬렉션으로 변환한다.
     // 그리고 SpringSecurity는 이 권한을 사용하여 인증 및 인가를 처리한다.
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        return Collections.singletonList(new SimpleGrantedAuthority(this.role));
     }
 
     //나머지는 계정상태를 나타냄.
