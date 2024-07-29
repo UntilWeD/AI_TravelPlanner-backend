@@ -1,7 +1,9 @@
 package com.teamsix.firstteamproject.user.email;
 
+import java.util.Optional;
+
 public interface EmailTokenService {
     String createEmailToken(Long number, String receiverEmail);
-    EmailToken findByIdAndExpirationDateAfterAndExpired(String emailTokenId) throws RuntimeException;
-    void resendEmailToken(String email);
+    Optional<EmailToken> findByIdAndExpirationDateAfterAndExpired(String emailTokenId) throws RuntimeException;
+    String sendEmailToken(String email);
 }

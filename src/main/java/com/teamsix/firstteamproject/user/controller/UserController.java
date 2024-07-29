@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
 public interface UserController {
-    public ResponseEntity<RegistryForm> register(RegistryForm registryForm, BindingResult bindingResult);
-    public ResponseEntity<JwtToken> signIn(LoginForm loginForm, BindingResult bindingResult);
+    public ResponseEntity<RegistryForm> register(RegistryForm registryForm);
+    public ResponseEntity<JwtToken> signIn(LoginForm loginForm);
 
 
 }

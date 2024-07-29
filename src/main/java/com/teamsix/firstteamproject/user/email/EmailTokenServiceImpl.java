@@ -18,13 +18,16 @@ public class EmailTokenServiceImpl implements EmailTokenService{
     private final EmailTokenRepository emailTokenRepository;
     private final UserRepository userRepository;
 
-    //이메일 인증 토큰 생성
+    @Override
+    public String sendEmailToken(String email) {
+        Long userNumber = userRepository.findUserByEmail(email).get().getId();
+        return createEmailToken(userNumber, email);
+    }
+
+
     @Override
     public String createEmailToken(Long number, String receiverEmail) {
         log.info("[EmailTokenService] Making EmailToken...");
-
-        Assert.notNull(number, "memberId는 필수적입니다.");
-        Assert.notNull(receiverEmail, "recevierEmail은 필수적입니다.");
 
         //이메일 토큰 저장
         EmailToken emailToken = EmailToken.createEmailToken(number);
@@ -35,27 +38,26 @@ public class EmailTokenServiceImpl implements EmailTokenService{
         mailMessage.setTo(receiverEmail);
         mailMessage.setSubject("회원가입 이메일 인증");
         mailMessage.setText("" +
-                "아래에 링크를 클릭해주셔서 이메일인증을 마무리 해주세요."+
-                "http://localhost:8080/user/email/confirm-email?token="+emailToken.getId());
+                "아래에 링크를 클릭해주셔서 이메일인증을 마무리 해주세요." +
+                "https://ec2-43-203-192-225.ap-northeast-2.compute.amazonaws.com:8080/user/email/confirm-email?token=" +
+                emailToken.getId());
         emailSenderService.sendEmail(mailMessage);
 
         return emailToken.getId();
     }
 
 
-    //유효한 토큰 가져오기
+
     @Override
-    public EmailToken findByIdAndExpirationDateAfterAndExpired(String emailTokenId) throws RuntimeException {
+    public Optional<EmailToken> findByIdAndExpirationDateAfterAndExpired(String emailTokenId) throws RuntimeException {
         Optional<EmailToken> emailToken = emailTokenRepository
                 .findByIdAndExpirationDateAfterAndExpired(emailTokenId, LocalDateTime.now(), false);
 
-        return emailToken.orElseThrow(() -> new RuntimeException());
+        if(emailToken.isEmpty()){
+                emailTokenRepository.deleteEmailTokenById(emailTokenId);
+        }
+
+        return emailToken;
     }
 
-    @Override
-    public void resendEmailToken(String email) {
-        Long userNumber = userRepository.findUserByEmail(email).get().getId();
-        createEmailToken(userNumber, email);
-        log.info("[EmailTokenService] Resending Compleete!  userNumber = {}, email = {} ", userNumber, email);
-    }
 }

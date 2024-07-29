@@ -11,37 +11,29 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Slf4j
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
     private final EmailTokenService emailTokenService;
     private final UserService userService;
-
     private final UserRepository userRepository;
 
     @Override
-    public boolean verifyEmail(String token) {
+    public String verifyEmail(String token) {
         log.info("[EmailServiceImpl] verifyEmail is Executing");
 
         //이메일 토큰을 찾아온다
-        EmailToken findEmailToken = emailTokenService.findByIdAndExpirationDateAfterAndExpired(token);
-
-        //고유 유저 아이디 찾기
-        Long userId = findEmailToken.getUserId();
-
-        log.info("[EmailServiceImpl] userId = {}", userId);
-
-        Optional<User> findUser = userService.setEmailVerify(userId);
-
-        findEmailToken.setTokenToUsed(); // 사용완료
-
-        if(findUser.isPresent()){
-            log.info("유저가 존재합니다. 유저 : {}", findUser.get());
-            return true;
+        Optional<EmailToken> findEmailToken = emailTokenService.findByIdAndExpirationDateAfterAndExpired(token);
+        if (findEmailToken.isEmpty()){
+            return "해당 이메일인증토큰은 만료되거나 존재하지 않는 토큰입니다.";
         }
-        log.info("해당유저는 데이터베이스에 존재하지 않습니다.");
-        return false;
+
+        Optional<User> findUser = userService.setEmailVerify(findEmailToken.get().getUserId());
+        findEmailToken.get().setTokenToUsed(); // 사용완료
+
+        return "이메일 인증이 완료되었습니다.";
 
     }
 
