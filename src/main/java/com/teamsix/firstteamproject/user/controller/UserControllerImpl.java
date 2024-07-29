@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -38,7 +37,7 @@ public class UserControllerImpl implements UserController{
     public ResponseEntity<RegistryForm> register(@RequestBody RegistryForm registryForm) {
         log.info("[UserController] Executing register method ");
         log.info("[UserController] Email = {} ", registryForm.getEmail());
-        log.info("[UserController] Email = {} ", registryForm.getPw());
+        log.info("[UserController] pw {} ", registryForm.getPw());
 
         RegistryForm registeredUser = userService.register(registryForm);
 
