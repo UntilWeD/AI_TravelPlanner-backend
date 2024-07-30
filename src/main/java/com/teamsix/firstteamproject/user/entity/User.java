@@ -32,7 +32,7 @@ public class User implements UserDetails {
     private String email;
     private String pw;
 
-    private boolean email_verification;
+    private boolean emailVerification;
 
     private String role;
 

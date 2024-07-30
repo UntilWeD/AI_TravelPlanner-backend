@@ -13,6 +13,8 @@ public interface UserRepository {
 
     public Optional<User> findUserByEmail(String email);
 
+    public Boolean findEmailVerificationByEmail(String email);
+
     //다른기능
     public Optional<User> setEmailVerifiedById(Long userId);
 }

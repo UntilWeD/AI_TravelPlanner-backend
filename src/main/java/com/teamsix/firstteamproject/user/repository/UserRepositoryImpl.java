@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -83,6 +84,23 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
+    public Boolean findEmailVerificationByEmail(String email) {
+        String sql = "SELECT email_verification FROM user WHERE email = :email";
+
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("email", email);
+
+        try{
+            Boolean result = template.queryForObject(sql, param, Boolean.class);
+            return result;
+        } catch (Exception e){
+            log.info("[UserRepositoryImpl] findEmailVerificationByEmail method has Error!!", e);
+            return false;
+        }
+
+    }
+
+    @Override
     public Optional<User> setEmailVerifiedById(Long userId) {
         log.info("[UserRepository] setEmailVerifiedById Method is Executing.. Id : {}", userId);
 
@@ -103,6 +121,8 @@ public class UserRepositoryImpl implements UserRepository{
             return Optional.empty();
         }
     }
+
+
 
 
 

@@ -19,14 +19,17 @@ public class EmailTokenServiceImpl implements EmailTokenService{
     private final UserRepository userRepository;
 
     @Override
-    public String sendEmailToken(String email) {
+    public boolean sendEmailToken(String email) {
+        if(userRepository.findEmailVerificationByEmail(email)){
+            return false;
+        }
         Long userNumber = userRepository.findUserByEmail(email).get().getId();
         return createEmailToken(userNumber, email);
     }
 
 
     @Override
-    public String createEmailToken(Long number, String receiverEmail) {
+    public boolean createEmailToken(Long number, String receiverEmail) {
         log.info("[EmailTokenService] Making EmailToken...");
 
         //이메일 토큰 저장
@@ -38,12 +41,14 @@ public class EmailTokenServiceImpl implements EmailTokenService{
         mailMessage.setTo(receiverEmail);
         mailMessage.setSubject("회원가입 이메일 인증");
         mailMessage.setText("" +
-                "아래에 링크를 클릭해주셔서 이메일인증을 마무리 해주세요." +
-                "https://ec2-43-203-192-225.ap-northeast-2.compute.amazonaws.com:8080/user/email/confirm-email?token=" +
-                emailToken.getId());
+                "아래에 링크를 클릭해주셔서 이메일인증을 마무리 해주세요. \n\n\n" +
+                "http://ec2-43-203-192-225.ap-northeast-2.compute.amazonaws.com:8080/user/email/confirm-email?token=" +
+                emailToken.getId() +
+                "\n\n\n\n\n 이용해주셔서 감사합니다.")
+        ;
         emailSenderService.sendEmail(mailMessage);
 
-        return emailToken.getId();
+        return true;
     }
 
 
