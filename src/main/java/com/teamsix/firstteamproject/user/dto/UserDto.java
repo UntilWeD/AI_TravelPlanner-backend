@@ -17,14 +17,14 @@ public class UserDto {
 
     private String name;
 
-    private boolean email_verification;
+    private boolean emailVerification;
 
     static public UserDto toDto(User user){
         return UserDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
-                .email_verification(user.isEmail_verification())
+                .emailVerification(user.getEmailVerification())
                 .build();
     }
 }

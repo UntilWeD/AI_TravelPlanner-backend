@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 public class User implements UserDetails {
 
 
-
     //유저 식별번호
     private Long id;
 
@@ -32,8 +31,8 @@ public class User implements UserDetails {
     private String email;
     private String pw;
 
-    private boolean emailVerification;
 
+    private boolean emailVerification;
     private String role;
 
 
@@ -74,6 +73,11 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+
+    public boolean getEmailVerification(){
+        return emailVerification;
     }
 }
 
