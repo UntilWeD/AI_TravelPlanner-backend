@@ -80,7 +80,7 @@ public class JwtTokenProvider {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        //UserDetails 객체를 만들어서 Authentication return
+        // UserDetails 객체를 만들어서 Authentication return
         // UserDetails: interface, User: UserDetails를 구현한 class
         UserDetails principal = new User(claims.getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
