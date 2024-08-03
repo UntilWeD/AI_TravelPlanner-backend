@@ -41,8 +41,8 @@ public class UserServiceImpl implements UserService{
     @Override
     public JwtToken signIn(LoginForm loginForm) {
 
-        log.info("LoginForm.email = {}", loginForm.getEmail());
-        log.info("LoginForm.pw = {}", passwordEncoder.encode(loginForm.pw));
+        log.info("[UserService] LoginForm.email = {}", loginForm.getEmail());
+        log.info("[UserService] LoginForm.pw = {}", passwordEncoder.encode(loginForm.pw));
 
         //1. username + password를 기반으로 Authentication 객체 생성
         //이때 authentication은 인증 여부를 확인하는 authenticated 값이 false

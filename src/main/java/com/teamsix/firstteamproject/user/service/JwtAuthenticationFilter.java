@@ -1,5 +1,7 @@
 package com.teamsix.firstteamproject.user.service;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -29,10 +31,17 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         String token = resolveToken((HttpServletRequest) request);
 
         //2. validateToken으로 토큰 유효성 검사
-        if(token != null && jwtTokenProvider.validateToken(token)){
-            //토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext에 저장
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if(token != null){
+            try{
+                jwtTokenProvider.validateToken(token);
+                //토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext에 저장
+                Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (ExpiredJwtException e){
+                throw e;
+            } catch (JwtException e){
+                throw e;
+            }
         }
         chain.doFilter(request, response);
     }
