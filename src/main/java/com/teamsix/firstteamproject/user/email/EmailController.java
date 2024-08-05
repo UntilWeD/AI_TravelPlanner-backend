@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public interface EmailController {
-    public ResponseEntity<String> viewConfirmEmail(@Valid @RequestParam String token);
+    public ResultDTO<String> viewConfirmEmail(@Valid @RequestParam String token);
     public ResultDTO sendEmail(@RequestBody String email);
-    public ResponseEntity findPasswordByEmail(String email, BindingResult bindingResult);
+    public ResultDTO findPasswordByEmail(String email, BindingResult bindingResult);
 }

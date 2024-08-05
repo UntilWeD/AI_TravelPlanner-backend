@@ -27,10 +27,10 @@ public class EmailControllerImpl implements EmailController {
 
     @Override
     @GetMapping("/confirm-email")
-    public ResponseEntity<String> viewConfirmEmail(@RequestParam String token) {
+    public ResultDTO<String> viewConfirmEmail(@RequestParam String token) {
         log.info("[EmailControllerImpl] Executing viewConfirmEmail method...");
 
-        return ResponseEntity.ok(emailService.verifyEmail(token));
+        return ApiUtils.ok(emailService.verifyEmail(token));
     }
 
     @Operation(summary = "이메일 인증 요청", description = "해당 유저의 이메일을 파라미터로 인증이메일을 전송한다.")
@@ -49,9 +49,9 @@ public class EmailControllerImpl implements EmailController {
     // 아이디 및 비밀번호 찾는 메서드들
 
     @Override
-    public ResponseEntity findPasswordByEmail(String email, BindingResult bindingResult) {
+    public ResultDTO findPasswordByEmail(String email, BindingResult bindingResult) {
         log.info("[EmailController]findPasswordByEmail is Executing...");
 
-        return new ResponseEntity(HttpStatus.OK);
+        return ApiUtils.ok(null);
     }
 }

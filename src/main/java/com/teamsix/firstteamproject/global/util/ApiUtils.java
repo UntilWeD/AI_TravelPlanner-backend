@@ -2,6 +2,7 @@ package com.teamsix.firstteamproject.global.util;
 
 import com.teamsix.firstteamproject.global.dto.ResultDTO;
 import org.springframework.http.HttpStatus;
+import reactor.core.publisher.Mono;
 
 
 public class ApiUtils {
@@ -21,6 +22,14 @@ public class ApiUtils {
                 .build();
     }
 
-
+    public static <T> Mono<ResultDTO<T>> MonoOk(Mono<T> data) {
+        return data.map(resolvedData ->
+                ResultDTO.<T>builder()
+                        .status(HttpStatus.OK.value())
+                        .message("Success")
+                        .data(resolvedData)
+                        .build()
+        );
+    }
 
 }

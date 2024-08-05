@@ -1,6 +1,8 @@
 package com.teamsix.firstteamproject.travelplan.controller;
 
 
+import com.teamsix.firstteamproject.global.dto.ResultDTO;
+import com.teamsix.firstteamproject.global.util.ApiUtils;
 import com.teamsix.firstteamproject.travelplan.dto.amadeus.AmadeusCond;
 import com.teamsix.firstteamproject.travelplan.dto.amadeus.FlightResponse;
 import com.teamsix.firstteamproject.travelplan.dto.restaurant.RestaurantCond;
@@ -33,15 +35,15 @@ public class ApiController {
 
     @Operation(summary = "식당 정보(공공데이터)", description = "식당정보를 요청할 때 사용하는 API")
     @PostMapping("/restaurant")
-    public ResponseEntity<RestaurantResponse> restaurantRequest(@RequestBody RestaurantCond restaurantCond){
-        return ResponseEntity.ok().body(restaurantApiService.getRestaurantDetails(restaurantCond));
+    public ResultDTO<RestaurantResponse> restaurantRequest(@RequestBody RestaurantCond restaurantCond){
+        return ApiUtils.ok(restaurantApiService.getRestaurantDetails(restaurantCond));
     }
 
     @Operation(summary = "비행기 정보(아마데우스)", description = "비행기 검색을 하는 것으로 아직 예약은 미구현")
     @PostMapping("flight-offers")
-    public Mono<FlightResponse> flightRequest(@RequestBody AmadeusCond cond){
+    public Mono<ResultDTO<FlightResponse>> flightRequest(@RequestBody AmadeusCond cond){
         log.info("[flightRequest] method Start!");
-        return amadeusApiService.getFlightOffers(cond);
+        return ApiUtils.MonoOk(amadeusApiService.getFlightOffers(cond));
     }
 
 
