@@ -23,7 +23,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         return userRepository.findUserByEmail(email)
                 .map(this::createUserDetails)
                 .orElseThrow(() -> new UsernameNotFoundException("해당하는 회원을 찾을 수 없습니다."));
-
     }
 
     //해당하는 User의 데이터가 존재한다면 UserDetails객체로 만들어서 return

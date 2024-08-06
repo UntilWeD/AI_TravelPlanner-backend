@@ -7,12 +7,10 @@ import com.teamsix.firstteamproject.user.dto.LoginForm;
 import com.teamsix.firstteamproject.user.dto.RegistryForm;
 import com.teamsix.firstteamproject.user.entity.JwtToken;
 import com.teamsix.firstteamproject.user.service.UserService;
-import com.teamsix.firstteamproject.user.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -39,9 +37,6 @@ public class UserControllerImpl implements UserController{
     @PostMapping("/register")
     public ResultDTO<RegistryForm> register(@RequestBody RegistryForm registryForm) {
         log.info("[UserController] Executing register method ");
-        log.info("[UserController] Email = {} ", registryForm.getEmail());
-        log.info("[UserController] pw {} ", registryForm.getPw());
-
         return ApiUtils.ok(userService.register(registryForm));
     }
 
@@ -51,11 +46,7 @@ public class UserControllerImpl implements UserController{
     @PostMapping("/signIn")
     public ResultDTO<JwtToken> signIn(@RequestBody LoginForm loginForm) {
         log.info("[UserControllerImpl] signIn method executing... : {}", loginForm);
-
         JwtToken jwtToken = userService.signIn(loginForm);
-
-        log.info("[UserControllerImpl] jwtToken accessToken = {}, refreshToken = {}",
-                jwtToken.getAccessToken(), jwtToken.getRefreshToken());
 
         return ApiUtils.ok(jwtToken);
     }

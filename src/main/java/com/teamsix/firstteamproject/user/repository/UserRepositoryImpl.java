@@ -69,14 +69,8 @@ public class UserRepositoryImpl implements UserRepository{
 
             Optional<User> findUser =  Optional.of(template.queryForObject(
                     sql, param, new BeanPropertyRowMapper<>(User.class)));
-
-            log.info("email = {} ", findUser.get().getEmail());
-            log.info("pw = {} ", findUser.get().getPw());
-
             return findUser;
         } catch (EmptyResultDataAccessException ex){
-            log.info("[유저리포지토리] findUser를 찾는 도중 오류가 발생하였습니다.");
-            log.info("Error :  ", ex);
             return Optional.empty();
         }
 

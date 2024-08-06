@@ -38,6 +38,7 @@ public class EmailControllerImpl implements EmailController {
     @GetMapping ("/send-email")
     public ResultDTO sendEmail(@RequestParam String email){
         log.info("[EmailController] Executing sendEmail method...");
+        // 후에 코드 수정 필요
         if(emailTokenService.sendEmailToken(email)){
             return ApiUtils.ok(null);
         } else {
@@ -51,7 +52,6 @@ public class EmailControllerImpl implements EmailController {
     @Override
     public ResultDTO findPasswordByEmail(String email, BindingResult bindingResult) {
         log.info("[EmailController]findPasswordByEmail is Executing...");
-
         return ApiUtils.ok(null);
     }
 }

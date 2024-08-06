@@ -1,22 +1,23 @@
 package com.teamsix.firstteamproject.user.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
 @ToString
 @Builder
 @AllArgsConstructor
 public class RegistryForm {
 
-    @NotNull
+    @NotBlank
     private String name;
 
     //로그인에 사용
-    @NotNull
+    @NotBlank
     private String email;
 
-    @NotNull
+    @NotBlank
     private String pw;
 
 }
