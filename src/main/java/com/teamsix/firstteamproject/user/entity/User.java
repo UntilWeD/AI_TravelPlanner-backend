@@ -1,5 +1,10 @@
 package com.teamsix.firstteamproject.user.entity;
 
+import com.teamsix.firstteamproject.travelplan.entity.TravelPlan;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,10 +23,13 @@ import java.util.stream.Collectors;
 @Builder
 @Setter
 @NoArgsConstructor
+@Entity
 public class User implements UserDetails {
 
 
     //유저 식별번호
+    @Id
+    @GeneratedValue
     private Long id;
 
     //유저이름
@@ -31,9 +39,15 @@ public class User implements UserDetails {
     private String email;
     private String pw;
 
-
     private boolean emailVerification;
     private String role;
+
+    /**
+     * TravelPlan과의 양방향관게에서 주인은 TravelPlan이기에
+     * travelPlans에 TravelPlan객체를 저장해도 외래키를 관리하지 않기에 저장되지 않는다.(연관관계)
+     */
+    @OneToMany(mappedBy = "user")
+    private List<TravelPlan> travelPlans;
 
 
     // roles 필드를 GrantedAuthority 객체의 컬렉션으로 변환한다.

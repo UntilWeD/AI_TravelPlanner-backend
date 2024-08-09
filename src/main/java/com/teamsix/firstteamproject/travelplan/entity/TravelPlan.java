@@ -1,36 +1,47 @@
 package com.teamsix.firstteamproject.travelplan.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.teamsix.firstteamproject.user.entity.User;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "TRAVEL_PLAN")
 public class TravelPlan {
 
-    @GeneratedValue @Id
-    Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "user_id")
-    Long userId;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
-    @Column(name = "basket_id")
-    Long basketId;
+    @OneToOne
+    @JoinColumn(name = "TRAVEL_BASKET_ID")
+    private TravelBasket travelBasket;
 
-    @Column(name = "content")
-    String content;
+
+    /**
+     * @Lob으로 String 속성을 CLOB으로 매핑해준다.
+     */
+    @Lob
+    @Column(name = "content", columnDefinition = "TEXT")
+    private String content;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
 
     @Builder
-    public TravelPlan(Long userId, Long basketId, String content) {
-        this.userId = userId;
-        this.basketId = basketId;
+    public TravelPlan(String content) {
         this.content = content;
     }
 }

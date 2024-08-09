@@ -43,7 +43,7 @@ public class EmailTokenServiceImpl implements EmailTokenService{
         mailMessage.setSubject("회원가입 이메일 인증");
         mailMessage.setText("" +
                 "아래에 링크를 클릭해주셔서 이메일인증을 마무리 해주세요. \n\n\n" +
-                "http://localhost:8080/user/email/confirm-email?token=" +
+                "http://ec2-43-203-192-225.ap-northeast-2.compute.amazonaws.com:8080/user/email/confirm-email?token=" +
                 emailToken.getId() +
                 "\n\n\n\n\n 이용해주셔서 감사합니다.")
         ;

@@ -11,16 +11,17 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "TRAVEL_BASKET")
 public class TravelBasket {
 
-    @GeneratedValue @Id
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "travelplan_id")
-    private Long travelPlanId;
+    @OneToOne(mappedBy = "travelBasket")
+    private TravelPlan travelPlan;
 
-    //JPA 책 참고 후 수정하기
-    @OneToMany
+    @OneToMany(mappedBy = "travelBasket")
     private List<BasketItem> basketItems;
 
 }
