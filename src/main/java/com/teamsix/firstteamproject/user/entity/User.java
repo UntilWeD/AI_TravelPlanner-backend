@@ -42,12 +42,13 @@ public class User implements UserDetails {
     private boolean emailVerification;
     private String role;
 
-    /**
-     * TravelPlan과의 양방향관게에서 주인은 TravelPlan이기에
-     * travelPlans에 TravelPlan객체를 저장해도 외래키를 관리하지 않기에 저장되지 않는다.(연관관계)
-     */
-    @OneToMany(mappedBy = "user")
-    private List<TravelPlan> travelPlans;
+
+//    /**
+//     * TravelPlan과의 양방향관게에서 주인은 TravelPlan이기에
+//     * travelPlans에 TravelPlan객체를 저장해도 외래키를 관리하지 않기에 저장되지 않는다.(연관관계)
+//     */
+//    @OneToMany(mappedBy = "user")
+//    private List<TravelPlan> travelPlans;
 
 
     // roles 필드를 GrantedAuthority 객체의 컬렉션으로 변환한다.
