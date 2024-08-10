@@ -20,8 +20,8 @@ public class BasketItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "basket_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "basket_id", nullable = false)
     private TravelBasket travelBasket;
 
     /**

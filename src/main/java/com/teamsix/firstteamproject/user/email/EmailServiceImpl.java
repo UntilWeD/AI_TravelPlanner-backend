@@ -20,6 +20,7 @@ public class EmailServiceImpl implements EmailService {
     private final UserService userService;
     private final UserRepository userRepository;
 
+    @Transactional
     @Override
     public String verifyEmail(String token) {
         log.info("[EmailServiceImpl] verifyEmail is Executing");

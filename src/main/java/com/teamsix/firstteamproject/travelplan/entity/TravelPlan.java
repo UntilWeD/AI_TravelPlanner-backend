@@ -20,11 +20,14 @@ public class TravelPlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @OneToOne
+    /**
+     * orphanRemoval = true : travelPlan 삭제시 같이 삭제됨
+     */
+    @OneToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "TRAVEL_BASKET_ID")
     private TravelBasket travelBasket;
 

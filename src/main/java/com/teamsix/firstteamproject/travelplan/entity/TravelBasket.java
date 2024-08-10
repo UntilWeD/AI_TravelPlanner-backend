@@ -18,10 +18,14 @@ public class TravelBasket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "travelBasket")
+    /**
+     * optional= false 는 TravelPlan은 nullable이 false이기 때문에 내부조인을 사용하게함
+     */
+    @OneToOne(mappedBy = "travelBasket", fetch = FetchType.LAZY, optional = false)
     private TravelPlan travelPlan;
 
-    @OneToMany(mappedBy = "travelBasket")
+    @OneToMany(mappedBy = "travelBasket", fetch = FetchType.LAZY,
+            cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<BasketItem> basketItems;
 
 }

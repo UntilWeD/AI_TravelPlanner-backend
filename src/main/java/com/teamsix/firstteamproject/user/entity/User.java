@@ -1,10 +1,7 @@
 package com.teamsix.firstteamproject.user.entity;
 
 import com.teamsix.firstteamproject.travelplan.entity.TravelPlan;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -47,7 +44,7 @@ public class User implements UserDetails {
 //     * TravelPlan과의 양방향관게에서 주인은 TravelPlan이기에
 //     * travelPlans에 TravelPlan객체를 저장해도 외래키를 관리하지 않기에 저장되지 않는다.(연관관계)
 //     */
-//    @OneToMany(mappedBy = "user")
+//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 //    private List<TravelPlan> travelPlans;
 
 
