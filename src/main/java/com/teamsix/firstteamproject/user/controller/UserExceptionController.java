@@ -43,4 +43,11 @@ public class UserExceptionController {
                 ex.getMessage());
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResultDTO handleUserRuntimeException(UserEmailVerificationException ex){
+        log.warn("User Runtime Exception");
+        return ApiUtils.error(HttpStatus.BAD_REQUEST,
+                ex.getMessage());
+    }
+
 }

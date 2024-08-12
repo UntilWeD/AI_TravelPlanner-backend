@@ -27,9 +27,12 @@ public class TravelPlan {
     /**
      * orphanRemoval = true : travelPlan 삭제시 같이 삭제됨
      */
-    @OneToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "TRAVEL_BASKET_ID")
     private TravelBasket travelBasket;
+
+    @Column(name = "title")
+    private String title;
 
 
     /**

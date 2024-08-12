@@ -25,7 +25,7 @@ public class TravelBasket {
     private TravelPlan travelPlan;
 
     @OneToMany(mappedBy = "travelBasket", fetch = FetchType.LAZY,
-            cascade = CascadeType.PERSIST, orphanRemoval = true)
+            cascade = CascadeType.ALL)
     private List<BasketItem> basketItems;
 
 }

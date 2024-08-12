@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+import javax.swing.text.html.Option;
 import java.util.Map;
 import java.util.Optional;
 
@@ -88,7 +89,7 @@ public class UserRepositoryImpl implements UserRepository{
             Boolean result = template.queryForObject(sql, param, Boolean.class);
             return result;
         } catch (Exception e){
-            log.info("[UserRepositoryImpl] findEmailVerificationByEmail method has Error!!", e);
+            log.info("[UserRepositoryImpl] Exception = {}",e);
             return false;
         }
 
@@ -97,18 +98,31 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
+    public User findUserById(Long id) {
+        String sql = "SELECT * FROM user where id = :id";
+
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("id", id);
+
+        try{
+            User user = template.queryForObject(sql, param, User.class);
+            return user;
+        } catch (EmptyResultDataAccessException e){
+            throw new RuntimeException("해당 id를 가진 유저가 존재하지 않습니다.");
+        } catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
     public Optional<User> setEmailVerifiedById(Long userId) {
         log.info("[UserRepository] setEmailVerifiedById Method is Executing.. Id : {}", userId);
 
         String sql = "UPDATE user SET email_verification= true WHERE id = :userId";
         Map<String, Object> param = Map.of("userId", userId);
-
         template.update(sql, param);
 
-        log.info("Value is changed");
-
         sql = "SELECT * FROM user WHERE id = :userId";
-
         try{
             Optional<User> findUser = Optional.of(template.queryForObject(sql, param, new BeanPropertyRowMapper<>(User.class)));
             return findUser;
@@ -117,6 +131,8 @@ public class UserRepositoryImpl implements UserRepository{
             return Optional.empty();
         }
     }
+
+
 
 
 
