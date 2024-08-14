@@ -25,7 +25,7 @@ public class UserController{
     private final UserService userService;
 
 
-    @Operation(summary = "유저 로그인 후 테스트", description = "회원 가입 후 spring security를 거쳐 유저정보를 확인하는 API")
+    @Operation(summary = "로그인 후 테스트", description = "회원 가입 후 spring security를 거쳐 유저정보를 확인하는 API")
     @GetMapping("/test")
     public String test(){
         return SecurityUtil.getCurrentUsername();
@@ -45,7 +45,7 @@ public class UserController{
         return ApiUtils.ok(jwtToken);
     }
 
-    @Operation(summary = "유저 홈", description = "유저가 자신의 개인정보를 수정하거나 여행플랜들을 확인한다.")
+    @Operation(summary = "유저 관리 홈", description = "유저가 자신의 개인정보를 수정하거나 여행플랜들을 확인한다.")
     @GetMapping("/{userId}")
     public ResultDTO<UserDto> userHome(@PathVariable Long userId){
         return ApiUtils.ok(userService.findUserById(userId));

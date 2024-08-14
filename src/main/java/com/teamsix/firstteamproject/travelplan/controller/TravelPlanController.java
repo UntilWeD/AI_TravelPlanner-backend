@@ -16,7 +16,7 @@ public class TravelPlanController {
     /**
      * 모든 TravelPlan 조회
      */
-    @Operation(summary = "로그인", description = "유저가 가입된 정보로 로그인하며 jwt토큰을 반환한다.")
+    @Operation(summary = "여행계획조회", description = "유저가 만든 여행계획의 리스트를 반환한다.")
     @GetMapping("/travel-plans")
     public ResultDTO<TravelPlanDTO> getAllTravelPlans(@PathVariable Long userId){
         //서비스 미구현 entity 객체 구조 필요

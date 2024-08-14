@@ -13,5 +13,4 @@ public class ResultDTO<T> {
     private final String message;
     private final T data;
 
-
 }

@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 
 
 
-@AllArgsConstructor
-@Getter
 @Builder
+@Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class User implements UserDetails {

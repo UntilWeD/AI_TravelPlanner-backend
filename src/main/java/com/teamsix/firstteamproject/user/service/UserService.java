@@ -31,11 +31,10 @@ public class UserService{
 
 
     public RegistryForm register(RegistryForm registryForm) {
-        log.info("register user = {}", registryForm);
-
         //패스워드 인코딩화 이거 생성할때 자동으로 하자.
+        // registryForm에 passwordEncoder의 의존관계를 만들어서 자동화하는 것과 비교해보자.
         registryForm.setPw(passwordEncoder.encode(registryForm.getPw()));
-        if(userRepository.findUserByEmail(registryForm.getEmail()).isEmpty()){
+        if(userRepository.findUserByEmail(registryForm.getEmail()).isPresent()){
             throw new UserAlreadyExistsException(registryForm.getEmail());
         }
         return userRepository.saveUser(registryForm);

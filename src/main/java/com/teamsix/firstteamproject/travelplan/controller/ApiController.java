@@ -12,7 +12,6 @@ import com.teamsix.firstteamproject.travelplan.service.RestaurantApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -30,7 +29,6 @@ public class ApiController {
         this.restaurantApiService = restaurantApiService;
         this.amadeusApiService = amadeusApiService;
     }
-
 
 
     @Operation(summary = "식당 정보(공공데이터)", description = "식당정보를 요청할 때 사용하는 API")

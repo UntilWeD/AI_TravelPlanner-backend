@@ -24,9 +24,6 @@ public class TravelPlan {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    /**
-     * orphanRemoval = true : travelPlan 삭제시 같이 삭제됨
-     */
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "TRAVEL_BASKET_ID")
     private TravelBasket travelBasket;
