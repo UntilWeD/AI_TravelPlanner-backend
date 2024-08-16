@@ -31,8 +31,7 @@ public class UserService{
 
 
     public RegistryForm register(RegistryForm registryForm) {
-        //패스워드 인코딩화 이거 생성할때 자동으로 하자.
-        // registryForm에 passwordEncoder의 의존관계를 만들어서 자동화하는 것과 비교해보자.
+        // 서비스 레이어에서 해당 인코딩도 비즈니스 로직이기에 적절하다.
         registryForm.setPw(passwordEncoder.encode(registryForm.getPw()));
         if(userRepository.findUserByEmail(registryForm.getEmail()).isPresent()){
             throw new UserAlreadyExistsException(registryForm.getEmail());
@@ -61,7 +60,6 @@ public class UserService{
 
 
     public Optional<User> setEmailVerify(Long userId) {
-        log.info("[UserService] setEmailVerify Method is Executing...");
         Optional<User> findUser = userRepository.setEmailVerifiedById(userId);
 
         if(findUser.isEmpty()){
