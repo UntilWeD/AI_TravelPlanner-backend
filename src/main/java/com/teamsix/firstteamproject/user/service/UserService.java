@@ -43,12 +43,6 @@ public class UserService{
 
     public JwtToken signIn(LoginForm loginForm) {
 
-        // 이런식으로 검증해야 하나? 좀더 나은방식이 없을까?
-        if(!userRepository.findEmailVerificationByEmail(loginForm.getEmail())){
-            throw new UserEmailVerificationException(loginForm.getEmail());
-        }
-
-
         //1. username + password를 기반으로 Authentication 객체 생성
         //이때 authentication은 인증 여부를 확인하는 authenticated 값이 false
         UsernamePasswordAuthenticationToken authenticationToken =
