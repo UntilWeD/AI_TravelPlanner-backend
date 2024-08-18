@@ -39,10 +39,9 @@ public class JwtTokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        long now = (new Date()).getTime();
 
         //Access Token 생성
-        Date accessTokenExpiresln = new Date(now + 86400000);
+        Date accessTokenExpiresln = new Date((new Date()).getTime() + 86400000);
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
@@ -52,9 +51,11 @@ public class JwtTokenProvider {
 
         //RefreshToken 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + 86400000))
+                .setExpiration(accessTokenExpiresln)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+
+
 
         return JwtToken.builder()
                 .grantType("Bearer")
@@ -66,7 +67,7 @@ public class JwtTokenProvider {
 
     // Jwt 토큰을 복호화하여 토큰에 들어 있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken){
-        //JWT 토큰 복호화]
+        //JWT 토큰 복호화
         Claims claims = parseClaims(accessToken);
 
         if(claims.get("auth") == null){
@@ -76,7 +77,7 @@ public class JwtTokenProvider {
         //클레임에서 권한 정보 가져오기
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(
-                        claims.get("auth").toString().split(","))
+                         claims.get("auth").toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 

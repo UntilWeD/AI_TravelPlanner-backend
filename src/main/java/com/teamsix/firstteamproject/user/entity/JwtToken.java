@@ -3,6 +3,7 @@ package com.teamsix.firstteamproject.user.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 
 /**
@@ -10,8 +11,8 @@ import lombok.Data;
  * 이 인증 방식은 Access Token을 HTTP요청의 Authorization헤더에 포함하여 전송한다.
  */
 @Builder
-@Data
 @AllArgsConstructor
+@Getter
 public class JwtToken {
 
     // JWT에 대한 인증 타입
