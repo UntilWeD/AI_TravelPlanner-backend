@@ -3,13 +3,13 @@ package com.teamsix.firstteamproject.user.service;
 
 import com.teamsix.firstteamproject.user.entity.JwtToken;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Key;
 import java.time.Clock;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -45,6 +46,7 @@ class JwtTokenProviderTest {
     private JwtTokenProvider jwtTokenProvider;
     private static final String SECRET_KEY = "verySecretKeyForTestingPurposesOnly12345678901234567890";
     private Key key;
+    long ONE_DAY_IN_SECONDS = 24*60*60;
 
 
     @BeforeEach
@@ -96,7 +98,7 @@ class JwtTokenProviderTest {
         assertThat(accessTokenClaims.get("auth")).isEqualTo("USER");
 
         Date now = new Date();
-        Date expectedExpiration= new Date(now.getTime() + 86400000); // 토큰 만료시간
+        Date expectedExpiration= new Date(now.getTime() + ONE_DAY_IN_SECONDS); // 토큰 만료시간
         long allowedDifference = 5000; // 허용된 5초의 오차시간
 
         assertThat(accessTokenClaims.getExpiration().getTime())
@@ -125,7 +127,7 @@ class JwtTokenProviderTest {
                 new SimpleGrantedAuthority("USER")
         );
 
-        Date accessTokenExpiresln = new Date((new Date()).getTime() + 86400000);
+        Date accessTokenExpiresln = new Date((new Date()).getTime() + ONE_DAY_IN_SECONDS);
         String accessToken = Jwts.builder()
                 .setSubject("testUser")
                 .claim("auth", authorities)
@@ -150,6 +152,39 @@ class JwtTokenProviderTest {
 
     @Test
     void validateToken() {
+
+        //given
+        Collection<? extends GrantedAuthority> authorities = Arrays.asList(
+                new SimpleGrantedAuthority("USER")
+        );
+
+        Instant expiration = Instant.now();
+        String accessToken = Jwts.builder()
+                .setSubject("testUser")
+                .claim("auth", authorities)
+                .setExpiration(Date.from(expiration.plusSeconds(ONE_DAY_IN_SECONDS)))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
+        String expiredAccessToken =  Jwts.builder()
+                .setSubject("testUser")
+                .claim("auth", authorities)
+                .setExpiration(Date.from(expiration.minusSeconds(ONE_DAY_IN_SECONDS)))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
+        //when
+        boolean result = jwtTokenProvider.validateToken(accessToken);
+
+        //then
+
+        //정상검증
+        assertThat(result).isTrue();
+        //만료 검증
+        Assertions.assertThatThrownBy(() -> {
+            jwtTokenProvider.validateToken(expiredAccessToken);
+        }).isInstanceOf(ExpiredJwtException.class);
+
 
     }
 }
