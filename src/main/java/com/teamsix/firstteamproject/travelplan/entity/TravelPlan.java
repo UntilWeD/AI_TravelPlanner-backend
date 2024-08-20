@@ -47,4 +47,12 @@ public class TravelPlan {
     public TravelPlan(String content) {
         this.content = content;
     }
+
+
+    // 제목
+    // 내용
+    // 이미지
+
+    // 여행플랜([id], userid) -> 여행 basket(plan_id) -> basket item(s)
+    // 사용자가 -> 여행플랜이동
 }

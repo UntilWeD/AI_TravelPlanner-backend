@@ -7,7 +7,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -21,6 +24,7 @@ import java.io.IOException;
  * SecurityContext에 저장하여 인증된 요청을 처리할 수 있도록 한다.
  */
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -30,20 +34,22 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             throws IOException, ServletException {
         //1. Request Header에서 JWT 토큰 추출
         String token = resolveToken((HttpServletRequest) request);
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        //2. validateToken으로 토큰 유효성 검사
-        if(token != null){
-            try{
-                jwtTokenProvider.validateToken(token);
+        try{
+            //2. validateToken으로 토큰 유효성 검사
+            if(token != null && jwtTokenProvider.validateToken(token)){
                 //토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext에 저장
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            } catch (ExpiredJwtException e){
-                throw e;
-            } catch (JwtException e){
-                throw e;
             }
+        } catch (ExpiredJwtException ex){
+            log.warn("Expired JWT token: {}", ex.getMessage());
+            httpResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+            httpResponse.getWriter().write("TOKEN_EXPIRED : The access token has expired. Please refresh your token.");
+            return;
         }
+
         chain.doFilter(request, response);
     }
 

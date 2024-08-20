@@ -34,4 +34,12 @@ public class BasketItem {
     @Lob
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
+
+
+    //제목  (Title)
+    //내용 (Content)
+    //이미지 (Image)
+
+
+
 }

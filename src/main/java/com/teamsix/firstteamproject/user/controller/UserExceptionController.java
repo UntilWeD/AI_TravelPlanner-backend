@@ -15,12 +15,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class UserExceptionController {
 
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResultDTO handleExpiredJwtException(ExpiredJwtException ex){
-        log.warn("Expired JWT token: {}", ex.getMessage());
-        return ApiUtils.error(HttpStatus.BAD_REQUEST,
-                "TOKEN_EXPIRED : The access token has expired. Please refresh your token.");
-    }
+//    필터레벨에선 처리가 불가능하다...
+//    @ExceptionHandler(ExpiredJwtException.class)
+//    public ResultDTO handleExpiredJwtException(ExpiredJwtException ex){
+//        log.warn("Expired JWT token: {}", ex.getMessage());
+//        return ApiUtils.error(HttpStatus.BAD_REQUEST,
+//                "TOKEN_EXPIRED : The access token has expired. Please refresh your token.");
+//    }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResultDTO handleUserAlreadyExistsException(UserAlreadyExistsException ex){
