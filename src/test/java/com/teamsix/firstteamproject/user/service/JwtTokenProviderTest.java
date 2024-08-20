@@ -46,7 +46,7 @@ class JwtTokenProviderTest {
     private JwtTokenProvider jwtTokenProvider;
     private static final String SECRET_KEY = "verySecretKeyForTestingPurposesOnly12345678901234567890";
     private Key key;
-    long ONE_DAY_IN_SECONDS = 24*60*60;
+    long ONE_DAY_IN_SECONDS = 86400000;
 
 
     @BeforeEach
