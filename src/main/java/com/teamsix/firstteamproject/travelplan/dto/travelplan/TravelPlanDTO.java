@@ -1,5 +1,6 @@
 package com.teamsix.firstteamproject.travelplan.dto.travelplan;
 
+import com.teamsix.firstteamproject.travelplan.entity.TravelBasket;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class TravelPlanDTO {
     private Long id;
     private String title;
     private Date createdAt;
+    private TravelBasket travelBasket;
 
 //    private String destination;
 //    private String description;

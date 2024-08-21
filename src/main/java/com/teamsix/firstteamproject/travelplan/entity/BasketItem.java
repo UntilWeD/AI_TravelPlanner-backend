@@ -3,7 +3,12 @@ package com.teamsix.firstteamproject.travelplan.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-
+/**
+ * ---BasketItem---
+ * Title
+ * Content
+ * Image
+ */
 @Entity
 @Getter
 @Builder
@@ -24,21 +29,22 @@ public class BasketItem {
     @JoinColumn(name = "basket_id", nullable = false)
     private TravelBasket travelBasket;
 
-    /**
-     * @Enumerated(EnumType.STRING) 애너테이션을 작성함으로써 DB에 문자로 쉽게 저장된다
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(name = "category", nullable = false)
-    private Category category;
+//    /**
+//     * @Enumerated(EnumType.STRING) 애너테이션을 작성함으로써 DB에 문자로 쉽게 저장된다
+//     */
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "category", nullable = false)
+//    private Category category;
+
+    @Column(name = "title")
+    private String title;
 
     @Lob
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
-
-    //제목  (Title)
-    //내용 (Content)
-    //이미지 (Image)
+    @Column(name = "image_url")
+    private String imageUrl;
 
 
 
