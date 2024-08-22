@@ -59,7 +59,7 @@ public class AwsS3Service {
 
     private String generateBasketItemImageName(MultipartFile multipartFile, Long userId){
         return TRAVEL_PLAN_DIR + userId + "/" + UUID.randomUUID().toString()
-                + "-" + multipartFile.getOriginalFilename().replace(" ", "_");
+                + "-" + multipartFile.getOriginalFilename();
     }
 
     private String getFileUrl(String fileName){
@@ -67,6 +67,8 @@ public class AwsS3Service {
     }
 
 
+
+    // 만약 파일변환이 필요하다면 사용
     private File convertMultiPartFileToFile(MultipartFile file) throws IOException{
         File convertedFile = new File(file.getOriginalFilename());
         try(FileOutputStream fos = new FileOutputStream(convertedFile)){
@@ -75,6 +77,7 @@ public class AwsS3Service {
         return convertedFile;
     }
 
+    // 만약 파일변환이 필요하다면 사용
     private void removeFile(File target){
         if(target.delete()){
             return ;

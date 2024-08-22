@@ -1,23 +1,39 @@
 package com.teamsix.firstteamproject.travelplan.dto.travelplan;
 
-import com.teamsix.firstteamproject.travelplan.entity.TravelBasket;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import com.teamsix.firstteamproject.travelplan.entity.TravelPlan;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
 import java.util.Date;
 
-@Builder
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
 public class TravelPlanDTO {
 
-    private Long id;
+    @NotBlank
+    private Long userId;
+
+    @NotBlank
     private String title;
+
+    private String content;
+
+    @NotBlank
     private Date createdAt;
-    private TravelBasket travelBasket;
+
+    private TravelBasketDTO travelBasket;
+
+
+    // DTO -> Entity
+    public TravelPlan toEntity(TravelPlanDTO travelPlanDTO){
+        return TravelPlan.builder()
+
+                .build();
+    }
+
+
 
 //    private String destination;
 //    private String description;

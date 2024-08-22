@@ -3,24 +3,27 @@ package com.teamsix.firstteamproject.travelplan.controller;
 import com.teamsix.firstteamproject.global.dto.ResultDTO;
 import com.teamsix.firstteamproject.global.util.ApiUtils;
 import com.teamsix.firstteamproject.travelplan.dto.travelplan.TravelPlanDTO;
+import com.teamsix.firstteamproject.travelplan.service.TravelPlanService;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("user/{userId}/")
 public class TravelPlanController {
 
+    private TravelPlanService travelPlanService;
+
+
     /**
-     * 모든 TravelPlan 조회
+     * TravelPlan 저장
      */
     @Operation(summary = "여행계획조회", description = "유저가 만든 여행계획의 리스트를 반환한다.")
-    @GetMapping("/travel-plans")
-    public ResultDTO<TravelPlanDTO> getAllTravelPlans(@PathVariable Long userId){
-        //서비스 미구현 entity 객체 구조 필요
-        return ApiUtils.ok(new TravelPlanDTO());
+    @PostMapping("/travel-plan")
+    public ResultDTO<TravelPlanDTO> getAllTravelPlans(
+            @PathVariable Long userId, @RequestBody TravelPlanDTO travelPlan){
+        return ApiUtils.ok(travelPlanService.saveTravelPlan(userId, travelPlan));
     }
 
 
