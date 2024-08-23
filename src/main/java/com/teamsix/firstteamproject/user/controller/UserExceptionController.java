@@ -45,10 +45,10 @@ public class UserExceptionController {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResultDTO handleUserRuntimeException(UserEmailVerificationException ex){
-        log.warn("User Runtime Exception");
+    public ResultDTO handleUserRuntimeException(RuntimeException ex){
+        log.warn("User Runtime Exception : {}", ex);
         return ApiUtils.error(HttpStatus.BAD_REQUEST,
-                ex.getMessage());
+                "Internal Server Error");
     }
 
 }

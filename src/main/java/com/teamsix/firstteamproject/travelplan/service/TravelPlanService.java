@@ -2,6 +2,7 @@ package com.teamsix.firstteamproject.travelplan.service;
 
 import com.teamsix.firstteamproject.travelplan.dto.travelplan.BasketItemDTO;
 import com.teamsix.firstteamproject.travelplan.dto.travelplan.TravelPlanDTO;
+import com.teamsix.firstteamproject.travelplan.entity.TravelPlan;
 import com.teamsix.firstteamproject.travelplan.repository.TravelPlanRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,13 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class TravelPlanService {
 
-    private AwsS3Service awsS3Service;
-    private TravelPlanRepository travelPlanRepository;
+    private final AwsS3Service awsS3Service;
+    private final TravelPlanRepository travelPlanRepository;
 
+    public TravelPlanService(AwsS3Service awsS3Service, TravelPlanRepository travelPlanRepository) {
+        this.awsS3Service = awsS3Service;
+        this.travelPlanRepository = travelPlanRepository;
+    }
 
     /**
      * ======  Travel-Plan 저장 단계 ======
@@ -30,22 +34,22 @@ public class TravelPlanService {
      * @param travelPlan
      * @return
      */
-    public TravelPlanDTO saveTravelPlan(Long userId, TravelPlanDTO travelPlan){
-        // 후에 리팩토링 필수 적용해보기
-        List<MultipartFile> multipartFiles = new ArrayList<>();
-        List<BasketItemDTO> basketItems = travelPlan.getTravelBasket().getBasketItems();
-        for(BasketItemDTO item : basketItems ){
-            MultipartFile image = item.getImage();
-            if(!image.isEmpty() && image != null){
-                multipartFiles.add(image);
-            }
-        }
+    public TravelPlan saveTravelPlan(Long userId, TravelPlanDTO travelPlan){
+//        // 후에 리팩토링 필수 적용해보기
+//        List<MultipartFile> multipartFiles = new ArrayList<>();
+//        List<BasketItemDTO> basketItems = travelPlan.getTravelBasket().getBasketItems();
+//        for(BasketItemDTO item : basketItems ){
+//            MultipartFile image = item.getImage();
+//            if(!image.isEmpty() && image != null){
+//                multipartFiles.add(image);
+//            }
+//        }
+//
+//        List<String> imageUrls = awsS3Service.uploadImageList(multipartFiles, userId);
+//        travelPlan.getTravelBasket().mappingImageUrl(imageUrls);
 
-        List<String> imageUrls = awsS3Service.uploadImageList(multipartFiles, userId);
-        travelPlan.getTravelBasket().mappingImageUrl(imageUrls);
-
-
-        return new TravelPlanDTO();
+        log.info("[TravelPlanService] Method is Executing...");
+        return travelPlanRepository.save(travelPlan.toEntity(travelPlan));
     }
 
 }

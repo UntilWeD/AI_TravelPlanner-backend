@@ -27,9 +27,12 @@ public class TravelPlanDTO {
 
 
     // DTO -> Entity
-    public TravelPlan toEntity(TravelPlanDTO travelPlanDTO){
+    public TravelPlan toEntity(TravelPlanDTO dto){
         return TravelPlan.builder()
-
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .createdAt(new Date())
+                .travelBasket(dto.getTravelBasket().toEntity())
                 .build();
     }
 

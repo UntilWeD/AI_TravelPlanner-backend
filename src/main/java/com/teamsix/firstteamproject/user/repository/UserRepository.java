@@ -2,8 +2,10 @@ package com.teamsix.firstteamproject.user.repository;
 
 import com.teamsix.firstteamproject.user.dto.RegistryForm;
 import com.teamsix.firstteamproject.user.entity.User;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+
 
 public interface UserRepository {
     // 유저 CRUD

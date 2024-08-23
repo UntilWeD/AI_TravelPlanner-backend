@@ -11,6 +11,7 @@ import java.util.Date;
 
 @Entity
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TRAVEL_PLAN")
@@ -41,12 +42,6 @@ public class TravelPlan {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-
-
-    @Builder
-    public TravelPlan(String content) {
-        this.content = content;
-    }
 
 
     // 제목
