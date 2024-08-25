@@ -1,5 +1,7 @@
 package com.teamsix.firstteamproject.travelplan.entity;
 
+import com.teamsix.firstteamproject.travelplan.dto.travelplan.TravelBasketDTO;
+import com.teamsix.firstteamproject.travelplan.dto.travelplan.TravelPlanDTO;
 import com.teamsix.firstteamproject.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -44,9 +46,15 @@ public class TravelPlan {
     private Date createdAt;
 
 
-    // 제목
-    // 내용
-    // 이미지
+    public static TravelPlanDTO toDto(TravelPlan travelPlan){
+        return TravelPlanDTO.builder()
+                .userId(travelPlan.getUser().getId())
+                .title(travelPlan.getTitle())
+                .content(travelPlan.getContent())
+                .createdAt(travelPlan.getCreatedAt())
+                .travelBasket(TravelBasket.toDto(travelPlan.getTravelBasket()))
+                .build();
+    }
 
     // 여행플랜([id], userid) -> 여행 basket(plan_id) -> basket item(s)
     // 사용자가 -> 여행플랜이동

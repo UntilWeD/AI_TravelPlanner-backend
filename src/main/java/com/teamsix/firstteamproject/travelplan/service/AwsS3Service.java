@@ -54,6 +54,8 @@ public class AwsS3Service {
             fileUrlList.add(getFileUrl(fileName));
         });
 
+        log.info("[uploadImageList]fileUrlList : {} ", fileUrlList.toString());
+        log.info("[uploadImageList]fileUrlList : {} ", fileUrlList.get(0));
         return fileUrlList;
     }
 

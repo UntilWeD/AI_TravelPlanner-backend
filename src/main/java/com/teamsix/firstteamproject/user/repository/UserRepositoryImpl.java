@@ -103,7 +103,8 @@ public class UserRepositoryImpl implements UserRepository{
                 .addValue("id", id);
 
         try{
-            User user = template.queryForObject(sql, param, User.class);
+            User user = template.queryForObject(sql, param,
+                    new BeanPropertyRowMapper<>(User.class));
             return user;
         } catch (EmptyResultDataAccessException e){
             throw new RuntimeException("해당 id를 가진 유저가 존재하지 않습니다.");

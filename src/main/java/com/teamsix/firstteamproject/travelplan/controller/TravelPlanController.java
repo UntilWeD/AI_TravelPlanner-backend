@@ -9,6 +9,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user/{userId}")
@@ -26,9 +29,11 @@ public class TravelPlanController {
      */
     @Operation(summary = "여행계획조회", description = "유저가 만든 여행계획의 리스트를 반환한다.")
     @PostMapping("/travel-plan")
-    public ResultDTO<TravelPlan> saveTravelPlan(
-            @PathVariable Long userId, @RequestBody TravelPlanDTO travelPlan){
-        return ApiUtils.ok(travelPlanService.saveTravelPlan(userId, travelPlan));
+    public ResultDTO<TravelPlanDTO> saveTravelPlan(
+            @RequestPart(value = "image", required = false) List<MultipartFile> images,
+            @PathVariable Long userId,
+            @RequestPart("travelPlan") TravelPlanDTO travelPlan){
+        return ApiUtils.ok(travelPlanService.saveTravelPlan(images ,userId, travelPlan));
     }
 
 

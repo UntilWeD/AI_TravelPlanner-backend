@@ -1,5 +1,6 @@
 package com.teamsix.firstteamproject.travelplan.entity;
 
+import com.teamsix.firstteamproject.travelplan.dto.travelplan.TravelBasketDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -29,5 +31,21 @@ public class TravelBasket {
     @OneToMany(mappedBy = "travelBasket", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private List<BasketItem> basketItems;
+
+    public void makingDependency(TravelPlan travelPlan){
+        this.travelPlan = travelPlan;
+        for(BasketItem item : basketItems){
+            item.setTravelBasket(this);
+        }
+    }
+
+    public static TravelBasketDTO toDto(TravelBasket travelBasket){
+        return TravelBasketDTO.builder()
+                .basketItems(travelBasket.getBasketItems().stream()
+                        .map(BasketItem::toDto)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
 
 }

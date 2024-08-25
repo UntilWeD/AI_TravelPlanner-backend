@@ -1,5 +1,6 @@
 package com.teamsix.firstteamproject.travelplan.entity;
 
+import com.teamsix.firstteamproject.travelplan.dto.travelplan.BasketItemDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,6 +12,7 @@ import lombok.*;
  */
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -43,8 +45,21 @@ public class BasketItem {
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
+    @Column(name = "image_name")
+    private String imageName;
+
     @Column(name = "image_url")
     private String imageUrl;
+
+
+    public static BasketItemDTO toDto(BasketItem basketItem){
+        return BasketItemDTO.builder()
+                .title(basketItem.getTitle())
+                .content(basketItem.getContent())
+                .imageUrl(basketItem.getImageUrl())
+                .imageName(basketItem.getImageName())
+                .build();
+    }
 
 
 
