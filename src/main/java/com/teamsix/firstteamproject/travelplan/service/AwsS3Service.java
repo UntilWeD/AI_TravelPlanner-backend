@@ -1,10 +1,9 @@
 package com.teamsix.firstteamproject.travelplan.service;
 
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -66,6 +65,40 @@ public class AwsS3Service {
 
     private String getFileUrl(String fileName){
         return amazonS3Client.getUrl(bucket, fileName).toString();
+    }
+
+    public void deleteImage(List<String> imageFileNames, Long userId){
+        List<String> failedDeletions = new ArrayList<>();
+        for(String imageName : imageFileNames) {
+            try {
+                amazonS3Client.deleteObject(
+                        new DeleteObjectRequest(bucket, TRAVEL_PLAN_DIR + userId + "/" + imageName));
+            } catch (AmazonClientException e) {
+                log.error("Error deleting object {} from bucket {}: {}", imageName, bucket, e.getMessage());
+                failedDeletions.add(imageName);
+            }
+        }
+        // 삭제되지 못한 파일들 처리 미구현
+    }
+
+    // 폴더안에 이미지 반환
+    public List<String> getImageListInFolder(Long userId) {
+        List<String> imageNames = new ArrayList<>();
+        ListObjectsV2Request req = new ListObjectsV2Request()
+                .withBucketName(bucket)
+                .withPrefix(TRAVEL_PLAN_DIR + userId + "/");
+        ListObjectsV2Result result;
+
+        do {
+            result = amazonS3Client.listObjectsV2(req);
+            for (S3ObjectSummary objectSummary : result.getObjectSummaries()) {
+                String imageName = objectSummary.getKey();
+                imageNames.add(imageName);
+            }
+            req.setContinuationToken(result.getContinuationToken());
+        } while (result.isTruncated());
+        log.info("getImageListInFolder method : {} ", imageNames);
+        return imageNames;
     }
 
 

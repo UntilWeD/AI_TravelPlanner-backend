@@ -15,6 +15,8 @@ import java.util.Date;
 @Builder
 public class TravelPlanDTO {
 
+    private Long id;
+
     @NotBlank
     private Long userId;
 

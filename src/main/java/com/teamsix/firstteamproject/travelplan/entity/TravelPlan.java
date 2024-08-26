@@ -48,6 +48,7 @@ public class TravelPlan {
 
     public static TravelPlanDTO toDto(TravelPlan travelPlan){
         return TravelPlanDTO.builder()
+                .id(travelPlan.getId())
                 .userId(travelPlan.getUser().getId())
                 .title(travelPlan.getTitle())
                 .content(travelPlan.getContent())
