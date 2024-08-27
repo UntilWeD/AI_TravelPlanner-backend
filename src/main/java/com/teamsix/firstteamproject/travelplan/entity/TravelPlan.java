@@ -4,10 +4,7 @@ import com.teamsix.firstteamproject.travelplan.dto.travelplan.TravelBasketDTO;
 import com.teamsix.firstteamproject.travelplan.dto.travelplan.TravelPlanDTO;
 import com.teamsix.firstteamproject.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
@@ -31,6 +28,7 @@ public class TravelPlan {
     @JoinColumn(name = "TRAVEL_BASKET_ID")
     private TravelBasket travelBasket;
 
+    @Setter
     @Column(name = "title")
     private String title;
 
@@ -38,6 +36,7 @@ public class TravelPlan {
     /**
      * @Lob으로 String 속성을 CLOB으로 매핑해준다.
      */
+    @Setter
     @Lob
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
@@ -56,6 +55,8 @@ public class TravelPlan {
                 .travelBasket(TravelBasket.toDto(travelPlan.getTravelBasket()))
                 .build();
     }
+
+
 
     // 여행플랜([id], userid) -> 여행 basket(plan_id) -> basket item(s)
     // 사용자가 -> 여행플랜이동

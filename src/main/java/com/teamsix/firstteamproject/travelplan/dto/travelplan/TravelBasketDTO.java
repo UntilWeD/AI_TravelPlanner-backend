@@ -20,7 +20,7 @@ public class TravelBasketDTO {
 
     private List<BasketItemDTO> basketItems;
 
-
+    // 알맞은 파일 이름 이미지와 URL 매핑하기
     public void mappingImageNameAndUrl(List<String> imageUrls){
         Map<String, String> imageNametoUrlMap = new HashMap<>();
         Map<String, String> imageNametoStoredImageMap = new HashMap<>();

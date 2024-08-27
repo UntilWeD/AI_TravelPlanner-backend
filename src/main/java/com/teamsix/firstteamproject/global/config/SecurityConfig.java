@@ -37,6 +37,7 @@ public class SecurityConfig {
                             .requestMatchers("/user/register").permitAll()
                             .requestMatchers("/user/email/*").permitAll()
                             .requestMatchers("/user/{userId}/*").permitAll()
+                            .requestMatchers("/user/{userId}/travel-plan/*").permitAll()
                             .requestMatchers("/travelplan/*").permitAll()
                             .requestMatchers( "/","/swagger-ui/**", "/v3/api-docs/**").permitAll()
                             // USER 권한이 있어야 요청할 수 있음

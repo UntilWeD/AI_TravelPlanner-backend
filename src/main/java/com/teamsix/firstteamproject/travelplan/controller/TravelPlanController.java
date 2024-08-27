@@ -69,12 +69,13 @@ public class TravelPlanController {
      */
     @Operation(summary = "여행계획수정", description = "TravelPlan을 수정한다.")
     @PostMapping("/travel-plan/{travelPlanId}")
-    public ResultDTO<TravelPlanDTO> saveTravelPlan(
-            @RequestPart(value = "image", required = false) List<MultipartFile> images,
+    public ResultDTO<TravelPlanDTO> updateTravelPlan(
             @PathVariable Long userId,
             @PathVariable Long travelPlanId,
+            @RequestPart(value = "image", required = false) List<MultipartFile> images,
             @RequestPart("travelPlan") TravelPlanDTO travelPlan){
-        return ApiUtils.ok(travelPlanService.updateTravelPlan(images, travelPlan));
+        log.info("[TravelPlanController] updateTravelPlan images : {} ", images);
+        return ApiUtils.ok(travelPlanService.updateTravelPlan(images, travelPlan, userId));
     }
 
 

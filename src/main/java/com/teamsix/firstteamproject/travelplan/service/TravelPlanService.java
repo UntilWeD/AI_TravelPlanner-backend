@@ -2,12 +2,14 @@ package com.teamsix.firstteamproject.travelplan.service;
 
 import com.teamsix.firstteamproject.travelplan.dto.travelplan.BasketItemDTO;
 import com.teamsix.firstteamproject.travelplan.dto.travelplan.TravelPlanDTO;
+import com.teamsix.firstteamproject.travelplan.entity.BasketItem;
 import com.teamsix.firstteamproject.travelplan.entity.TravelPlan;
 import com.teamsix.firstteamproject.travelplan.repository.TravelPlanRepository;
 import com.teamsix.firstteamproject.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -83,21 +85,63 @@ public class TravelPlanService {
      * 2. 가져온 dto와 객체와 데이터를 비교 후 수정
      * 3. 수정하면 영속성 컨텍스트에 있기때문에 자동으로 수정
      * @param images
-     * @param travelPlanDTO
+     * @param dto
      * @return
      */
-    public TravelPlanDTO updateTravelPlan(List<MultipartFile> images, TravelPlanDTO travelPlanDTO) {
-        // 기존의 TravlPlanDTO의 basketItem이미지이름리스트와 현재 저장소의 이미지이름리스트 비교
-        List<String> imageNames = travelPlanDTO.getTravelBasket().getBasketItems()
-                .stream().map(basketItemDTO -> basketItemDTO.getImageName()).collect(Collectors.toList());
-        List<String> preImageNames = awsS3Service.getImageListInFolder(travelPlanDTO.getUserId());
+    @Transactional
+    public TravelPlanDTO updateTravelPlan(List<MultipartFile> images, TravelPlanDTO dto, Long userId) {
+        // 기존 TravelPlan 영속성 컨텍스트에 넣고 기본 속성 수정하기
+        TravelPlan travelPlan = travelPlanRepository.findById(dto.getId()).get();
+        travelPlan.setTitle(dto.getTitle());
+        travelPlan.setContent(dto.getContent());
+
+        // 이미지가 존재한다면
+        if( images != null ){
+            // 이전 이미지 이름 리스트
+            List<String> preImageNames = travelPlan.getTravelBasket().getBasketItems()
+                    .stream().map(basketItem -> basketItem.getImageName()).collect(Collectors.toList());
+            log.info("preImageNames : {}", preImageNames);
+            // 현재 이미지 이름 리스트
+            List<String> imageNames = dto.getTravelBasket().getBasketItems()
+                    .stream().map(basketItemDTO -> basketItemDTO.getImageName()).collect(Collectors.toList());
+            log.info("imageNames : {}", imageNames);
+
+            for(String preImageName : preImageNames){
+                if(imageNames.contains(preImageName)){
+                    preImageNames.remove(preImageName);
+                }
+            }
+            log.info("삭제할 리스트 preImageNames : {}", preImageNames);
+            // 현재 이미지 이름 리스트에 존재하지 않는 이미지 삭제
+            if(!preImageNames.isEmpty()){
+                awsS3Service.deleteImage(preImageNames, userId);
+            }
+
+            // preImageNames에 존재하는 이미지 이름 현재 baskItems에서 삭제
+            List<BasketItem> basketItems = travelPlan.getTravelBasket().getBasketItems();
+            for(BasketItem basketItem : basketItems){
+                if(preImageNames.contains(basketItem.getImageName())){
+                    basketItems.remove(basketItem);
+                }
+            }
+
+            // 새로 추가된 이미지 업로드
+            List<BasketItemDTO> basketItemDTOS = dto.getTravelBasket().getBasketItems();
+            List<String> imageUrls = awsS3Service.uploadImageList(images, userId);
+
+            dto.getTravelBasket().mappingImageNameAndUrl(imageUrls);
 
 
+            // BasketItemDTOS에 새로 추가된 basketItem 추가
+            for(BasketItemDTO itemDTO : basketItemDTOS){
+                if(!basketItems.contains(itemDTO)){
+                    basketItems.add(itemDTO.toEntity());
+                }
+            }
+        }
 
 
-        TravelPlan travelPlan = travelPlanRepository.findById(travelPlanDTO.getId()).get();
-
-        return TravelPlanDTO.builder().build();
+        return TravelPlan.toDto(travelPlan);
     }
 
 }
