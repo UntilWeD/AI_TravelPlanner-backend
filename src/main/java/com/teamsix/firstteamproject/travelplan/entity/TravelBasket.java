@@ -29,7 +29,7 @@ public class TravelBasket {
     private TravelPlan travelPlan;
 
     @OneToMany(mappedBy = "travelBasket", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BasketItem> basketItems;
 
     public void makingDependency(TravelPlan travelPlan){
@@ -45,6 +45,16 @@ public class TravelBasket {
                         .map(BasketItem::toDto)
                         .collect(Collectors.toList()))
                 .build();
+    }
+
+    public void addBasketItem(BasketItem basketItem) {
+        basketItems.add(basketItem);
+        basketItem.setTravelBasket(this);
+    }
+
+    public void removeBasketItem(BasketItem basketItem) {
+        basketItems.remove(basketItem);
+        basketItem.setTravelBasket(null);
     }
 
 

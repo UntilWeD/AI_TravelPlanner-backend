@@ -61,6 +61,18 @@ public class BasketItem {
                 .build();
     }
 
+    public void setTravelBasket(TravelBasket travelBasket) {
+        // 기존 연관관계 제거
+        if (this.travelBasket != null) {
+            this.travelBasket.getBasketItems().remove(this);
+        }
+        this.travelBasket = travelBasket;
+        // 새로운 연관관계 설정
+        if (travelBasket != null && !travelBasket.getBasketItems().contains(this)) {
+            travelBasket.getBasketItems().add(this);
+        }
+    }
+
 
 
 }

@@ -5,6 +5,7 @@ import com.teamsix.firstteamproject.travelplan.entity.TravelPlan;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,15 +22,17 @@ public class TravelBasketDTO {
     private List<BasketItemDTO> basketItems;
 
     // 알맞은 파일 이름 이미지와 URL 매핑하기
-    public void mappingImageNameAndUrl(List<String> imageUrls){
+    public List<String> mappingImageNameAndUrl(List<String> imageUrls){
         Map<String, String> imageNametoUrlMap = new HashMap<>();
         Map<String, String> imageNametoStoredImageMap = new HashMap<>();
+        List<String> result = new ArrayList<>();
 
         //이미지 이름과 URL을 매핑
         for (String url : imageUrls){
             String originalFileName = extractOriginalFileName(url);
             imageNametoUrlMap.put(originalFileName, url);
             imageNametoStoredImageMap.put(originalFileName, extractFileName(url));
+            result.add(extractFileName(url));
         }
 
 
@@ -43,6 +46,8 @@ public class TravelBasketDTO {
             }
         }
 
+
+        return result;
     }
 
     public TravelBasket toEntity(){

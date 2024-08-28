@@ -3,6 +3,7 @@ package com.teamsix.firstteamproject.travelplan.service;
 import com.teamsix.firstteamproject.travelplan.dto.travelplan.BasketItemDTO;
 import com.teamsix.firstteamproject.travelplan.dto.travelplan.TravelPlanDTO;
 import com.teamsix.firstteamproject.travelplan.entity.BasketItem;
+import com.teamsix.firstteamproject.travelplan.entity.TravelBasket;
 import com.teamsix.firstteamproject.travelplan.entity.TravelPlan;
 import com.teamsix.firstteamproject.travelplan.repository.TravelPlanRepository;
 import com.teamsix.firstteamproject.user.repository.UserRepository;
@@ -95,49 +96,50 @@ public class TravelPlanService {
         travelPlan.setTitle(dto.getTitle());
         travelPlan.setContent(dto.getContent());
 
+        // 이전 이미지 이름 리스트
+        List<String> preImageNames = travelPlan.getTravelBasket().getBasketItems()
+                .stream().map(basketItem -> basketItem.getImageName()).collect(Collectors.toList());
+        log.info("preImageNames : {}", preImageNames);
+        // 현재 이미지 이름 리스트
+        List<String> imageNames = dto.getTravelBasket().getBasketItems()
+                .stream().map(basketItemDTO -> basketItemDTO.getImageName()).collect(Collectors.toList());
+        log.info("imageNames : {}", imageNames);
+
+        for(int i=preImageNames.size() - 1 ; i >= 0; i--){
+            if(imageNames.contains(preImageNames.get(i))){
+                preImageNames.remove(i);
+            }
+        }
+        log.info("삭제할 리스트 preImageNames : {}", preImageNames);
+
+
+        List<BasketItem> basketItems = travelPlan.getTravelBasket().getBasketItems();
+        // 현재 이미지 이름 리스트에 존재하지 않는 이미지 삭제
+        if(!preImageNames.isEmpty()){
+            awsS3Service.deleteImage(preImageNames, userId);
+
+            // preImageNames에 존재하는 이미지 이름을 이전 baskItems에서 삭제
+            basketItems.removeIf(basketItem -> preImageNames.contains(basketItem.getImageName()));
+        }
+
         // 이미지가 존재한다면
         if( images != null ){
-            // 이전 이미지 이름 리스트
-            List<String> preImageNames = travelPlan.getTravelBasket().getBasketItems()
-                    .stream().map(basketItem -> basketItem.getImageName()).collect(Collectors.toList());
-            log.info("preImageNames : {}", preImageNames);
-            // 현재 이미지 이름 리스트
-            List<String> imageNames = dto.getTravelBasket().getBasketItems()
-                    .stream().map(basketItemDTO -> basketItemDTO.getImageName()).collect(Collectors.toList());
-            log.info("imageNames : {}", imageNames);
-
-            for(String preImageName : preImageNames){
-                if(imageNames.contains(preImageName)){
-                    preImageNames.remove(preImageName);
-                }
-            }
-            log.info("삭제할 리스트 preImageNames : {}", preImageNames);
-            // 현재 이미지 이름 리스트에 존재하지 않는 이미지 삭제
-            if(!preImageNames.isEmpty()){
-                awsS3Service.deleteImage(preImageNames, userId);
-            }
-
-            // preImageNames에 존재하는 이미지 이름 현재 baskItems에서 삭제
-            List<BasketItem> basketItems = travelPlan.getTravelBasket().getBasketItems();
-            for(BasketItem basketItem : basketItems){
-                if(preImageNames.contains(basketItem.getImageName())){
-                    basketItems.remove(basketItem);
-                }
-            }
 
             // 새로 추가된 이미지 업로드
             List<BasketItemDTO> basketItemDTOS = dto.getTravelBasket().getBasketItems();
             List<String> imageUrls = awsS3Service.uploadImageList(images, userId);
 
-            dto.getTravelBasket().mappingImageNameAndUrl(imageUrls);
+            List<String> addedImages = dto.getTravelBasket().mappingImageNameAndUrl(imageUrls);
 
-
+            log.info("addedImages : {} ", addedImages);
             // BasketItemDTOS에 새로 추가된 basketItem 추가
-            for(BasketItemDTO itemDTO : basketItemDTOS){
-                if(!basketItems.contains(itemDTO)){
-                    basketItems.add(itemDTO.toEntity());
+            for(BasketItemDTO basketItemDTO : basketItemDTOS){
+                if(addedImages.contains(basketItemDTO.getImageName())){
+                    log.info("method 실행");
+                    travelPlan.getTravelBasket().addBasketItem(basketItemDTO.toEntity());
                 }
             }
+
         }
 
 
