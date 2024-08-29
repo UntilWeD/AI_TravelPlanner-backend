@@ -69,8 +69,10 @@ public class TravelPlanController {
      * @return
      */
     @Operation(summary = "여행계획삭제", description = "TravelPlan을 삭제한다.")
-    @DeleteMapping("/travel-plans")
-    public ResultDTO<String> deleteTravelPlan(@PathVariable Long userId, @RequestParam Long travelPlanId){
+    @DeleteMapping("/travel-plans/{travelPlanId}")
+    public ResultDTO<String> deleteTravelPlan(
+            @PathVariable Long userId,
+            @PathVariable Long travelPlanId){
         travelPlanService.deleteTravelPlan(travelPlanId);
         return ApiUtils.ok("TravelPlan이 정상적으로 삭제되었습니다.");
     }
