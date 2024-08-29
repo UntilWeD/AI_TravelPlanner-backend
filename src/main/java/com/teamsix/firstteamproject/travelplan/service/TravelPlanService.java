@@ -1,13 +1,12 @@
 package com.teamsix.firstteamproject.travelplan.service;
 
 import com.teamsix.firstteamproject.travelplan.dto.travelplan.BasketItemDTO;
+import com.teamsix.firstteamproject.travelplan.dto.travelplan.SimpleTravelPlanDTO;
 import com.teamsix.firstteamproject.travelplan.dto.travelplan.TravelPlanDTO;
 import com.teamsix.firstteamproject.travelplan.entity.BasketItem;
-import com.teamsix.firstteamproject.travelplan.entity.TravelBasket;
 import com.teamsix.firstteamproject.travelplan.entity.TravelPlan;
 import com.teamsix.firstteamproject.travelplan.repository.TravelPlanRepository;
 import com.teamsix.firstteamproject.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,11 +51,28 @@ public class TravelPlanService {
         return TravelPlan.toDto(travelPlanRepository.save(travelPlan));
     }
 
-    public List<TravelPlanDTO> getTravelPlans(Long userId) {
+    /**
+     * 해당 유저의 Simple TravelPlan객체들을 DTO에 담아 전송한다.
+     * @param userId
+     * @return
+     */
+    public List<SimpleTravelPlanDTO> getSimpleTravelPlans(Long userId) {
         return travelPlanRepository.findByUser_Id(userId)
-                .stream().map(travelPlan -> TravelPlan.toDto(travelPlan))
-                .collect(Collectors.toList());
+            .stream().map(travelPlan -> SimpleTravelPlanDTO.toSimpleTravelPlanDTO(travelPlan))
+            .collect(Collectors.toList());
     }
+
+    /**
+     * 해당 유저의 travelPlanList중 travelPlanId에 해당하는 TravelPlan객체를
+     * DTO화 시켜 반환한다.
+     * @param travelPlanId
+     * @return
+     */
+    public TravelPlanDTO getTravelPlan(Long travelPlanId){
+        return TravelPlan.toDto(travelPlanRepository.findById(travelPlanId).get());
+    }
+
+
 
     /**
      * ====== 삭제 과정 ======
