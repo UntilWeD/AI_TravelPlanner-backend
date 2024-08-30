@@ -5,10 +5,9 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString
 @Builder
 @AllArgsConstructor
-public class RegistryForm {
+public class UserRegistryDTO {
 
     @NotBlank
     private String name;

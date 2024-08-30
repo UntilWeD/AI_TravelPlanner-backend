@@ -1,8 +1,8 @@
 package com.teamsix.firstteamproject.user.service;
 
-import com.teamsix.firstteamproject.user.dto.LoginForm;
-import com.teamsix.firstteamproject.user.dto.RegistryForm;
-import com.teamsix.firstteamproject.user.dto.UserDto;
+import com.teamsix.firstteamproject.user.dto.UserLoginDTO;
+import com.teamsix.firstteamproject.user.dto.UserRegistryDTO;
+import com.teamsix.firstteamproject.user.dto.UserDTO;
 import com.teamsix.firstteamproject.user.entity.JwtToken;
 import com.teamsix.firstteamproject.user.entity.User;
 import com.teamsix.firstteamproject.user.repository.UserRepository;
@@ -13,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -55,21 +53,21 @@ class UserServiceTest {
     void register() {
 
         //given
-        RegistryForm mockRegistryForm =
-                RegistryForm.builder()
+        UserRegistryDTO mockUserRegistryDTO =
+                UserRegistryDTO.builder()
                         .email("muojeso90@gmail.com")
                         .pw("12345678")
                         .name("test01")
                         .build();
 
         //when
-        when(userRepository.saveUser(mockRegistryForm)).thenReturn(mockRegistryForm);
-        when(passwordEncoder.encode(mockRegistryForm.getPw())).thenReturn("12345678");
-        when(userRepository.findUserByEmail(mockRegistryForm.getEmail())).thenReturn(Optional.empty());
-        RegistryForm result = userService.register(mockRegistryForm);
+        when(userRepository.saveUser(mockUserRegistryDTO)).thenReturn(mockUserRegistryDTO);
+        when(passwordEncoder.encode(mockUserRegistryDTO.getPw())).thenReturn("12345678");
+        when(userRepository.findUserByEmail(mockUserRegistryDTO.getEmail())).thenReturn(Optional.empty());
+        UserRegistryDTO result = userService.register(mockUserRegistryDTO);
 
         //then
-        Assertions.assertThat(mockRegistryForm).isEqualTo(result);
+        Assertions.assertThat(mockUserRegistryDTO).isEqualTo(result);
 
     }
 
@@ -77,7 +75,7 @@ class UserServiceTest {
     void signIn() {
 
         //given
-        LoginForm loginForm = LoginForm.builder()
+        UserLoginDTO userLoginDTO = UserLoginDTO.builder()
                 .email("muojeso90@gmail.com")
                 .pw("12345678")
                 .build();
@@ -92,7 +90,7 @@ class UserServiceTest {
         when(jwtTokenProvider.generateToken(mockAuthentication)).thenReturn(expectedToken);
 
         //when
-        JwtToken result = userService.signIn(loginForm);
+        JwtToken result = userService.signIn(userLoginDTO);
 
         //then
         Assertions.assertThat(expectedToken).isEqualTo(result);
@@ -138,7 +136,7 @@ class UserServiceTest {
                 .role("USER")
                 .emailVerification(true)
                 .build();
-        UserDto userDto = UserDto.toDto(user);
+        UserDTO userDto = UserDTO.toDto(user);
 
         /**
          * try-with-resources 로 MockedStatic은 전역상태를 변경한다.
@@ -146,14 +144,14 @@ class UserServiceTest {
          * 바로 정리해야 하기에 이 try구문 후에
          * MockedStatic객체가 자동으로 닫히고 staitc 메서드에 대한 모킹이 사라진다.
          */
-        try (MockedStatic<UserDto> mockedStatic = mockStatic(UserDto.class)){
+        try (MockedStatic<UserDTO> mockedStatic = mockStatic(UserDTO.class)){
             when(userRepository.findUserById(userId)).thenReturn(user);
-            when(UserDto.toDto(user)).thenReturn(userDto);
-            mockedStatic.when(() -> UserDto.toDto(user)).thenReturn(userDto);
+            when(UserDTO.toDto(user)).thenReturn(userDto);
+            mockedStatic.when(() -> UserDTO.toDto(user)).thenReturn(userDto);
 
 
             //when
-            UserDto result = userService.findUserById(userId);
+            UserDTO result = userService.findUserById(userId);
 
             //then
             Assertions.assertThat(result).isEqualTo(userDto);

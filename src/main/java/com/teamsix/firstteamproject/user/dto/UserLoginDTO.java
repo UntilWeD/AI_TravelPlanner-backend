@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @Builder
-public class LoginForm {
+public class UserLoginDTO {
 
     @NotBlank
     public String email;

@@ -1,12 +1,12 @@
 package com.teamsix.firstteamproject.user.service;
 
-import com.teamsix.firstteamproject.user.dto.LoginForm;
-import com.teamsix.firstteamproject.user.dto.RegistryForm;
-import com.teamsix.firstteamproject.user.dto.UserDto;
+import com.teamsix.firstteamproject.user.dto.UserLoginDTO;
+import com.teamsix.firstteamproject.user.dto.UserRegistryDTO;
+import com.teamsix.firstteamproject.user.dto.UserDTO;
+import com.teamsix.firstteamproject.user.dto.UserUpdateDTO;
 import com.teamsix.firstteamproject.user.entity.JwtToken;
 import com.teamsix.firstteamproject.user.entity.User;
 import com.teamsix.firstteamproject.user.exception.UserAlreadyExistsException;
-import com.teamsix.firstteamproject.user.exception.UserEmailVerificationException;
 import com.teamsix.firstteamproject.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,22 +30,22 @@ public class UserService{
     private final PasswordEncoder passwordEncoder;
 
 
-    public RegistryForm register(RegistryForm registryForm) {
+    public UserRegistryDTO register(UserRegistryDTO userRegistryDTO) {
         // 서비스 레이어에서 해당 인코딩도 비즈니스 로직이기에 적절하다.
-        registryForm.setPw(passwordEncoder.encode(registryForm.getPw()));
-        if(userRepository.findUserByEmail(registryForm.getEmail()).isPresent()){
-            throw new UserAlreadyExistsException(registryForm.getEmail());
+        userRegistryDTO.setPw(passwordEncoder.encode(userRegistryDTO.getPw()));
+        if(userRepository.findUserByEmail(userRegistryDTO.getEmail()).isPresent()){
+            throw new UserAlreadyExistsException(userRegistryDTO.getEmail());
         }
-        return userRepository.saveUser(registryForm);
+        return userRepository.saveUser(userRegistryDTO);
     }
 
 
-    public JwtToken signIn(LoginForm loginForm) {
+    public JwtToken signIn(UserLoginDTO userLoginDTO) {
 
         //1. username + password를 기반으로 Authentication 객체 생성
         //이때 authentication은 인증 여부를 확인하는 authenticated 값이 false
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginForm.email, loginForm.pw);
+                new UsernamePasswordAuthenticationToken(userLoginDTO.email, userLoginDTO.pw);
 
         //2. 실제 검증. authenticate() 메서드를 통해 요청된 User에 대한 검증 진행
         // authenticated메서드가 실행될 때 CustomUserDetailsService에서 만든 loadUserByUsername 메서드 실행
@@ -69,7 +69,24 @@ public class UserService{
         return findUser;
     }
 
-    public UserDto findUserById(Long userId){
-        return UserDto.toDto(userRepository.findUserById(userId));
+    public UserDTO findUserById(Long userId){
+        return UserDTO.toDto(userRepository.findUserById(userId));
     }
+
+    public UserDTO updateUser(Long userId, UserUpdateDTO userUpdateDTO) {
+        if(!userUpdateDTO.getPw().equals(userUpdateDTO.getConfirmationPw())){
+            throw new RuntimeException("User pw and confirmationPw is not equal.");
+        }
+        userUpdateDTO.setPw(passwordEncoder.encode(userUpdateDTO.getPw()));
+        return UserDTO.toDto(userRepository.updateUser(userId, userUpdateDTO));
+    }
+
+    public Long deleteUser(Long userId) {
+        return userRepository.deleteUser(userId);
+    }
+
+    private boolean verifyPassword(String rawPw, String encodedPw){
+        return passwordEncoder.matches(rawPw, encodedPw);
+    }
+
 }

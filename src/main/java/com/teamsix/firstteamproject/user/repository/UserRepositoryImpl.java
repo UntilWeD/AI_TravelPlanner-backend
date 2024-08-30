@@ -1,6 +1,7 @@
 package com.teamsix.firstteamproject.user.repository;
 
-import com.teamsix.firstteamproject.user.dto.RegistryForm;
+import com.teamsix.firstteamproject.user.dto.UserRegistryDTO;
+import com.teamsix.firstteamproject.user.dto.UserUpdateDTO;
 import com.teamsix.firstteamproject.user.entity.Role;
 import com.teamsix.firstteamproject.user.entity.User;
 import lombok.extern.slf4j.Slf4j;
@@ -31,31 +32,53 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public RegistryForm saveUser(RegistryForm registryForm) {
+    public UserRegistryDTO saveUser(UserRegistryDTO userRegistryDTO) {
         log.info("[UserRepository] Executing the saveUser method ");
 
         String sql = "INSERT INTO user(email, pw, name, role) " +
                 "VALUES(:email, :pw, :name, :role)";
 
         SqlParameterSource param = new MapSqlParameterSource()
-                .addValue("email", registryForm.getEmail())
-                .addValue("pw", registryForm.getPw())
-                .addValue("name", registryForm.getName())
+                .addValue("email", userRegistryDTO.getEmail())
+                .addValue("pw", userRegistryDTO.getPw())
+                .addValue("name", userRegistryDTO.getName())
                 .addValue("role", Role.USER.name());
         template.update(sql, param);
-        log.info("[UserRepository] Saving User = {}", registryForm);
+        log.info("[UserRepository] Saving User = {}", userRegistryDTO);
 
-        return registryForm;
+        return userRegistryDTO;
     }
 
     @Override
-    public User updateUser(User user, Long id) {
-        return null;
+    public User updateUser(Long userId, UserUpdateDTO dto) {
+        String sql = "UPDATE user SET pw = :pw, name = :name where id = :id";
+
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("pw", dto.getPw())
+                .addValue("name", dto.getName())
+                .addValue("id", userId);
+        int updatedRow = template.update(sql, parameterSource);
+        if(updatedRow == 0){
+            throw new RuntimeException("User not found with id: " + userId);
+        }
+
+        return findUserById(userId);
     }
 
     @Override
-    public User deleteUser(User user) {
-        return null;
+    public Long deleteUser(Long userId) {
+        String sql = "DELETE FROM user WHERE id = :id";
+
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("id", userId);
+
+        int deletedRows = template.update(sql, parameterSource);
+
+        if (deletedRows == 0) {
+            throw new RuntimeException("User not found with id: " + userId);
+        }
+
+        return userId;
     }
 
     @Override

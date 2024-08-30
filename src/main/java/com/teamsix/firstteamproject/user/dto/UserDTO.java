@@ -10,18 +10,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDto {
+public class UserDTO {
     private Long id;
 
     private String email;
 
     private String name;
 
+    private String pw;
+
     private boolean emailVerification;
 
-    static public UserDto toDto(User user){
-        return UserDto.builder()
+    static public UserDTO toDto(User user){
+        return UserDTO.builder()
                 .id(user.getId())
+                .pw(user.getPw())
                 .email(user.getEmail())
                 .name(user.getName())
                 .emailVerification(user.getEmailVerification())

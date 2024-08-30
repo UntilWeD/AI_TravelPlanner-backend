@@ -12,4 +12,5 @@ import java.util.List;
 @Repository
 public interface TravelPlanRepository extends JpaRepository<TravelPlan, Long>, TravelPlanRepositoryCustom {
     List<TravelPlan> findByUser_Id(Long userId);
+//    List<TravelPlan> findAllByOrderBy
 }

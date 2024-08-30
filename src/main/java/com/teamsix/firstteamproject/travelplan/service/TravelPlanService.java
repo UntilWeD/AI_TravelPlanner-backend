@@ -52,7 +52,7 @@ public class TravelPlanService {
     }
 
     /**
-     * 해당 유저의 Simple TravelPlan객체들을 DTO에 담아 전송한다.
+     * 해당 유저의 Simple TravelPlan객체들을 updated_at속성에 따라
      * @param userId
      * @return
      */
