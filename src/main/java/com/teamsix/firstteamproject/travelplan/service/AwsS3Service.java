@@ -29,12 +29,9 @@ public class AwsS3Service {
     private String bucket;
 
     private String TRAVEL_PLAN_DIR = "TravelPlan/";
+    private String COMMUNITY_DIR = "Board/";
 
-    public String uploadImage(MultipartFile multipartFile){
-        return "yet";
-    }
-
-    public List<String> uploadImageList(List<MultipartFile> multipartFile, Long userId){
+    public List<String> uploadTravelPlanImageList(List<MultipartFile> multipartFile, Long userId){
         List<String> fileUrlList = new ArrayList<>();
 
         multipartFile.forEach(file -> {
@@ -58,10 +55,42 @@ public class AwsS3Service {
         return fileUrlList;
     }
 
+
+    public List<String> uploadCommunityImageList(List<MultipartFile> multipartFile, Long userId){
+        List<String> fileUrlList = new ArrayList<>();
+
+        multipartFile.forEach(file -> {
+            String fileName = generatePostImageName(file,userId);
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentLength(file.getSize());
+            objectMetadata.setContentType(file.getContentType());
+
+            try(InputStream inputStream = file.getInputStream()){
+                amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+            } catch (IOException ex){
+                log.info("[AwsS3Service] uploadImageList Method Error!! {}", ex);
+            }
+
+            fileUrlList.add(getFileUrl(fileName));
+        });
+
+        log.info("[uploadImageList]fileUrlList : {} ", fileUrlList.toString());
+        log.info("[uploadImageList]fileUrlList : {} ", fileUrlList.get(0));
+        return fileUrlList;
+    }
+
     private String generateBasketItemImageName(MultipartFile multipartFile, Long userId){
         return TRAVEL_PLAN_DIR + userId + "/" + UUID.randomUUID().toString()
                 + "-" + multipartFile.getOriginalFilename();
     }
+
+    private String generatePostImageName(MultipartFile multipartFile, Long userId){
+        return COMMUNITY_DIR  + userId + "/" + UUID.randomUUID().toString()
+                + "-" + multipartFile.getOriginalFilename();
+    }
+
+
 
     private String getFileUrl(String fileName){
         return amazonS3Client.getUrl(bucket, fileName).toString();

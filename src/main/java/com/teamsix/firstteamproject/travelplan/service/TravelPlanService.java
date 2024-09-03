@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +42,7 @@ public class TravelPlanService {
      */
     public TravelPlanDTO saveTravelPlan(List<MultipartFile> images, Long userId, TravelPlanDTO travelPlanDTO){
         List<BasketItemDTO> basketItems = travelPlanDTO.getTravelBasket().getBasketItems();
-        List<String> imageUrls = awsS3Service.uploadImageList(images, userId);
+        List<String> imageUrls = awsS3Service.uploadTravelPlanImageList(images, userId);
 
         travelPlanDTO.getTravelBasket().mappingImageNameAndUrl(imageUrls);
 
@@ -143,7 +142,7 @@ public class TravelPlanService {
 
             // 새로 추가된 이미지 업로드
             List<BasketItemDTO> basketItemDTOS = dto.getTravelBasket().getBasketItems();
-            List<String> imageUrls = awsS3Service.uploadImageList(images, userId);
+            List<String> imageUrls = awsS3Service.uploadTravelPlanImageList(images, userId);
 
             List<String> addedImages = dto.getTravelBasket().mappingImageNameAndUrl(imageUrls);
 

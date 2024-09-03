@@ -14,6 +14,9 @@ public class PostImage {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @Column(name = "image_name")
+    private String imageName;
+
     @Column(name = "image_url")
     private String imageUrl;
 
