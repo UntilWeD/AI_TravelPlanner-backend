@@ -1,12 +1,18 @@
 package com.teamsix.firstteamproject.community.dto;
 
 
+import com.teamsix.firstteamproject.community.entity.Comment;
+import com.teamsix.firstteamproject.community.entity.Post;
+import com.teamsix.firstteamproject.community.entity.PostCategory;
+import com.teamsix.firstteamproject.community.entity.PostImage;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
@@ -15,22 +21,84 @@ import java.util.*;
 public class PostDTO {
 
     private Long id;
+    // 후에 userId와 username userDTO로 묶기
+
+    @NotNull
     private Long userId;
-    private Long categoryId;
+
+    @NotNull
     private String username;
+
+    @NotNull
     private String title;
+
+    @NotNull
     private String content;
+
     private int like;
+
+    @NotNull
     private Date createdAt;
+    @NotNull
     private Date updatedAt;
+    private PostCategoryDTO postCategoryDTO;
     private List<PostImageDTO> postImageDTOS;
+    private List<CommentDTO> commentDTOS;
 
-    //toENtity
+    // toEntity
+    public Post toEntity(){
+        Post post = Post.builder()
+                .username(getUsername())
+                .title(getTitle())
+                .content(getContent())
+                .like(getLike())
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
+                .build();
+
+        // PostImage 엔티티화 및 연관관계 설정
+        if(!postImageDTOS.isEmpty()){
+            List<PostImage> postImages = getPostImageDTOS().stream()
+                    .map(dto -> {
+                        PostImage postImage = dto.toEntity();
+                        postImage.setPost(post);  // 양방향 연관관계 설정
+                        return postImage;
+                    })
+                    .collect(Collectors.toList());
+
+            post.setPostImages(postImages);
+        }
+
+        // Comment 엔티티화 및 연관관계 설정
+        if(!commentDTOS.isEmpty()){
+            List<Comment> comments = getCommentDTOS().stream()
+                    .map(dto -> {
+                        Comment comment = dto.toEntity();
+                        comment.setPost(post);  // 양방향 연관관계 설정
+                        return comment;
+                    })
+                    .collect(Collectors.toList());
+
+            post.setComments(comments);
+        }
+
+        if(postCategoryDTO != null){
+            // PostCategory 엔티티화 및 연관관계 설정
+            PostCategory postCategory = postCategoryDTO.toEntity();
+            postCategory.addPost(post); // 양방향 연관관계 설정
+
+
+            post.setPostCategory(postCategory);
+        }
+
+        return post;
+    }
 
 
 
+
+    // awsS3서비스에서 받은 imageUrls를 postImageDTOS에 추가
     public void mappingImageNameAndUrl(List<String> imageUrls) {
-
         for (String imageUrl :imageUrls){
             postImageDTOS.add(
                     PostImageDTO.builder()

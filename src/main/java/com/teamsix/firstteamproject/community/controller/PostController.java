@@ -1,7 +1,6 @@
 package com.teamsix.firstteamproject.community.controller;
 
 import com.teamsix.firstteamproject.community.dto.PostDTO;
-import com.teamsix.firstteamproject.community.entity.Post;
 import com.teamsix.firstteamproject.community.service.PostService;
 import com.teamsix.firstteamproject.global.dto.ResultDTO;
 import com.teamsix.firstteamproject.global.util.ApiUtils;
