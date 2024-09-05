@@ -122,6 +122,7 @@ public class UserRepositoryImpl implements UserRepository{
     public User findUserById(Long id) {
         String sql = "SELECT * FROM user where id = :id";
 
+        log.info("user id = {}", id);
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("id", id);
 

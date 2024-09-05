@@ -40,6 +40,7 @@ public class SecurityConfig {
                             .requestMatchers("/user/{userId}").permitAll()
                             .requestMatchers("/user/{userId}/travel-plans/*").permitAll()
                             .requestMatchers("/travelplan/*").permitAll()
+                            .requestMatchers("/board/*").permitAll()
                             .requestMatchers( "/","/swagger-ui/**", "/v3/api-docs/**").permitAll()
                             // USER 권한이 있어야 요청할 수 있음
                             .requestMatchers("/user/test").hasRole("USER")

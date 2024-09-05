@@ -2,6 +2,7 @@ package com.teamsix.firstteamproject.community.entity;
 
 import com.teamsix.firstteamproject.community.dto.PostImageDTO;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,9 +25,11 @@ public class PostImage {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @NotNull
     @Column(name = "image_name")
     private String imageName;
 
+    @NotNull
     @Column(name = "image_url")
     private String imageUrl;
 

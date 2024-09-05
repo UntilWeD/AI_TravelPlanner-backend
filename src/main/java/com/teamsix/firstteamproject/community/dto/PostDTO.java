@@ -35,15 +35,15 @@ public class PostDTO {
     @NotNull
     private String content;
 
-    private int like;
+    private int likes;
 
     @NotNull
     private Date createdAt;
     @NotNull
     private Date updatedAt;
     private PostCategoryDTO postCategoryDTO;
-    private List<PostImageDTO> postImageDTOS;
-    private List<CommentDTO> commentDTOS;
+    private List<PostImageDTO> postImageDTOS = new ArrayList<>();
+    private List<CommentDTO> commentDTOS = new ArrayList<>();
 
     // toEntity
     public Post toEntity(){
@@ -51,13 +51,13 @@ public class PostDTO {
                 .username(getUsername())
                 .title(getTitle())
                 .content(getContent())
-                .like(getLike())
+                .likes(getLikes())
                 .createdAt(getCreatedAt())
                 .updatedAt(getUpdatedAt())
                 .build();
 
         // PostImage 엔티티화 및 연관관계 설정
-        if(!postImageDTOS.isEmpty()){
+        if(postImageDTOS != null){
             List<PostImage> postImages = getPostImageDTOS().stream()
                     .map(dto -> {
                         PostImage postImage = dto.toEntity();
@@ -70,7 +70,7 @@ public class PostDTO {
         }
 
         // Comment 엔티티화 및 연관관계 설정
-        if(!commentDTOS.isEmpty()){
+        if(commentDTOS != null ){
             List<Comment> comments = getCommentDTOS().stream()
                     .map(dto -> {
                         Comment comment = dto.toEntity();
@@ -102,8 +102,8 @@ public class PostDTO {
         for (String imageUrl :imageUrls){
             postImageDTOS.add(
                     PostImageDTO.builder()
-                            .imageName(extractOriginalFileName(imageUrl))
-                            .imageUrl(extractFileName(imageUrl))
+                            .imageName(extractFileName(imageUrl))
+                            .imageUrl(imageUrl)
                             .build()
             );
         }

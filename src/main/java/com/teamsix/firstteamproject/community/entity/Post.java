@@ -49,8 +49,8 @@ public class Post {
         cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
-    @Column(name = "like")
-    private int like;
+    @Column(name = "likes")
+    private int likes;
 
     @Column(name = "created_at")
     private Date createdAt;
@@ -89,7 +89,7 @@ public class Post {
                 .content(getContent())
                 .createdAt(getCreatedAt())
                 .updatedAt(getUpdatedAt())
-                .like(getLike())
+                .likes(getLikes())
                 .postCategoryDTO(Optional.ofNullable(getPostCategory())
                         .map(PostCategory::toDTO).orElse(null))
                 .postImageDTOS(
@@ -109,8 +109,20 @@ public class Post {
                 .build();
     }
 
-
-
-
-
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", user=" + user +
+                ", postCategory=" + postCategory +
+                ", username='" + username + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", postImages=" + postImages +
+                ", comments=" + comments +
+                ", likes=" + likes +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }
