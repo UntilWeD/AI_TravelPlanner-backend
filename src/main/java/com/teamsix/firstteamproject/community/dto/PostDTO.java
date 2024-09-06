@@ -37,6 +37,8 @@ public class PostDTO {
 
     private int likes;
 
+    private int views;
+
     @NotNull
     private Date createdAt;
     @NotNull
@@ -52,6 +54,7 @@ public class PostDTO {
                 .title(getTitle())
                 .content(getContent())
                 .likes(getLikes())
+                .views(getViews())
                 .createdAt(getCreatedAt())
                 .updatedAt(getUpdatedAt())
                 .build();

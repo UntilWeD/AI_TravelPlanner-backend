@@ -1,6 +1,7 @@
 package com.teamsix.firstteamproject.community.entity;
 
 import com.teamsix.firstteamproject.community.dto.PostDTO;
+import com.teamsix.firstteamproject.community.dto.SimplePostDTO;
 import com.teamsix.firstteamproject.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -52,6 +53,9 @@ public class Post {
     @Column(name = "likes")
     private int likes;
 
+    @Column(name = "views")
+    private int views;
+
     @Column(name = "created_at")
     private Date createdAt;
 
@@ -84,6 +88,7 @@ public class Post {
     public PostDTO toDTO(){
         return PostDTO.builder()
                 .id(getId())
+                .userId(getUser().getId())
                 .username(getUsername())
                 .title(getTitle())
                 .content(getContent())
@@ -106,6 +111,16 @@ public class Post {
                                         .collect(Collectors.toList()))
                                 .orElse(Collections.emptyList())
                 )
+                .build();
+    }
+
+    public SimplePostDTO toSimpleDTO(){
+        return SimplePostDTO.builder()
+                .id(getId())
+                .username(getUsername())
+                .title(getTitle())
+                .likes(getLikes())
+                .createdAt(getCreatedAt())
                 .build();
     }
 

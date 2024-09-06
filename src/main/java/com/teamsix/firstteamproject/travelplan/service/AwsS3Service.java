@@ -110,6 +110,20 @@ public class AwsS3Service {
         // 삭제되지 못한 파일들 처리 미구현
     }
 
+    public void deleteCommunityImages(List<String> imageFileNames, Long userId){
+        List<String> failedDeletions = new ArrayList<>();
+        for(String imageName : imageFileNames) {
+            try {
+                amazonS3Client.deleteObject(
+                        new DeleteObjectRequest(bucket, COMMUNITY_DIR + userId + "/" + imageName));
+            } catch (AmazonClientException e) {
+                log.error("Error deleting object {} from bucket {}: {}", imageName, bucket, e.getMessage());
+                failedDeletions.add(imageName);
+            }
+        }
+        // 삭제되지 못한 파일들 처리 미구현
+    }
+
     // 폴더안에 이미지 반환
     public List<String> getImageListInFolder(Long userId) {
         List<String> imageNames = new ArrayList<>();
