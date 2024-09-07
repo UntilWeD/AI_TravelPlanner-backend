@@ -1,6 +1,7 @@
 package com.teamsix.firstteamproject.community.entity;
 
 import com.teamsix.firstteamproject.community.dto.PostDTO;
+import com.teamsix.firstteamproject.community.dto.PostImageDTO;
 import com.teamsix.firstteamproject.community.dto.SimplePostDTO;
 import com.teamsix.firstteamproject.user.entity.User;
 import jakarta.persistence.*;
@@ -84,6 +85,41 @@ public class Post {
         }
     }
 
+    public void removePostImage(List<String> removingImages){
+        for(int i = postImages.size() -1 ; i>= 0; i--){
+            if(removingImages.contains(postImages.get(i).getImageName())){
+                postImages.remove(i);
+            }
+        }
+    }
+
+    // awsS3서비스에서 받은 imageUrls를 postImageDTOS에 추가
+    public void mappingImageNameAndUrl(List<String> imageUrls) {
+        for (String imageUrl :imageUrls){
+            postImages.add(
+                    PostImage.builder()
+                            .post(this)
+                            .imageName(extractFileName(imageUrl))
+                            .imageUrl(imageUrl)
+                            .build()
+            );
+        }
+    }
+
+    public List<String> getPostImageNames(){
+        return postImages.stream().map(
+                PostImage::getImageName
+        ).collect(Collectors.toList());
+    }
+
+    public void updatePostFromDTO(PostDTO dto){
+        postCategory = dto.getPostCategoryDTO().toEntity();
+        title = dto.getTitle();
+        content = dto.getContent();
+        updatedAt = dto.getUpdatedAt();
+
+    }
+
 
     public PostDTO toDTO(){
         return PostDTO.builder()
@@ -140,4 +176,17 @@ public class Post {
                 ", updatedAt=" + updatedAt +
                 '}';
     }
+
+    public void addingViews(){
+        views++;
+    }
+
+    private String extractOriginalFileName(String url){
+        return url.substring(url.lastIndexOf('-') + 1, url.lastIndexOf("."));
+    }
+
+    private String extractFileName(String url){
+        return url.substring(url.lastIndexOf('/') + 1);
+    }
+
 }

@@ -47,6 +47,12 @@ public class PostDTO {
     private List<PostImageDTO> postImageDTOS = new ArrayList<>();
     private List<CommentDTO> commentDTOS = new ArrayList<>();
 
+    public List<String> getPostImageNames(){
+        return postImageDTOS.stream().map(
+                PostImageDTO::getImageName
+        ).collect(Collectors.toList());
+    }
+
     // toEntity
     public Post toEntity(){
         Post post = Post.builder()

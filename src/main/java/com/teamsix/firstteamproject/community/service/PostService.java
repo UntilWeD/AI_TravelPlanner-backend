@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,7 +55,9 @@ public class PostService {
     }
 
     public PostDTO getPostDTO(Long postId){
-        return postRepository.findById(postId).get().toDTO();
+        Post findingPost = postRepository.findById(postId).get();
+        findingPost.addingViews();
+        return findingPost.toDTO();
     }
 
     public void deletePost(Long postId){
@@ -70,6 +73,49 @@ public class PostService {
         } catch (Exception ex){
             throw new RuntimeException("While Removing Image, Exception Occured!!");
         }
+    }
+
+    /**
+     * Post 수정 메서드
+     * 1) 내용 수정
+     * 2) 이미지 변경 여부 확인 및 삭제
+     * 3) 추가된 이미지 저장과 엔티티 이미지리스트에 추가
+     * @param images
+     * @param postDTO
+     * @return
+     */
+    public PostDTO updatePost(List<MultipartFile> images, PostDTO postDTO){
+        // 1)
+        Post post = postRepository.findById(postDTO.getId()).get();
+        post.updatePostFromDTO(postDTO);
+
+        // 2)
+        if(post.getPostImages().size() != postDTO.getPostImageDTOS().size()){
+            List<String> deletingImageNames = post.getPostImageNames();
+            List<String> savingImageNames = postDTO.getPostImageNames();
+
+            for(int i = deletingImageNames.size() -1 ; i>= 0; i--){
+                if(savingImageNames.contains(deletingImageNames.get(i))){
+                    deletingImageNames.remove(i);
+                }
+            }
+
+            if(!deletingImageNames.isEmpty()){
+                //엔티티상 삭제
+                post.removePostImage(deletingImageNames);
+
+                //저장소상 삭제
+                awsS3Service.deleteCommunityImages(deletingImageNames, post.getUser().getId());
+            }
+        }
+
+        // 3)
+        if(images != null){
+            post.mappingImageNameAndUrl(awsS3Service.uploadCommunityImageList(images, post.getUser().getId()));
+        }
+
+
+        return post.toDTO();
     }
 
 

@@ -114,11 +114,11 @@ public class TravelPlanService {
         // 이전 이미지 이름 리스트
         List<String> preImageNames = travelPlan.getTravelBasket().getBasketItems()
                 .stream().map(basketItem -> basketItem.getImageName()).collect(Collectors.toList());
-        log.info("preImageNames : {}", preImageNames);
+
         // 현재 이미지 이름 리스트
         List<String> imageNames = dto.getTravelBasket().getBasketItems()
                 .stream().map(basketItemDTO -> basketItemDTO.getImageName()).collect(Collectors.toList());
-        log.info("imageNames : {}", imageNames);
+
 
         for(int i=preImageNames.size() - 1 ; i >= 0; i--){
             if(imageNames.contains(preImageNames.get(i))){

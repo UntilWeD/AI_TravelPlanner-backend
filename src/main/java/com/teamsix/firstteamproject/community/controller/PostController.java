@@ -62,6 +62,15 @@ public class PostController {
     }
 
     //post 수정
+    @Operation(summary = "커뮤니티 글 수정", description = "특정 id의 post를 수정한다.")
+    @PostMapping ("/lists/{postId}")
+    public ResultDTO<PostDTO> getUpdatingPostRequest(
+            @PathVariable Long postId,
+            @RequestPart(value = "image", required = false) List<MultipartFile> images,
+            @RequestPart(value = "post") PostDTO postDTO
+    ){
+        return ApiUtils.ok(postService.updatePost(images, postDTO));
+    }
 
 
 
