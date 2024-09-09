@@ -1,7 +1,6 @@
 package com.teamsix.firstteamproject.community.entity;
 
 import com.teamsix.firstteamproject.community.dto.PostDTO;
-import com.teamsix.firstteamproject.community.dto.PostImageDTO;
 import com.teamsix.firstteamproject.community.dto.SimplePostDTO;
 import com.teamsix.firstteamproject.user.entity.User;
 import jakarta.persistence.*;
@@ -180,6 +179,8 @@ public class Post {
     public void addingViews(){
         views++;
     }
+
+    public void addingLikes(){ likes++;}
 
     private String extractOriginalFileName(String url){
         return url.substring(url.lastIndexOf('-') + 1, url.lastIndexOf("."));

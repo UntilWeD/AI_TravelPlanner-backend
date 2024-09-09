@@ -72,6 +72,15 @@ public class PostController {
         return ApiUtils.ok(postService.updatePost(images, postDTO));
     }
 
+    // post 좋아요 클릭 (후에 수정)
+    @Operation(summary = "커뮤니티 글 좋아요", description = "특정 id의 post 좋아요 수를 올린다. ")
+    @GetMapping("/lists/{postId}/likes")
+    public ResultDTO<PostDTO> getLikesRequest(
+            @PathVariable Long postId
+    ){
+        return ApiUtils.ok(postService.addingLikesToPost(postId));
+    }
+
 
 
 

@@ -47,7 +47,7 @@ public class GlobalExceptionController {
     public ResultDTO handleUserRuntimeException(RuntimeException ex){
         log.warn("User Runtime Exception : {}", ex);
         return ApiUtils.error(HttpStatus.BAD_REQUEST,
-                "Internal Server Error");
+                ex.getMessage());
     }
 
 }
