@@ -1,9 +1,6 @@
 package com.teamsix.firstteamproject.user.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 
 /**
@@ -15,7 +12,9 @@ import lombok.Getter;
 @Getter
 public class JwtToken {
 
+    @Setter
     // JWT에 대한 인증 타입
+    private Long userId;
     private String grantType;
     private String accessToken;
     private String refreshToken;

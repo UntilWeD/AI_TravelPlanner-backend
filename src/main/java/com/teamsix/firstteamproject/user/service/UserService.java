@@ -54,6 +54,7 @@ public class UserService{
 
         //3. 인증 정보를 기반으로 JWT 토큰 생성
         JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
+        jwtToken.setUserId(userRepository.findUserByEmail(userLoginDTO.email).get().getId());
 
         return jwtToken;
     }
