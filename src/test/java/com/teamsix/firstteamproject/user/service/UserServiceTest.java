@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -79,8 +80,9 @@ class UserServiceTest {
                 .email("muojeso90@gmail.com")
                 .pw("12345678")
                 .build();
+        User user = Mockito.mock(User.class);
         Authentication mockAuthentication = mock(Authentication.class);
-        JwtToken expectedToken = new JwtToken("USER",
+        JwtToken expectedToken = new JwtToken(1L,"USER",
                 "mockAccessToken", "mockRefreshToken");
         AuthenticationManager mockAuthenticationManger = mock(AuthenticationManager.class);
 
@@ -88,6 +90,7 @@ class UserServiceTest {
         when(mockAuthenticationManger.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenReturn(mockAuthentication);
         when(jwtTokenProvider.generateToken(mockAuthentication)).thenReturn(expectedToken);
+        when(userRepository.findUserByEmail(userLoginDTO.email)).thenReturn(Optional.of(user));
 
         //when
         JwtToken result = userService.signIn(userLoginDTO);
