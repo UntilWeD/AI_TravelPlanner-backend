@@ -8,8 +8,6 @@ import com.teamsix.firstteamproject.travelplan.service.TravelPlanService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 @RestController
@@ -29,10 +27,9 @@ public class TravelPlanController {
     @Operation(summary = "여행계획저장", description = "요청받은 여행계획을 저장한다.")
     @PostMapping("/travel-plans")
     public ResultDTO<TravelPlanDTO> saveTravelPlan(
-            @RequestPart(value = "image", required = false) List<MultipartFile> images,
             @PathVariable Long userId,
-            @RequestPart("travelPlan") TravelPlanDTO travelPlan){
-        return ApiUtils.ok(travelPlanService.saveTravelPlan(images ,userId, travelPlan));
+            @RequestBody TravelPlanDTO travelPlan){
+        return ApiUtils.ok(travelPlanService.saveTravelPlan(userId, travelPlan));
     }
 
     /**
@@ -79,7 +76,6 @@ public class TravelPlanController {
 
     /**
      * TravelPlan 변경
-     * @param images
      * @param userId
      * @param travelPlanId
      * @param travelPlan
@@ -90,10 +86,9 @@ public class TravelPlanController {
     public ResultDTO<TravelPlanDTO> updateTravelPlan(
             @PathVariable Long userId,
             @PathVariable Long travelPlanId,
-            @RequestPart(value = "image", required = false) List<MultipartFile> images,
-            @RequestPart("travelPlan") TravelPlanDTO travelPlan){
-        log.info("[TravelPlanController] updateTravelPlan images : {} ", images);
-        return ApiUtils.ok(travelPlanService.updateTravelPlan(images, travelPlan, userId));
+            @RequestBody TravelPlanDTO travelPlan){
+
+        return ApiUtils.ok(travelPlanService.updateTravelPlan(travelPlan, userId));
     }
 
 

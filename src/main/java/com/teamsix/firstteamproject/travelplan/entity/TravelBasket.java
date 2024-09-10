@@ -41,6 +41,7 @@ public class TravelBasket {
 
     public static TravelBasketDTO toDto(TravelBasket travelBasket){
         return TravelBasketDTO.builder()
+                .id(travelBasket.getId())
                 .basketItems(travelBasket.getBasketItems().stream()
                         .map(BasketItem::toDto)
                         .collect(Collectors.toList()))

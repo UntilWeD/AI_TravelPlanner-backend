@@ -86,11 +86,11 @@ public class PostService {
      * @return
      */
     public PostDTO updatePost(List<MultipartFile> images, PostDTO postDTO){
-        // 1)
+        // 1) 내용 변경 적용
         Post post = postRepository.findById(postDTO.getId()).get();
         post.updatePostFromDTO(postDTO);
 
-        // 2)
+        // 2) 삭제된 이미지 수정 적용
         if(post.getPostImages().size() != postDTO.getPostImageDTOS().size()){
             List<String> deletingImageNames = post.getPostImageNames();
             List<String> savingImageNames = postDTO.getPostImageNames();
@@ -102,15 +102,15 @@ public class PostService {
             }
 
             if(!deletingImageNames.isEmpty()){
-                //엔티티상 삭제
+                //엔티티상 이미지 삭제
                 post.removePostImage(deletingImageNames);
 
-                //저장소상 삭제
+                //저장소상 이미지 삭제
                 awsS3Service.deleteCommunityImages(deletingImageNames, post.getUser().getId());
             }
         }
 
-        // 3)
+        // 3) 추가된 이미지 적용
         if(images != null){
             post.mappingImageNameAndUrl(awsS3Service.uploadCommunityImageList(images, post.getUser().getId()));
         }

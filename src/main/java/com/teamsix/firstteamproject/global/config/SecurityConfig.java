@@ -39,7 +39,7 @@ public class SecurityConfig {
                             .requestMatchers("/user/{userId}/*").permitAll()
                             .requestMatchers("/user/{userId}").permitAll()
                             .requestMatchers("/user/{userId}/travel-plans").permitAll()
-                            .requestMatchers("/user/{userId}/travel-plans/*").permitAll()
+                            .requestMatchers("/user/{userId}/travel-plans/{travelPlanId}").permitAll()
                             .requestMatchers("/travelplan/*").permitAll()
                             .requestMatchers("/board/*").permitAll()
                             .requestMatchers("/board/lists/*").permitAll()

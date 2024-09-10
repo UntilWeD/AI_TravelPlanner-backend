@@ -11,17 +11,21 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class BasketItemDTO {
+    private Long id;
     private String title;
-    private String content;
+    private String address;
+    private int rating;
     private String imageUrl;
-    private String imageName;
 
+
+    // 연관관계 설정 되있지 않음.
     public BasketItem toEntity(){
         return BasketItem.builder()
+                .id(this.id)
                 .title(this.title)
-                .content(this.content)
+                .address(this.address)
+                .rating(this.rating)
                 .imageUrl(this.imageUrl)
-                .imageName(this.imageName)
                 .build();
     }
 }

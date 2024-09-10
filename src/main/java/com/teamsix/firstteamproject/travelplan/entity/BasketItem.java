@@ -31,22 +31,14 @@ public class BasketItem {
     @JoinColumn(name = "basket_id", nullable = false)
     private TravelBasket travelBasket;
 
-//    /**
-//     * @Enumerated(EnumType.STRING) 애너테이션을 작성함으로써 DB에 문자로 쉽게 저장된다
-//     */
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "category", nullable = false)
-//    private Category category;
-
     @Column(name = "title")
     private String title;
 
-    @Lob
-    @Column(name = "content", columnDefinition = "TEXT")
-    private String content;
+    @Column(name = "address")
+    private String address;
 
-    @Column(name = "image_name")
-    private String imageName;
+    @Column(name = "rating")
+    private int rating;
 
     @Column(name = "image_url")
     private String imageUrl;
@@ -54,10 +46,11 @@ public class BasketItem {
 
     public static BasketItemDTO toDto(BasketItem basketItem){
         return BasketItemDTO.builder()
+                .id(basketItem.getId())
                 .title(basketItem.getTitle())
-                .content(basketItem.getContent())
+                .address(basketItem.getAddress())
+                .rating(basketItem.getRating())
                 .imageUrl(basketItem.getImageUrl())
-                .imageName(basketItem.getImageName())
                 .build();
     }
 
@@ -73,6 +66,11 @@ public class BasketItem {
         }
     }
 
-
-
 }
+
+//    /**
+//     * @Enumerated(EnumType.STRING) 애너테이션을 작성함으로써 DB에 문자로 쉽게 저장된다
+//     */
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "category", nullable = false)
+//    private Category category;
