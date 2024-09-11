@@ -57,4 +57,9 @@ public class Comment {
     public void setPost(Post post) {
         this.post = post;
     }
+
+    public void updateComment(CommentDTO commentDTO) {
+        this.content = commentDTO.getContent();
+        this.updatedAt = commentDTO.getUpdatedAt();
+    }
 }

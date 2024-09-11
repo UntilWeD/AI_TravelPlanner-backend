@@ -15,9 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -57,7 +55,7 @@ public class PostService {
 
     public PostDTO getPostDTO(Long postId){
         Post findingPost = postRepository.findById(postId).get();
-        findingPost.addingViews();
+        findingPost.addViews();
         return findingPost.toDTO();
     }
 
@@ -122,7 +120,7 @@ public class PostService {
     // (사용자당 하나의 좋아요 제한 로직 코드 작성하기 및 테이블 수정)
     public PostDTO addingLikesToPost(Long postId){
         Post post = postRepository.findById(postId).get();
-        post.addingLikes();
+        post.addLikes();
         return post.toDTO();
     }
 

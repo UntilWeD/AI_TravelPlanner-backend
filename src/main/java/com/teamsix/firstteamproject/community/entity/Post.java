@@ -176,11 +176,16 @@ public class Post {
                 '}';
     }
 
-    public void addingViews(){
+    public void addViews(){
         views++;
     }
 
-    public void addingLikes(){ likes++;}
+    public void addLikes(){ likes++;}
+
+    public void addComments(Comment comment){
+        this.comments.add(comment);
+        comment.setPost(this);
+    }
 
     private String extractOriginalFileName(String url){
         return url.substring(url.lastIndexOf('-') + 1, url.lastIndexOf("."));

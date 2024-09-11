@@ -1,6 +1,7 @@
 package com.teamsix.firstteamproject.community.dto;
 
 import com.teamsix.firstteamproject.community.entity.Comment;
+import com.teamsix.firstteamproject.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,6 +24,10 @@ public class CommentDTO {
 
     public Comment toEntity(){
         return Comment.builder()
+                .user(User.builder()
+                        .id(userId)
+                        .name(userName)
+                        .build())
                 .content(getContent())
                 .createdAt(getCreatedAt())
                 .updatedAt(getUpdatedAt())
