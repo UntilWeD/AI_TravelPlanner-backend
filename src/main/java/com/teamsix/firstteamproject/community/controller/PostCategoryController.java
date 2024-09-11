@@ -52,7 +52,7 @@ public class PostCategoryController {
     }
 
     @Operation(summary = "PostCategory 삭제", description = "해당 id의 PostCategory를 삭제한다.")
-    @PostMapping ("/{categoryId}")
+    @DeleteMapping ("/{categoryId}")
     public ResultDTO<String> deletePostCategory(
             @PathVariable Long categoryId
     ){
