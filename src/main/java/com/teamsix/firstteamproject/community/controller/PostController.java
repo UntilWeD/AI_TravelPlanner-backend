@@ -81,6 +81,11 @@ public class PostController {
         return ApiUtils.ok(postService.addingLikesToPost(postId));
     }
 
+    //해당 카테고리에 해당하는 Post들을 조회한다.
+
+
+    //포스트에 대한 검색 기능
+
 
 
 

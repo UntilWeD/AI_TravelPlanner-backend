@@ -46,6 +46,8 @@ public class PostCategory {
     }
 
 
-
-
+    public void updatePostCategory(PostCategoryDTO dto) {
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+    }
 }
