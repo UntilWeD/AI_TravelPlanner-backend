@@ -1,9 +1,8 @@
 package com.teamsix.firstteamproject.user.service;
 
-import com.teamsix.firstteamproject.user.entity.Role;
 import com.teamsix.firstteamproject.user.entity.User;
 import com.teamsix.firstteamproject.user.exception.UserEmailVerificationException;
-import com.teamsix.firstteamproject.user.repository.UserRepository;
+import com.teamsix.firstteamproject.user.repository.UserRepositoryJDBC;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,13 +16,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @ExtendWith(MockitoExtension.class)
 class CustomUserDetailsServiceTest {
 
     @Mock
-    UserRepository userRepository;
+    UserRepositoryJDBC userRepositoryJDBC;
 
     @Mock
     PasswordEncoder passwordEncoder;
@@ -43,7 +40,7 @@ class CustomUserDetailsServiceTest {
                 .role("USER")
                 .emailVerification(true)
                 .build();
-        Mockito.when(userRepository.findUserByEmail(email)).thenReturn(Optional.of(testUser));
+        Mockito.when(userRepositoryJDBC.findUserByEmail(email)).thenReturn(Optional.of(testUser));
 
         //when
         UserDetails result = customUserDetailsService.loadUserByUsername(email);
@@ -66,7 +63,7 @@ class CustomUserDetailsServiceTest {
                 .role("USER")
                 .emailVerification(false)
                 .build();
-        Mockito.when(userRepository.findUserByEmail(email)).thenReturn(Optional.of(testUser));
+        Mockito.when(userRepositoryJDBC.findUserByEmail(email)).thenReturn(Optional.of(testUser));
 
         //when
 
@@ -82,7 +79,7 @@ class CustomUserDetailsServiceTest {
 
         //given
         String email = "test01@gmail.com";
-        Mockito.when(userRepository.findUserByEmail(email)).thenReturn(Optional.empty());
+        Mockito.when(userRepositoryJDBC.findUserByEmail(email)).thenReturn(Optional.empty());
 
         //when
 

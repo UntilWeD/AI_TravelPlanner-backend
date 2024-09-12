@@ -2,7 +2,7 @@ package com.teamsix.firstteamproject.user.service;
 
 import com.teamsix.firstteamproject.user.entity.User;
 import com.teamsix.firstteamproject.user.exception.UserEmailVerificationException;
-import com.teamsix.firstteamproject.user.repository.UserRepository;
+import com.teamsix.firstteamproject.user.repository.UserRepositoryJDBC;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,13 +16,13 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserRepositoryJDBC userRepositoryJDBC;
     private final PasswordEncoder passwordEncoder;
 
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findUserByEmail(email)
+        return userRepositoryJDBC.findUserByEmail(email)
                 .map(user -> {
                     if(!user.getEmailVerification()){
                         throw new UserEmailVerificationException("이메일 인증이 완료되지 않았습니다.");

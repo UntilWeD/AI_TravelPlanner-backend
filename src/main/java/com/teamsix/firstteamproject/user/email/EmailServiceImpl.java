@@ -1,7 +1,7 @@
 package com.teamsix.firstteamproject.user.email;
 
 import com.teamsix.firstteamproject.user.entity.User;
-import com.teamsix.firstteamproject.user.repository.UserRepository;
+import com.teamsix.firstteamproject.user.repository.UserRepositoryJDBC;
 import com.teamsix.firstteamproject.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ public class EmailServiceImpl implements EmailService {
 
     private final EmailTokenService emailTokenService;
     private final UserService userService;
-    private final UserRepository userRepository;
+    private final UserRepositoryJDBC userRepositoryJDBC;
 
     @Transactional
     @Override
@@ -40,7 +40,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendUserEmail(String email) {
-        Optional<User> user = userRepository.findUserByEmail(email);
+        Optional<User> user = userRepositoryJDBC.findUserByEmail(email);
 
         if(user==null){
             log.info("[EmailService] User's Email is not Correct!");

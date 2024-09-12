@@ -21,13 +21,13 @@ import java.util.Optional;
 @Repository
 @Slf4j
 @Transactional(readOnly = false)
-public class UserRepositoryImpl implements UserRepository{
+public class UserRepositoryJDBCImpl implements UserRepositoryJDBC {
 
     private final NamedParameterJdbcTemplate template;
 
     //Source주입
     @Autowired
-    public UserRepositoryImpl(DataSource dataSource){
+    public UserRepositoryJDBCImpl(DataSource dataSource){
         this.template = new NamedParameterJdbcTemplate(dataSource);
     }
 

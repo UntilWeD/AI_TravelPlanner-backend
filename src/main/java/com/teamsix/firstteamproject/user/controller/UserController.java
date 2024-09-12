@@ -35,8 +35,8 @@ public class UserController{
 
     @Operation(summary = "회원가입", description = "회원가입 API")
     @PostMapping("/register")
-    public ResultDTO<UserRegistryDTO> register(@RequestBody UserRegistryDTO userRegistryDTO) {
-        return ApiUtils.ok(userService.register(userRegistryDTO));
+    public ResultDTO<UserDTO> register(@RequestBody UserDTO dto) {
+        return ApiUtils.ok(userService.register(dto));
     }
 
     @Operation(summary = "로그인", description = "유저가 가입된 정보로 로그인하며 jwt토큰을 반환한다.")

@@ -21,6 +21,20 @@ public class UserDTO {
 
     private boolean emailVerification;
 
+    public void encodingPw(String pw){
+        this.pw = pw;
+    }
+
+    public User toEntity(){
+        return User.builder()
+                .id(this.id)
+                .email(this.email)
+                .pw(this.pw)
+                .name(this.name)
+                .emailVerification(this.emailVerification)
+                .build();
+    }
+
     static public UserDTO toDto(User user){
         return UserDTO.builder()
                 .id(user.getId())
@@ -30,4 +44,7 @@ public class UserDTO {
                 .emailVerification(user.getEmailVerification())
                 .build();
     }
+
+
+
 }

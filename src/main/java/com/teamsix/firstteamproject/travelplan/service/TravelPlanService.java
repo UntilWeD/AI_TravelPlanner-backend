@@ -4,14 +4,12 @@ import com.teamsix.firstteamproject.travelplan.dto.travelplan.BasketItemDTO;
 import com.teamsix.firstteamproject.travelplan.dto.travelplan.SimpleTravelPlanDTO;
 import com.teamsix.firstteamproject.travelplan.dto.travelplan.TravelPlanDTO;
 import com.teamsix.firstteamproject.travelplan.entity.BasketItem;
-import com.teamsix.firstteamproject.travelplan.entity.TravelBasket;
 import com.teamsix.firstteamproject.travelplan.entity.TravelPlan;
 import com.teamsix.firstteamproject.travelplan.repository.TravelPlanRepository;
-import com.teamsix.firstteamproject.user.repository.UserRepository;
+import com.teamsix.firstteamproject.user.repository.UserRepositoryJDBC;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,13 +20,13 @@ public class TravelPlanService {
 
     private final AwsS3Service awsS3Service;
     private final TravelPlanRepository travelPlanRepository;
-    private final UserRepository userRepository;
+    private final UserRepositoryJDBC userRepositoryJDBC;
 
     public TravelPlanService(AwsS3Service awsS3Service, TravelPlanRepository travelPlanRepository,
-                             UserRepository userRepository) {
+                             UserRepositoryJDBC userRepositoryJDBC) {
         this.awsS3Service = awsS3Service;
         this.travelPlanRepository = travelPlanRepository;
-        this.userRepository = userRepository;
+        this.userRepositoryJDBC = userRepositoryJDBC;
     }
 
     /**
@@ -42,7 +40,7 @@ public class TravelPlanService {
      * @return
      */
     public TravelPlanDTO saveTravelPlan(Long userId, TravelPlanDTO dto){
-        TravelPlan travelPlan = dto.toEntity(dto, userRepository.findUserById(userId));
+        TravelPlan travelPlan = dto.toEntity(dto, userRepositoryJDBC.findUserById(userId));
 
         return TravelPlan.toDto(travelPlanRepository.save(travelPlan));
     }

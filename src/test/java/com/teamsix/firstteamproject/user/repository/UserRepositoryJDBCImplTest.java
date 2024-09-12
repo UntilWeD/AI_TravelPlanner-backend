@@ -2,7 +2,7 @@ package com.teamsix.firstteamproject.user.repository;
 
 import org.junit.jupiter.api.Test;
 
-class UserRepositoryImplTest {
+class UserRepositoryJDBCImplTest {
 
     @Test
     void saveUser() {

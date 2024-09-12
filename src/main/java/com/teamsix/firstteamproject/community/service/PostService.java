@@ -8,7 +8,7 @@ import com.teamsix.firstteamproject.community.entity.PostImage;
 import com.teamsix.firstteamproject.community.repository.PostRepository;
 import com.teamsix.firstteamproject.travelplan.service.AwsS3Service;
 import com.teamsix.firstteamproject.user.entity.User;
-import com.teamsix.firstteamproject.user.repository.UserRepository;
+import com.teamsix.firstteamproject.user.repository.UserRepositoryJDBC;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
+    private final UserRepositoryJDBC userRepositoryJDBC;
     private final AwsS3Service awsS3Service;
 
     public PostDTO savePost(PostDTO postDTO, List<MultipartFile> images) {
@@ -36,7 +36,7 @@ public class PostService {
         // postImage리스트를 갖는 DTO의 Entity화 시키기
         Post post = postDTO.toEntity();
         // 후에 관계설정 코드 수정하기 (-> UserDTO객체 수정 필요)
-        User user = userRepository.findUserById(postDTO.getUserId());
+        User user = userRepositoryJDBC.findUserById(postDTO.getUserId());
         post.setUser(user);
         if(post.getComments() != null ){
             for(Comment comment : post.getComments()){
