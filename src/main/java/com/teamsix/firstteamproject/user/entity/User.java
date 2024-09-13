@@ -109,9 +109,5 @@ public class User implements UserDetails {
         return true;
     }
 
-
-    public boolean getEmailVerification(){
-        return emailVerification;
-    }
 }
 

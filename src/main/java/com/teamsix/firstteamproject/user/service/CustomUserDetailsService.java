@@ -2,7 +2,7 @@ package com.teamsix.firstteamproject.user.service;
 
 import com.teamsix.firstteamproject.user.entity.User;
 import com.teamsix.firstteamproject.user.exception.UserEmailVerificationException;
-import com.teamsix.firstteamproject.user.repository.UserRepositoryJDBC;
+import com.teamsix.firstteamproject.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,15 +16,17 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepositoryJDBC userRepositoryJDBC;
+
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
 
+    // email과 pw를 둘다 조건을 갖은채로 조회하기 수정필요
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepositoryJDBC.findUserByEmail(email)
+        return userRepository.findUserByEmail(email)
                 .map(user -> {
-                    if(!user.getEmailVerification()){
+                    if(!user.isEmailVerification()){
                         throw new UserEmailVerificationException("이메일 인증이 완료되지 않았습니다.");
                     }
                     return createUserDetails(user);

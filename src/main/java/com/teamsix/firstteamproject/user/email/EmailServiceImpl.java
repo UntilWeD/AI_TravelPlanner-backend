@@ -31,7 +31,7 @@ public class EmailServiceImpl implements EmailService {
             return "해당 이메일인증토큰은 만료되거나 존재하지 않는 토큰입니다.";
         }
 
-        Optional<User> findUser = userService.setEmailVerify(findEmailToken.get().getUserId());
+        userService.setEmailVerify(findEmailToken.get().getUserId());
         findEmailToken.get().setTokenToUsed(); // 사용완료
 
         return "이메일 인증이 완료되었습니다.";

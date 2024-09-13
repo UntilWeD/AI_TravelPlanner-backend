@@ -1,7 +1,6 @@
 package com.teamsix.firstteamproject.user.service;
 
-import com.teamsix.firstteamproject.user.dto.UserLoginDTO;
-import com.teamsix.firstteamproject.user.dto.UserRegistryDTO;
+
 import com.teamsix.firstteamproject.user.dto.UserDTO;
 import com.teamsix.firstteamproject.user.dto.UserUpdateDTO;
 import com.teamsix.firstteamproject.user.entity.JwtToken;
@@ -33,22 +32,22 @@ public class UserService{
 
 
     public UserDTO register(UserDTO dto) {
+        if(userRepository.findUserByEmail(dto.getEmail()).isPresent()){
+            throw new UserAlreadyExistsException(dto.getEmail());
+        }
 
         // 서비스 레이어에서 해당 인코딩도 비즈니스 로직이기에 적합하다.
         dto.encodingPw(passwordEncoder.encode(dto.getPw()));
-        if(userRepository.findUserByEmail(dto.getEmail()) != null){
-            throw new UserAlreadyExistsException(dto.getEmail());
-        }
         return userRepository.save(dto.toEntity()).toDTO();
     }
 
 
-    public JwtToken signIn(UserLoginDTO userLoginDTO) {
+    public JwtToken signIn(UserDTO dto) {
 
         //1. username + password를 기반으로 Authentication 객체 생성
         //이때 authentication은 인증 여부를 확인하는 authenticated 값이 false
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(userLoginDTO.email, userLoginDTO.pw);
+                new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPw());
 
         //2. 실제 검증. authenticate() 메서드를 통해 요청된 User에 대한 검증 진행
         // authenticated메서드가 실행될 때 CustomUserDetailsService에서 만든 loadUserByUsername 메서드 실행
@@ -57,20 +56,15 @@ public class UserService{
 
         //3. 인증 정보를 기반으로 JWT 토큰 생성
         JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
-        jwtToken.setUserId(userRepositoryJDBC.findUserByEmail(userLoginDTO.email).get().getId());
+        jwtToken.setUserId(userRepository.findUserByEmail(dto.getEmail()).get().getId());
 
         return jwtToken;
     }
 
 
-    public Optional<User> setEmailVerify(Long userId) {
-        Optional<User> findUser = userRepositoryJDBC.setEmailVerifiedById(userId);
+    public void setEmailVerify(Long userId) {
+        userRepository.updateEmailVerificationById(userId);
 
-        if(findUser.isEmpty()){
-            log.info("해당 유저는 존재하지 않습니다.");
-            return null;
-        }
-        return findUser;
     }
 
     public UserDTO findUserById(Long userId){
@@ -86,7 +80,8 @@ public class UserService{
     }
 
     public Long deleteUser(Long userId) {
-        return userRepositoryJDBC.deleteUser(userId);
+        userRepository.deleteById(userId);
+        return userId;
     }
 
     private boolean verifyPassword(String rawPw, String encodedPw){

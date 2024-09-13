@@ -1,6 +1,6 @@
 package com.teamsix.firstteamproject.user.repository;
 
-import com.teamsix.firstteamproject.user.dto.UserRegistryDTO;
+
 import com.teamsix.firstteamproject.user.dto.UserUpdateDTO;
 import com.teamsix.firstteamproject.user.entity.User;
 
@@ -8,8 +8,8 @@ import java.util.Optional;
 
 
 public interface UserRepositoryJDBC {
-    // 유저 CRUD
-    public UserRegistryDTO saveUser(UserRegistryDTO userRegistryDTO);
+
+
     public User updateUser(Long userId, UserUpdateDTO userUpdateDTO);
     public Long deleteUser(Long userId);
 

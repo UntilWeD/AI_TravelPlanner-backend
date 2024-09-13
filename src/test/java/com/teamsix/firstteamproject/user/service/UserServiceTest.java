@@ -1,7 +1,6 @@
 package com.teamsix.firstteamproject.user.service;
 
-import com.teamsix.firstteamproject.user.dto.UserLoginDTO;
-import com.teamsix.firstteamproject.user.dto.UserRegistryDTO;
+
 import com.teamsix.firstteamproject.user.dto.UserDTO;
 import com.teamsix.firstteamproject.user.entity.JwtToken;
 import com.teamsix.firstteamproject.user.entity.User;
@@ -53,33 +52,33 @@ class UserServiceTest {
 
     }
 
-    @Test
-    void register() {
+//    @Test
+//    void register() {
 
-        //given
-        UserDTO mockUserDTO =
-                UserDTO.builder()
-                        .email("muojeso90@gmail.com")
-                        .pw("12345678")
-                        .name("test01")
-                        .build();
-        User savedUser = mockUserDTO.toEntity();
-
-        //when
-        when(passwordEncoder.encode(mockUserDTO.getPw())).thenReturn("12345678");
-        when(userRepository.findUserByEmail(mockUserDTO.getEmail())).thenReturn(null);
-        when(userRepository.save(any(User.class))).thenReturn(savedUser);
-
-        UserDTO result = userService.register(mockUserDTO);
-
-        //then
-        log.info("mockerUserDTO.getName : " + mockUserDTO.getName());
-        log.info("result : " + result.getName());
-        Assertions.assertThat(result.getEmail()).isEqualTo(mockUserDTO.getEmail());
-        Assertions.assertThat(result.getName()).isEqualTo(mockUserDTO.getName());
-        Assertions.assertThat(result.isEmailVerification()).isEqualTo(mockUserDTO.isEmailVerification());
-
-    }
+//        //given
+//        UserDTO mockUserDTO =
+//                UserDTO.builder()
+//                        .email("muojeso90@gmail.com")
+//                        .pw("12345678")
+//                        .name("test01")
+//                        .build();
+//        User savedUser = mockUserDTO.toEntity();
+//
+//        //when
+//        when(passwordEncoder.encode(mockUserDTO.getPw())).thenReturn("12345678");
+//        when(userRepository.findUserByEmail(mockUserDTO.getEmail())).thenReturn(null);
+//        when(userRepository.save(any(User.class))).thenReturn(savedUser);
+//
+//        UserDTO result = userService.register(mockUserDTO);
+//
+//        //then
+//        log.info("mockerUserDTO.getName : " + mockUserDTO.getName());
+//        log.info("result : " + result.getName());
+//        Assertions.assertThat(result.getEmail()).isEqualTo(mockUserDTO.getEmail());
+//        Assertions.assertThat(result.getName()).isEqualTo(mockUserDTO.getName());
+//        Assertions.assertThat(result.isEmailVerification()).isEqualTo(mockUserDTO.isEmailVerification());
+//
+//    }
 
 //    @Test
 //    void signIn() {

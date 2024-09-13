@@ -1,8 +1,7 @@
 package com.teamsix.firstteamproject.user.repository;
 
-import com.teamsix.firstteamproject.user.dto.UserRegistryDTO;
+
 import com.teamsix.firstteamproject.user.dto.UserUpdateDTO;
-import com.teamsix.firstteamproject.user.entity.Role;
 import com.teamsix.firstteamproject.user.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,23 +30,23 @@ public class UserRepositoryJDBCImpl implements UserRepositoryJDBC {
         this.template = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    @Override
-    public UserRegistryDTO saveUser(UserRegistryDTO userRegistryDTO) {
-        log.info("[UserRepository] Executing the saveUser method ");
-
-        String sql = "INSERT INTO user(email, pw, name, role) " +
-                "VALUES(:email, :pw, :name, :role)";
-
-        SqlParameterSource param = new MapSqlParameterSource()
-                .addValue("email", userRegistryDTO.getEmail())
-                .addValue("pw", userRegistryDTO.getPw())
-                .addValue("name", userRegistryDTO.getName())
-                .addValue("role", Role.USER.name());
-        template.update(sql, param);
-        log.info("[UserRepository] Saving User = {}", userRegistryDTO);
-
-        return userRegistryDTO;
-    }
+//    @Override
+//    public UserRegistryDTO saveUser(UserRegistryDTO userRegistryDTO) {
+//        log.info("[UserRepository] Executing the saveUser method ");
+//
+//        String sql = "INSERT INTO user(email, pw, name, role) " +
+//                "VALUES(:email, :pw, :name, :role)";
+//
+//        SqlParameterSource param = new MapSqlParameterSource()
+//                .addValue("email", userRegistryDTO.getEmail())
+//                .addValue("pw", userRegistryDTO.getPw())
+//                .addValue("name", userRegistryDTO.getName())
+//                .addValue("role", Role.USER.name());
+//        template.update(sql, param);
+//        log.info("[UserRepository] Saving User = {}", userRegistryDTO);
+//
+//        return userRegistryDTO;
+//    }
 
     @Override
     public User updateUser(Long userId, UserUpdateDTO dto) {

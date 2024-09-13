@@ -41,7 +41,7 @@ public class UserDTO {
                 .pw(user.getPw())
                 .email(user.getEmail())
                 .name(user.getName())
-                .emailVerification(user.getEmailVerification())
+                .emailVerification(user.isEmailVerification())
                 .build();
     }
 
