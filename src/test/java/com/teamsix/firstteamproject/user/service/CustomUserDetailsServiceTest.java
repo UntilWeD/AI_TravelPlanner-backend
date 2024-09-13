@@ -2,6 +2,7 @@ package com.teamsix.firstteamproject.user.service;
 
 import com.teamsix.firstteamproject.user.entity.User;
 import com.teamsix.firstteamproject.user.exception.UserEmailVerificationException;
+import com.teamsix.firstteamproject.user.repository.UserRepository;
 import com.teamsix.firstteamproject.user.repository.UserRepositoryJDBC;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,9 @@ class CustomUserDetailsServiceTest {
     UserRepositoryJDBC userRepositoryJDBC;
 
     @Mock
+    UserRepository userRepository;
+
+    @Mock
     PasswordEncoder passwordEncoder;
 
     @InjectMocks
@@ -40,7 +44,7 @@ class CustomUserDetailsServiceTest {
                 .role("USER")
                 .emailVerification(true)
                 .build();
-        Mockito.when(userRepositoryJDBC.findUserByEmail(email)).thenReturn(Optional.of(testUser));
+        Mockito.when(userRepository.findUserByEmail(email)).thenReturn(Optional.of(testUser));
 
         //when
         UserDetails result = customUserDetailsService.loadUserByUsername(email);
@@ -63,7 +67,7 @@ class CustomUserDetailsServiceTest {
                 .role("USER")
                 .emailVerification(false)
                 .build();
-        Mockito.when(userRepositoryJDBC.findUserByEmail(email)).thenReturn(Optional.of(testUser));
+        Mockito.when(userRepository.findUserByEmail(email)).thenReturn(Optional.of(testUser));
 
         //when
 
@@ -79,7 +83,7 @@ class CustomUserDetailsServiceTest {
 
         //given
         String email = "test01@gmail.com";
-        Mockito.when(userRepositoryJDBC.findUserByEmail(email)).thenReturn(Optional.empty());
+        Mockito.when(userRepository.findUserByEmail(email)).thenReturn(Optional.empty());
 
         //when
 
