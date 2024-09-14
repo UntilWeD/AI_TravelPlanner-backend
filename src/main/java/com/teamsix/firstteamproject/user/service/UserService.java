@@ -4,10 +4,8 @@ package com.teamsix.firstteamproject.user.service;
 import com.teamsix.firstteamproject.user.dto.UserDTO;
 import com.teamsix.firstteamproject.user.dto.UserUpdateDTO;
 import com.teamsix.firstteamproject.user.entity.JwtToken;
-import com.teamsix.firstteamproject.user.entity.User;
 import com.teamsix.firstteamproject.user.exception.UserAlreadyExistsException;
 import com.teamsix.firstteamproject.user.repository.UserRepository;
-import com.teamsix.firstteamproject.user.repository.UserRepositoryJDBC;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,8 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -26,7 +22,6 @@ import java.util.Optional;
 public class UserService{
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserRepositoryJDBC userRepositoryJDBC;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
@@ -64,19 +59,19 @@ public class UserService{
 
     public void setEmailVerify(Long userId) {
         userRepository.updateEmailVerificationById(userId);
-
     }
 
     public UserDTO findUserById(Long userId){
-        return UserDTO.toDto(userRepositoryJDBC.findUserById(userId));
+        return UserDTO.toDto(userRepository.findUserById(userId).get());
     }
 
-    public UserDTO updateUser(Long userId, UserUpdateDTO userUpdateDTO) {
-        if(!userUpdateDTO.getPw().equals(userUpdateDTO.getConfirmationPw())){
+    public UserDTO updateUser(Long userId, UserUpdateDTO dto) {
+        if(!dto.getPw().equals(dto.getConfirmationPw())){
             throw new RuntimeException("User pw and confirmationPw is not equal.");
         }
-        userUpdateDTO.setPw(passwordEncoder.encode(userUpdateDTO.getPw()));
-        return UserDTO.toDto(userRepositoryJDBC.updateUser(userId, userUpdateDTO));
+        dto.setPw(passwordEncoder.encode(dto.getPw()));
+        userRepository.updateNameAndPwById(dto.getName(), dto.getPw(), userId);
+        return userRepository.findUserById(userId).get().toDTO();
     }
 
     public Long deleteUser(Long userId) {

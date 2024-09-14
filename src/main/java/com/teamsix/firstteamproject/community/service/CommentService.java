@@ -6,7 +6,7 @@ import com.teamsix.firstteamproject.community.entity.Comment;
 import com.teamsix.firstteamproject.community.entity.Post;
 import com.teamsix.firstteamproject.community.repository.CommentRepository;
 import com.teamsix.firstteamproject.community.repository.PostRepository;
-import com.teamsix.firstteamproject.user.repository.UserRepositoryJDBC;
+import com.teamsix.firstteamproject.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,12 +21,12 @@ public class CommentService {
 
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final UserRepositoryJDBC userRepositoryJDBC;
+    private final UserRepository userRepository;
 
-    public CommentService(PostRepository postRepository, CommentRepository commentRepository, UserRepositoryJDBC userRepositoryJDBC) {
+    public CommentService(PostRepository postRepository, CommentRepository commentRepository, UserRepository userRepository) {
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
-        this.userRepositoryJDBC = userRepositoryJDBC;
+        this.userRepository = userRepository;
     }
 
     public PostDTO saveComment(Long postId, CommentDTO commentDTO) {

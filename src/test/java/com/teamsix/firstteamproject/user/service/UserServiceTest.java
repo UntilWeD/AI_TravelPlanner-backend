@@ -1,31 +1,17 @@
 package com.teamsix.firstteamproject.user.service;
 
 
-import com.teamsix.firstteamproject.user.dto.UserDTO;
-import com.teamsix.firstteamproject.user.entity.JwtToken;
-import com.teamsix.firstteamproject.user.entity.User;
 import com.teamsix.firstteamproject.user.repository.UserRepository;
-import com.teamsix.firstteamproject.user.repository.UserRepositoryJDBC;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Optional;
-
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 
 @Slf4j

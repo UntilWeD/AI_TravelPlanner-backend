@@ -1,6 +1,6 @@
 package com.teamsix.firstteamproject.user.email;
 
-import com.teamsix.firstteamproject.user.repository.UserRepositoryJDBC;
+import com.teamsix.firstteamproject.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -15,14 +15,14 @@ import java.util.Optional;
 public class EmailTokenServiceImpl implements EmailTokenService{
     private final EmailSenderService emailSenderService;
     private final EmailTokenRepository emailTokenRepository;
-    private final UserRepositoryJDBC userRepositoryJDBC;
+    private final UserRepository userRepository;
 
     @Override
     public boolean sendEmailToken(String email) {
-        if(userRepositoryJDBC.findEmailVerificationByEmail(email)){
+        if(userRepository.findEmailVerificationByEmail(email)){
             return false;
         }
-        Long userNumber = userRepositoryJDBC.findUserByEmail(email).get().getId();
+        Long userNumber = userRepository.findUserByEmail(email).get().getId();
         return createEmailToken(userNumber, email);
     }
 

@@ -53,9 +53,9 @@ public class UserController{
     @PostMapping("/{userId}")
     public ResultDTO<UserDTO> updateUser(
             @PathVariable Long userId,
-            @RequestBody UserUpdateDTO userUpdateDTO
+            @RequestBody UserUpdateDTO dto
             ){
-        return ApiUtils.ok(userService.updateUser(userId, userUpdateDTO));
+        return ApiUtils.ok(userService.updateUser(userId, dto));
     }
 
     @Operation(summary = "유저 삭제", description = "해당 유저의 관련된 모든 정보를 db에서 삭제한다.")

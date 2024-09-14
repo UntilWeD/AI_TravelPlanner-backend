@@ -12,13 +12,21 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    public Optional<User> findUserById(Long id);
+
     public Optional<User> findUserByEmail(String email);
 
     public Optional<User> findUserByEmailAndPw(String email, String pw);
 
     @Modifying
-    @Query(value = "UPDATE User u SET u.emailVerification = TRUE WHERE u.id = :id")
+    @Query("UPDATE User u SET u.emailVerification = TRUE WHERE u.id = :id")
     public int updateEmailVerificationById(@Param("id") Long id);
 
+    @Query("SELECT u.emailVerification FROM User u WHERE u.email = :email")
+    public boolean findEmailVerificationByEmail(@Param("email") String email);
 
+    //"UPDATE user SET pw = :pw, name = :name where id = :id"
+    @Modifying
+    @Query("UPDATE User u SET u.name = :name, u.pw = :pw WHERE u.id = :id")
+    public int updateNameAndPwById(String name, String pw, Long id);
 }

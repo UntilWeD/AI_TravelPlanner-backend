@@ -6,7 +6,7 @@ import com.teamsix.firstteamproject.travelplan.dto.travelplan.TravelPlanDTO;
 import com.teamsix.firstteamproject.travelplan.entity.BasketItem;
 import com.teamsix.firstteamproject.travelplan.entity.TravelPlan;
 import com.teamsix.firstteamproject.travelplan.repository.TravelPlanRepository;
-import com.teamsix.firstteamproject.user.repository.UserRepositoryJDBC;
+import com.teamsix.firstteamproject.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,13 +20,13 @@ public class TravelPlanService {
 
     private final AwsS3Service awsS3Service;
     private final TravelPlanRepository travelPlanRepository;
-    private final UserRepositoryJDBC userRepositoryJDBC;
+    private final UserRepository userRepository;
 
     public TravelPlanService(AwsS3Service awsS3Service, TravelPlanRepository travelPlanRepository,
-                             UserRepositoryJDBC userRepositoryJDBC) {
+                             UserRepository userRepository) {
         this.awsS3Service = awsS3Service;
         this.travelPlanRepository = travelPlanRepository;
-        this.userRepositoryJDBC = userRepositoryJDBC;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -40,7 +40,7 @@ public class TravelPlanService {
      * @return
      */
     public TravelPlanDTO saveTravelPlan(Long userId, TravelPlanDTO dto){
-        TravelPlan travelPlan = dto.toEntity(dto, userRepositoryJDBC.findUserById(userId));
+        TravelPlan travelPlan = dto.toEntity(dto, userRepository.findUserById(userId).get());
 
         return TravelPlan.toDto(travelPlanRepository.save(travelPlan));
     }

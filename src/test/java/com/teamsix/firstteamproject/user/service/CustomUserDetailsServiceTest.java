@@ -3,7 +3,6 @@ package com.teamsix.firstteamproject.user.service;
 import com.teamsix.firstteamproject.user.entity.User;
 import com.teamsix.firstteamproject.user.exception.UserEmailVerificationException;
 import com.teamsix.firstteamproject.user.repository.UserRepository;
-import com.teamsix.firstteamproject.user.repository.UserRepositoryJDBC;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,9 +18,6 @@ import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 class CustomUserDetailsServiceTest {
-
-    @Mock
-    UserRepositoryJDBC userRepositoryJDBC;
 
     @Mock
     UserRepository userRepository;
