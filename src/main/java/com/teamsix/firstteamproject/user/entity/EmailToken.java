@@ -1,4 +1,4 @@
-package com.teamsix.firstteamproject.user.email;
+package com.teamsix.firstteamproject.user.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

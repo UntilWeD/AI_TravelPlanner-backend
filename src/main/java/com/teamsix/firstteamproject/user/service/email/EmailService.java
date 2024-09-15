@@ -1,7 +1,6 @@
-package com.teamsix.firstteamproject.user.email;
+package com.teamsix.firstteamproject.user.service.email;
 
-import com.teamsix.firstteamproject.user.entity.User;
-import com.teamsix.firstteamproject.user.repository.UserRepository;
+import com.teamsix.firstteamproject.user.entity.EmailToken;
 import com.teamsix.firstteamproject.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,16 +13,14 @@ import java.util.Optional;
 @Transactional
 @Service
 @RequiredArgsConstructor
-public class EmailServiceImpl implements EmailService {
+public class EmailService{
 
     private final EmailTokenService emailTokenService;
     private final UserService userService;
-    private final UserRepository userRepository;
 
+    // 프론트엔드 배포 후 리턴방식 변경필요
     @Transactional
-    @Override
     public String verifyEmail(String token) {
-        log.info("[EmailServiceImpl] verifyEmail is Executing");
 
         //이메일 토큰을 찾아온다
         Optional<EmailToken> findEmailToken = emailTokenService.findByIdAndExpirationDateAfterAndExpired(token);
@@ -31,21 +28,12 @@ public class EmailServiceImpl implements EmailService {
             return "해당 이메일인증토큰은 만료되거나 존재하지 않는 토큰입니다.";
         }
 
-        userService.setEmailVerify(findEmailToken.get().getUserId());
-        findEmailToken.get().setTokenToUsed(); // 사용완료
+        // 이메일토큰 확인 후 이메일인증 여부 수정
+        findEmailToken.get().setTokenToUsed();
+        userService.setEmailVerifyById(findEmailToken.get().getUserId());
 
         return "이메일 인증이 완료되었습니다.";
 
     }
 
-    @Override
-    public void sendUserEmail(String email) {
-        Optional<User> user = userRepository.findUserByEmail(email);
-
-        if(user==null){
-            log.info("[EmailService] User's Email is not Correct!");
-        }
-
-
-    }
 }

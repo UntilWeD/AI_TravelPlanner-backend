@@ -2,6 +2,7 @@ package com.teamsix.firstteamproject.user.service;
 
 
 import com.teamsix.firstteamproject.user.entity.JwtToken;
+import com.teamsix.firstteamproject.user.service.jwt.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -24,12 +25,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Key;
-import java.time.Clock;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;

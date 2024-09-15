@@ -10,13 +10,12 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+    public interface UserRepository extends JpaRepository<User, Long> {
 
-    public Optional<User> findUserById(Long id);
+        public Optional<User> findUserById(Long id);
 
-    public Optional<User> findUserByEmail(String email);
+        public Optional<User> findUserByEmail(String email);
 
-    public Optional<User> findUserByEmailAndPw(String email, String pw);
 
     @Modifying
     @Query("UPDATE User u SET u.emailVerification = TRUE WHERE u.id = :id")

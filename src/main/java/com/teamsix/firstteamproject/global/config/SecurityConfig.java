@@ -1,7 +1,7 @@
 package com.teamsix.firstteamproject.global.config;
 
-import com.teamsix.firstteamproject.user.service.JwtAuthenticationFilter;
-import com.teamsix.firstteamproject.user.service.JwtTokenProvider;
+import com.teamsix.firstteamproject.user.service.jwt.JwtAuthenticationFilter;
+import com.teamsix.firstteamproject.user.service.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -2,6 +2,7 @@ package com.teamsix.firstteamproject.user.service;
 
 
 import com.teamsix.firstteamproject.user.repository.UserRepository;
+import com.teamsix.firstteamproject.user.service.jwt.JwtTokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;

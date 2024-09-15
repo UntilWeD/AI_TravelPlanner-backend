@@ -37,3 +37,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+### Private ###
+UserRepositoryJDBCImpl.java
+UserRowMapper.java

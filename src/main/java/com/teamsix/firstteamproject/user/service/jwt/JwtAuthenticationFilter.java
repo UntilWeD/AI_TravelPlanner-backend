@@ -1,7 +1,6 @@
-package com.teamsix.firstteamproject.user.service;
+package com.teamsix.firstteamproject.user.service.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -43,6 +42,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+            // 필터에서 서비스를 갖고와서 예외를 던질시에 GlobalExceptionController로 가게되나?
         } catch (ExpiredJwtException ex){
             log.warn("Expired JWT token: {}", ex.getMessage());
             httpResponse.setStatus(HttpStatus.UNAUTHORIZED.value());

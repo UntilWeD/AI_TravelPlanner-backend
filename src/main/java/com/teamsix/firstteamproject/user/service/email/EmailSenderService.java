@@ -1,4 +1,4 @@
-package com.teamsix.firstteamproject.user.email;
+package com.teamsix.firstteamproject.user.service.email;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -8,11 +8,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class EmailSenderServiceImpl implements EmailSenderService{
+public class EmailSenderService{
 
     private final JavaMailSender javaMailSender;
 
-    @Override
     @Async
     public void sendEmail(SimpleMailMessage email) {
         javaMailSender.send(email);

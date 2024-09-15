@@ -46,7 +46,7 @@ public class UserController{
     @Operation(summary = "유저 관리 홈", description = "유저가 자신의 개인정보를 수정하거나 여행플랜들을 확인한다.")
     @GetMapping("/{userId}")
     public ResultDTO<UserDTO> userHome(@PathVariable Long userId){
-        return ApiUtils.ok(userService.findUserById(userId));
+        return ApiUtils.ok(userService.findUserDTOById(userId));
     }
 
     @Operation(summary = "유저 수정", description = "유저 개인의 비밀번호나 이름을 수정한다.")

@@ -1,4 +1,4 @@
-package com.teamsix.firstteamproject.user.service;
+package com.teamsix.firstteamproject.user.service.jwt;
 
 import com.teamsix.firstteamproject.user.entity.JwtToken;
 import io.jsonwebtoken.*;

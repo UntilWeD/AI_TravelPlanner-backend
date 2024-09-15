@@ -17,21 +17,20 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
 
 
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
 
     // email과 pw를 둘다 조건을 갖은채로 조회하기 수정필요
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findUserByEmail(email)
-                .map(user -> {
-                    if(!user.isEmailVerification()){
-                        throw new UserEmailVerificationException("이메일 인증이 완료되지 않았습니다.");
-                    }
-                    return createUserDetails(user);
-                })
-                .orElseThrow(() -> new UsernameNotFoundException("해당하는 회원을 찾을 수 없습니다."));
+        User user = userService.findUserByEmail(email);
+        if(!user.isEmailVerification()){
+            throw new UserEmailVerificationException(email);
+        }
+        return createUserDetails(user);
+
+
     }
 
     //해당하는 User의 데이터가 존재한다면 UserDetails객체로 만들어서 return
