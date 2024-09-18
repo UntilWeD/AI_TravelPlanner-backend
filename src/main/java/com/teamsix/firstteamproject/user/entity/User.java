@@ -60,6 +60,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> comments;
 
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private EmailToken emailToken;
+
     public UserDTO toDTO(){
         return UserDTO.builder()
                 .id(this.id)

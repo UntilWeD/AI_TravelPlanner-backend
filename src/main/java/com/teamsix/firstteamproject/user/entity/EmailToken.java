@@ -1,9 +1,6 @@
 package com.teamsix.firstteamproject.user.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,14 +25,17 @@ public class EmailToken {
 
     private boolean expired;
 
-    private Long userId;
+    //엔티티로 만들 이유가 있을까? @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     //이메일인증토큰생성
     public static EmailToken createEmailToken(Long userId){
         EmailToken emailToken = new EmailToken();
         emailToken.expirationDate = LocalDateTime.now().plusMinutes(EMAIL_TOKEN_EXPIRATION_TIME_VALUE); //5분후 만료
         emailToken.expired = false;
-        emailToken.userId = userId;
+        emailToken.user = User.builder().id(userId).build();
 
         return emailToken;
     }

@@ -18,13 +18,12 @@ import java.util.Optional;
 
 
     @Modifying
-    @Query("UPDATE User u SET u.emailVerification = TRUE WHERE u.id = :id")
-    public int updateEmailVerificationById(@Param("id") Long id);
+    @Query("UPDATE User u SET u.emailVerification = TRUE, u.role = :role WHERE u.id = :id")
+    public int updateEmailVerificationById(@Param("id") Long id, @Param("role") String role);
 
     @Query("SELECT u.emailVerification FROM User u WHERE u.email = :email")
     public boolean findEmailVerificationByEmail(@Param("email") String email);
 
-    //"UPDATE user SET pw = :pw, name = :name where id = :id"
     @Modifying
     @Query("UPDATE User u SET u.name = :name, u.pw = :pw WHERE u.id = :id")
     public int updateNameAndPwById(String name, String pw, Long id);

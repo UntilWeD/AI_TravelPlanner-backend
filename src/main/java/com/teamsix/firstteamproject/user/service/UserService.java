@@ -55,7 +55,7 @@ public class UserService{
     public UserDTO register(UserDTO dto) {
         if(userRepository.findUserByEmail(dto.getEmail()).isPresent()){
             throw new UserAlreadyExistsException(dto.getEmail());
-        } else if (dto != null){
+        } else if (dto == null){
             throw new RuntimeException("dto 객체가 Null 입니다.");
         }
 
@@ -93,7 +93,7 @@ public class UserService{
 
     public void setEmailVerifyById(Long userId) {
         try{
-            int updatedRows = userRepository.updateEmailVerificationById(userId);
+            int updatedRows = userRepository.updateEmailVerificationById(userId, "USER");
             if(updatedRows == 0){
                 throw new UserNotFoundException("User Not Found with id : " + userId);
             }

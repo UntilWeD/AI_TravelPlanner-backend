@@ -44,8 +44,8 @@ public class PostDTO {
     @NotNull
     private Date updatedAt;
     private PostCategoryDTO postCategoryDTO;
-    private List<PostImageDTO> postImageDTOS = new ArrayList<>();
-    private List<CommentDTO> commentDTOS = new ArrayList<>();
+    private List<PostImageDTO> postImageDTOS;
+    private List<CommentDTO> commentDTOS;
 
     public List<String> getPostImageNames(){
         return postImageDTOS.stream().map(

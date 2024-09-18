@@ -30,7 +30,7 @@ public class EmailService{
 
         // 이메일토큰 확인 후 이메일인증 여부 수정
         findEmailToken.get().setTokenToUsed();
-        userService.setEmailVerifyById(findEmailToken.get().getUserId());
+        userService.setEmailVerifyById(findEmailToken.get().getUser().getId());
 
         return "이메일 인증이 완료되었습니다.";
 
