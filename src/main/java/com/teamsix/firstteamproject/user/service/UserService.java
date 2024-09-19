@@ -11,7 +11,6 @@ import com.teamsix.firstteamproject.user.repository.UserRepository;
 import com.teamsix.firstteamproject.user.service.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -44,29 +43,19 @@ public class UserService{
     }
 
     public boolean findEmailVerificationByEmail(String email){
-        try {
-            return userRepository.findEmailVerificationByEmail(email);
-        } catch (DataAccessException ex){
-            throw new RuntimeException("해당 " + email + " 를 갖고 있는 유저의 이메일인증값을 조회하는데 실패하였습니다.");
-        }
+        return userRepository.findEmailVerificationByEmail(email);
     }
 
 
     public UserDTO register(UserDTO dto) {
         if(userRepository.findUserByEmail(dto.getEmail()).isPresent()){
             throw new UserAlreadyExistsException(dto.getEmail());
-        } else if (dto == null){
-            throw new RuntimeException("dto 객체가 Null 입니다.");
         }
 
         // 서비스 레이어에서 해당 인코딩도 비즈니스 로직이기에 적합하다.
         dto.encodingPw(passwordEncoder.encode(dto.getPw()));
-        try{
-            User savingUser = userRepository.save(dto.toEntity());
-            return savingUser.toDTO();
-        } catch (DataAccessException ex){
-            throw new RuntimeException("유저를 저장하는데 예외가 발생하였습니다.");
-        }
+        User savingUser = userRepository.save(dto.toEntity());
+        return savingUser.toDTO();
 
     }
 
@@ -92,13 +81,9 @@ public class UserService{
 
 
     public void setEmailVerifyById(Long userId) {
-        try{
-            int updatedRows = userRepository.updateEmailVerificationById(userId, "USER");
-            if(updatedRows == 0){
-                throw new UserNotFoundException("User Not Found with id : " + userId);
-            }
-        } catch (DataAccessException ex){
-            throw new RuntimeException("해당 " + userId +" 를 가진 유저의 이메일인증 여부를 수정하는데 예외가 발생했습니다.");
+        int updatedRows = userRepository.updateEmailVerificationById(userId, "USER");
+        if(updatedRows == 0){
+            throw new UserNotFoundException("User Not Found with id : " + userId);
         }
     }
 
@@ -108,27 +93,17 @@ public class UserService{
             throw new RuntimeException("User pw and confirmationPw is not equal.");
         }
         dto.setPw(passwordEncoder.encode(dto.getPw()));
-        try{
-            int updatedRows = userRepository.updateNameAndPwById(dto.getName(), dto.getPw(), userId);
-            if(updatedRows == 0 ){
-                throw new UserNotFoundException("User Not Found with id : " + userId);
-            }
-        } catch (DataAccessException ex){
-            throw new RuntimeException("해당 " +userId+ " 를 가진 유저의 DB를 수정하는데 예외가 발생하였습니다.");
+
+        int updatedRows = userRepository.updateNameAndPwById(dto.getName(), dto.getPw(), userId);
+        if(updatedRows == 0 ){
+            throw new UserNotFoundException("User Not Found with id : " + userId);
         }
+
         return findUserDTOById(userId);
     }
 
     public Long deleteUser(Long userId) {
-        // 1. 삭제할 유저 확인
-        User deletingUser = findUserById(userId);
-
-        // 2. 유저 삭제
-        try{
-            userRepository.deleteById(userId);
-        } catch (DataAccessException ex){
-            throw new RuntimeException("해당 " + userId + " 를 가진 유저를 삭제하는 데 예외가 발생하였습니다.");
-        }
+        userRepository.deleteById(userId);
         return userId;
     }
 

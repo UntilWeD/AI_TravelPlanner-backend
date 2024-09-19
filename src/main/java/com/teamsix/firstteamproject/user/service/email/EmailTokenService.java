@@ -40,11 +40,7 @@ public class EmailTokenService{
     public boolean createEmailToken(Long number, String receiverEmail) {
         //이메일 토큰 저장
         EmailToken emailToken = EmailToken.createEmailToken(number);
-        try{
-            emailTokenRepository.save(emailToken);
-        } catch (DataAccessException ex){
-            throw new RuntimeException("이메일 토큰을 만드는데 실패하였스빈다.");
-        }
+        emailTokenRepository.save(emailToken);
 
 
         //이메일 전송

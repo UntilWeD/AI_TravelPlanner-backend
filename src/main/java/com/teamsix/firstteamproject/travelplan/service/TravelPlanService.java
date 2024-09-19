@@ -5,8 +5,9 @@ import com.teamsix.firstteamproject.travelplan.dto.travelplan.SimpleTravelPlanDT
 import com.teamsix.firstteamproject.travelplan.dto.travelplan.TravelPlanDTO;
 import com.teamsix.firstteamproject.travelplan.entity.BasketItem;
 import com.teamsix.firstteamproject.travelplan.entity.TravelPlan;
+import com.teamsix.firstteamproject.travelplan.exception.TravelPlanNotFoundException;
 import com.teamsix.firstteamproject.travelplan.repository.TravelPlanRepository;
-import com.teamsix.firstteamproject.user.repository.UserRepository;
+import com.teamsix.firstteamproject.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,13 +21,13 @@ public class TravelPlanService {
 
     private final AwsS3Service awsS3Service;
     private final TravelPlanRepository travelPlanRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     public TravelPlanService(AwsS3Service awsS3Service, TravelPlanRepository travelPlanRepository,
-                             UserRepository userRepository) {
+                             UserService userService) {
         this.awsS3Service = awsS3Service;
         this.travelPlanRepository = travelPlanRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     /**
@@ -40,8 +41,7 @@ public class TravelPlanService {
      * @return
      */
     public TravelPlanDTO saveTravelPlan(Long userId, TravelPlanDTO dto){
-        TravelPlan travelPlan = dto.toEntity(dto, userRepository.findUserById(userId).get());
-
+        TravelPlan travelPlan = dto.toEntity(dto, userService.findUserById(userId));
         return TravelPlan.toDto(travelPlanRepository.save(travelPlan));
     }
 
@@ -52,8 +52,9 @@ public class TravelPlanService {
      */
     public List<SimpleTravelPlanDTO> getSimpleTravelPlans(Long userId) {
         return travelPlanRepository.findByUser_Id(userId)
-            .stream().map(travelPlan -> SimpleTravelPlanDTO.toSimpleTravelPlanDTO(travelPlan))
-            .collect(Collectors.toList());
+                .stream().map(travelPlan -> SimpleTravelPlanDTO.toSimpleTravelPlanDTO(travelPlan))
+                .collect(Collectors.toList());
+
     }
 
     /**
@@ -63,7 +64,11 @@ public class TravelPlanService {
      * @return
      */
     public TravelPlanDTO getTravelPlan(Long travelPlanId){
-        return TravelPlan.toDto(travelPlanRepository.findById(travelPlanId).get());
+        TravelPlan travelPlan = travelPlanRepository.findById(travelPlanId).get();
+        if(travelPlan == null){
+            throw new TravelPlanNotFoundException(travelPlanId);
+        }
+        return TravelPlan.toDto(travelPlan);
     }
 
 
@@ -72,8 +77,6 @@ public class TravelPlanService {
         //[리팩토링 필수] 나중에 다른 repository를 생성하던가 구조를 바꾸어 해결해야함
         TravelPlan travelPlan = travelPlanRepository.findById(travelPlanId).get();
         travelPlanRepository.delete(travelPlan);
-
-        return;
     }
 
 
