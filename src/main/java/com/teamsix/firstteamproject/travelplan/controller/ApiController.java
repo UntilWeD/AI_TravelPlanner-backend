@@ -5,9 +5,12 @@ import com.teamsix.firstteamproject.global.dto.ResultDTO;
 import com.teamsix.firstteamproject.global.util.ApiUtils;
 import com.teamsix.firstteamproject.travelplan.dto.amadeus.AmadeusCond;
 import com.teamsix.firstteamproject.travelplan.dto.amadeus.FlightResponse;
+import com.teamsix.firstteamproject.travelplan.dto.gpt.DomesticTravelRequest;
+import com.teamsix.firstteamproject.travelplan.dto.gpt.InternationalTravelRequest;
 import com.teamsix.firstteamproject.travelplan.dto.restaurant.RestaurantCond;
 import com.teamsix.firstteamproject.travelplan.dto.restaurant.RestaurantResponse;
 import com.teamsix.firstteamproject.travelplan.service.AmadeusApiService;
+import com.teamsix.firstteamproject.travelplan.service.GPTService;
 import com.teamsix.firstteamproject.travelplan.service.RestaurantApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,13 +26,13 @@ public class ApiController {
 
     private final RestaurantApiService restaurantApiService;
     private final AmadeusApiService amadeusApiService;
+    private final GPTService gptService;
 
-
-    public ApiController(RestaurantApiService restaurantApiService, AmadeusApiService amadeusApiService) {
+    public ApiController(RestaurantApiService restaurantApiService, AmadeusApiService amadeusApiService, GPTService gptService) {
         this.restaurantApiService = restaurantApiService;
         this.amadeusApiService = amadeusApiService;
+        this.gptService = gptService;
     }
-
 
     @Operation(summary = "식당 정보(공공데이터)", description = "식당정보를 요청할 때 사용하는 API")
     @PostMapping("/restaurant")
@@ -42,6 +45,18 @@ public class ApiController {
     public Mono<ResultDTO<FlightResponse>> flightRequest(@RequestBody AmadeusCond cond){
         log.info("[flightRequest] method Start!");
         return ApiUtils.MonoOk(amadeusApiService.getFlightOffers(cond));
+    }
+
+    @Operation(summary = "국내 여행 추천 GPT 생성", description = "여행지 추천에 대한 내용 답변")
+    @PostMapping("/gpt/domestic")
+    public ResultDTO<?> gptDomesticTravel(@RequestBody DomesticTravelRequest requestDTO){
+        return ApiUtils.ok(gptService.getDomesticTravel(requestDTO));
+    }
+
+    @Operation(summary = "국외 여행 추천 GPT 생성", description = "여행지 추천에 대한 내용 답변")
+    @PostMapping("/gpt/international")
+    public ResultDTO<?> gptInternationalTravel(@RequestBody InternationalTravelRequest requestDTO){
+        return ApiUtils.ok(gptService.getInternationalTravel(requestDTO));
     }
 
 
