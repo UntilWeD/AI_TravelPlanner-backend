@@ -80,8 +80,6 @@ public class User implements UserDetails {
         return Collections.singletonList(new SimpleGrantedAuthority(this.role));
     }
 
-    //나머지는 계정상태를 나타냄.
-
     @Override
     public String getPassword() {
         return pw;
