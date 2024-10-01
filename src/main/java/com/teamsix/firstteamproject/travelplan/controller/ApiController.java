@@ -4,6 +4,8 @@ package com.teamsix.firstteamproject.travelplan.controller;
 import com.teamsix.firstteamproject.global.dto.ResultDTO;
 import com.teamsix.firstteamproject.global.util.ApiUtils;
 import com.teamsix.firstteamproject.travelplan.dto.AreaCodeResponse;
+import com.teamsix.firstteamproject.travelplan.dto.TourEventRequest;
+import com.teamsix.firstteamproject.travelplan.dto.TourEventResponse;
 import com.teamsix.firstteamproject.travelplan.dto.amadeus.AmadeusCond;
 import com.teamsix.firstteamproject.travelplan.dto.amadeus.FlightResponse;
 import com.teamsix.firstteamproject.travelplan.dto.gpt.DomesticTravelRequest;
@@ -70,6 +72,11 @@ public class ApiController {
         return ApiUtils.ok(koreaTourService.getAreaCode());
     }
 
+    @Operation(summary = "한국관광데이터 이벤트 조회", description = "한국관광데이터 이벤트 조회를 한다.")
+    @GetMapping("/event")
+    public ResultDTO<TourEventResponse> getEvent(@RequestBody TourEventRequest requestDTO) {
+        return ApiUtils.ok(koreaTourService.getEvent(requestDTO));
+    }
 
 
 }
