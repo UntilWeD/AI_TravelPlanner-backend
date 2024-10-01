@@ -3,6 +3,7 @@ package com.teamsix.firstteamproject.travelplan.controller;
 
 import com.teamsix.firstteamproject.global.dto.ResultDTO;
 import com.teamsix.firstteamproject.global.util.ApiUtils;
+import com.teamsix.firstteamproject.travelplan.dto.AreaCodeResponse;
 import com.teamsix.firstteamproject.travelplan.dto.amadeus.AmadeusCond;
 import com.teamsix.firstteamproject.travelplan.dto.amadeus.FlightResponse;
 import com.teamsix.firstteamproject.travelplan.dto.gpt.DomesticTravelRequest;
@@ -11,6 +12,7 @@ import com.teamsix.firstteamproject.travelplan.dto.restaurant.RestaurantCond;
 import com.teamsix.firstteamproject.travelplan.dto.restaurant.RestaurantResponse;
 import com.teamsix.firstteamproject.travelplan.service.AmadeusApiService;
 import com.teamsix.firstteamproject.travelplan.service.GPTService;
+import com.teamsix.firstteamproject.travelplan.service.KoreaTourService;
 import com.teamsix.firstteamproject.travelplan.service.RestaurantApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,12 +29,15 @@ public class ApiController {
     private final RestaurantApiService restaurantApiService;
     private final AmadeusApiService amadeusApiService;
     private final GPTService gptService;
+    private final KoreaTourService koreaTourService;
 
-    public ApiController(RestaurantApiService restaurantApiService, AmadeusApiService amadeusApiService, GPTService gptService) {
+    public ApiController(RestaurantApiService restaurantApiService, AmadeusApiService amadeusApiService, GPTService gptService, KoreaTourService koreaTourService) {
         this.restaurantApiService = restaurantApiService;
         this.amadeusApiService = amadeusApiService;
         this.gptService = gptService;
+        this.koreaTourService = koreaTourService;
     }
+
 
     @Operation(summary = "식당 정보(공공데이터)", description = "식당정보를 요청할 때 사용하는 API")
     @PostMapping("/restaurant")
@@ -58,6 +63,13 @@ public class ApiController {
     public ResultDTO<?> gptInternationalTravel(@RequestBody InternationalTravelRequest requestDTO){
         return ApiUtils.ok(gptService.getInternationalTravel(requestDTO));
     }
+
+    @Operation(summary = "한국관광데이터 지역 코드 조회", description = "한국관광데이터 지역 코드 조회를 한다.")
+    @GetMapping("/areaCode")
+    public ResultDTO<AreaCodeResponse> getAreaCode() {
+        return ApiUtils.ok(koreaTourService.getAreaCode());
+    }
+
 
 
 }
