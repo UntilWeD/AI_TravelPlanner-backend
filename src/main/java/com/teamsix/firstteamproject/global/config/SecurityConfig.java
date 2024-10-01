@@ -32,6 +32,7 @@ public class SecurityConfig {
             // REST API이므로 basic auth 및 csrf 보안을 사용하지 않음
             .httpBasic(HttpBasicConfigurer::disable)
             .csrf(CsrfConfigurer::disable)
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             // JWT를 사용하기 때문에 세션을 사용하지 않음
             .sessionManagement(configurer ->
                     configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
