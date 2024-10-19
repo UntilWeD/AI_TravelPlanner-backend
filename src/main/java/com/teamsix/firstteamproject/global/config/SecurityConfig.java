@@ -5,6 +5,9 @@ import com.teamsix.firstteamproject.user.service.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -22,6 +25,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
@@ -38,28 +42,11 @@ public class SecurityConfig {
                     configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize ->
                     authorize
-                            // 해당 API에 대해서는 모든 요청을 허가
-                            .requestMatchers("/user/signIn").permitAll()
-                            .requestMatchers("/user/register").permitAll()
-                            .requestMatchers("/user/email/*").permitAll()
-                            .requestMatchers("/user/{userId}/*").permitAll()
-                            .requestMatchers("/user/{userId}").permitAll()
-                            .requestMatchers("/user/{userId}/travel-plans").permitAll()
-                            .requestMatchers("/user/{userId}/travel-plans/{travelPlanId}").permitAll()
-                            .requestMatchers("/travelplan/*").permitAll()
-                            .requestMatchers("/travelplan/gpt/*").permitAll()
-                            .requestMatchers("/board/*").permitAll()
-                            .requestMatchers("/board/category").permitAll()
-                            .requestMatchers("/board/category/writes").permitAll()
-                            .requestMatchers("/board/category/{categoryId}").permitAll()
-                            .requestMatchers("/board/lists/*").permitAll()
-                            .requestMatchers("/board/lists/{postId}/*").permitAll()
-                            .requestMatchers("/board/lists/{postId}/comments/writes").permitAll()
-                            .requestMatchers("/board/lists/{postId}/comments/{commentId}").permitAll()
                             .requestMatchers( "/","/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                            // USER 권한이 있어야 요청할 수 있음
-                            .requestMatchers("/user/test").hasRole("USER")
-                            // 이 밖에 모든 요청에 대해서 인증을 필요로 한다는 설정
+                            .requestMatchers( "/user/register", "/user/signIn", "/user/email/**", "/user/admin").permitAll()
+                            .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                            // 커뮤 아직 미구현
+                            .requestMatchers("/board/**").permitAll()
                             .anyRequest().authenticated()
                     )
             // JWT 인증을 위하여 직접 구현한 필터를 UsernamePasswordAuthenticationFilter 전에 실행

@@ -29,8 +29,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UserEmailVerificationException(email);
         }
         return createUserDetails(user);
-
-
     }
 
     //해당하는 User의 데이터가 존재한다면 UserDetails객체로 만들어서 return

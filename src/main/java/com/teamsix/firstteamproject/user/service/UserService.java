@@ -4,6 +4,7 @@ package com.teamsix.firstteamproject.user.service;
 import com.teamsix.firstteamproject.user.dto.UserDTO;
 import com.teamsix.firstteamproject.user.dto.UserUpdateDTO;
 import com.teamsix.firstteamproject.user.entity.JwtToken;
+import com.teamsix.firstteamproject.user.entity.Role;
 import com.teamsix.firstteamproject.user.entity.User;
 import com.teamsix.firstteamproject.user.exception.UserAlreadyExistsException;
 import com.teamsix.firstteamproject.user.exception.UserNotFoundException;
@@ -11,6 +12,8 @@ import com.teamsix.firstteamproject.user.repository.UserRepository;
 import com.teamsix.firstteamproject.user.service.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -27,6 +30,9 @@ public class UserService{
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+
+    @Value("${admin.key}")
+    private String ADMIN_KEY;
 
     public User findUserByEmail(String email){
         return userRepository.findUserByEmail(email)
@@ -111,4 +117,23 @@ public class UserService{
         return passwordEncoder.matches(rawPw, encodedPw);
     }
 
+    public UserDTO createAdmin(UserDTO dto, String adminKey) {
+        if(userRepository.findUserByEmail(dto.getEmail()).isPresent()){
+            throw new UserAlreadyExistsException(dto.getEmail());
+        }
+        if(adminKey != ADMIN_KEY){
+            throw new RuntimeException("Admin Key is not correct.");
+        }
+
+        dto.encodingPw(passwordEncoder.encode(dto.getPw()));
+        User admin = User.builder()
+                .email(dto.getEmail())
+                .pw(dto.getPw())
+                .name(dto.getName())
+                .emailVerification(true)
+                .role("ADMIN")
+                .build();
+        User savingUser = userRepository.save(admin);
+        return savingUser.toDTO();
+    }
 }

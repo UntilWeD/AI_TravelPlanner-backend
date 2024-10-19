@@ -4,6 +4,7 @@ import com.teamsix.firstteamproject.global.dto.ResultDTO;
 import com.teamsix.firstteamproject.global.util.ApiUtils;
 import com.teamsix.firstteamproject.user.exception.UserAlreadyExistsException;
 import com.teamsix.firstteamproject.user.exception.UserEmailVerificationException;
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -39,6 +40,13 @@ public class GlobalExceptionController {
     @ExceptionHandler(UserEmailVerificationException.class)
     public ResultDTO handleUserEmailVerificationException(UserEmailVerificationException ex){
         log.warn("User didn't verify email...");
+        return ApiUtils.error(HttpStatus.BAD_REQUEST,
+                ex.getMessage());
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResultDTO handleJwtException(JwtException ex){
+        log.warn("JWT Exception : {}", ex);
         return ApiUtils.error(HttpStatus.BAD_REQUEST,
                 ex.getMessage());
     }

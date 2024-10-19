@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+
+  traffic-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: utilwed7539/traffic-app:latest
+    container_name: traffic-app
+    ports:
+      - "8080:8080"
+    restart: always
+    environment:
+      - DB_URL=${DB_URL}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - API_RESTAURANT_KEY=${API_RESTAURANT_KEY}
+      - AMADEUS_API_KEY=${AMADEUS_API_KEY}
+      - AMADEUS_SECRET=${AMADEUS_SECRET}
+      - IMAGE_ACCESS_KEY=${IMAGE_ACCESS_KEY}
+      - IMAGE_SECRET_KEY=${IMAGE_SECRET_KEY}
+      - AMAZON_BUCKET_NAME=${AMAZON_BUCKET_NAME}
+      - AMAZON_REGION=${AMAZON_REGION}
+      - BACKEND_URL=${BACKEND_URL}
+      - GPT_API_KEY=${GPT_API_KEY}
+      - ADMIN_KEY=${ADMIN_KEY}

@@ -7,12 +7,15 @@ import com.teamsix.firstteamproject.travelplan.dto.travelplan.TravelPlanDTO;
 import com.teamsix.firstteamproject.travelplan.service.TravelPlanService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/user/{userId}")
 @Slf4j
+@PreAuthorize("hasRole('ADMIN') or @userSecurityExpression.isOwner(#userId)")
 public class TravelPlanController {
 
     private final TravelPlanService travelPlanService;
@@ -26,6 +29,7 @@ public class TravelPlanController {
      */
     @Operation(summary = "여행계획저장", description = "요청받은 여행계획을 저장한다.")
     @PostMapping("/travel-plans")
+    @PostAuthorize("returnObject.getData().getEmail() == authentication.principal.username or hasRole('ROLE_ADMIN')")
     public ResultDTO<TravelPlanDTO> saveTravelPlan(
             @PathVariable Long userId,
             @RequestBody TravelPlanDTO travelPlan){

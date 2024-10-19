@@ -19,6 +19,7 @@ import com.teamsix.firstteamproject.travelplan.service.RestaurantApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -26,6 +27,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/travelplan")
 @Tag(name = "외부 API", description = "외부 api 요청")
 @Slf4j
+@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 public class ApiController {
 
     private final RestaurantApiService restaurantApiService;
