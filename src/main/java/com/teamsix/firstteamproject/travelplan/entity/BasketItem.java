@@ -43,6 +43,12 @@ public class BasketItem {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Column(name = "lat")
+    private String lat;
+
+    @Column(name = "lng")
+    private String lng;
+
 
     public static BasketItemDTO toDto(BasketItem basketItem){
         return BasketItemDTO.builder()
@@ -51,6 +57,8 @@ public class BasketItem {
                 .address(basketItem.getAddress())
                 .rating(basketItem.getRating())
                 .imageUrl(basketItem.getImageUrl())
+                .lat(basketItem.getLat())
+                .lng(basketItem.getLng())
                 .build();
     }
 

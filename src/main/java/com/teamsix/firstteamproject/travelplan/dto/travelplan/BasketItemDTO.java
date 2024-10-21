@@ -16,6 +16,8 @@ public class BasketItemDTO {
     private String address;
     private int rating;
     private String imageUrl;
+    private String lat;
+    private String lng;
 
 
     // 연관관계 설정 되있지 않음.
@@ -26,6 +28,8 @@ public class BasketItemDTO {
                 .address(this.address)
                 .rating(this.rating)
                 .imageUrl(this.imageUrl)
+                .lat(this.lat)
+                .lng(this.lng)
                 .build();
     }
 }
