@@ -43,7 +43,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize ->
                     authorize
                             .requestMatchers( "/","/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                            .requestMatchers( "/user/register", "/user/signIn", "/user/email/**", "/user/admin").permitAll()
+                            .requestMatchers( "/user/register", "/user/signIn", "/user/email/**", "/user/admin", "user/refreshToken").permitAll()
                             .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                             // 커뮤 아직 미구현
                             .requestMatchers("/board/**").permitAll()

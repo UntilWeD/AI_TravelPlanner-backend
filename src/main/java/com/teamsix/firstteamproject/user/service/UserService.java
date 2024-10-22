@@ -4,10 +4,12 @@ package com.teamsix.firstteamproject.user.service;
 import com.teamsix.firstteamproject.user.dto.UserDTO;
 import com.teamsix.firstteamproject.user.dto.UserUpdateDTO;
 import com.teamsix.firstteamproject.user.entity.JwtToken;
+import com.teamsix.firstteamproject.user.entity.RefreshToken;
 import com.teamsix.firstteamproject.user.entity.Role;
 import com.teamsix.firstteamproject.user.entity.User;
 import com.teamsix.firstteamproject.user.exception.UserAlreadyExistsException;
 import com.teamsix.firstteamproject.user.exception.UserNotFoundException;
+import com.teamsix.firstteamproject.user.repository.RefreshTokenRepository;
 import com.teamsix.firstteamproject.user.repository.UserRepository;
 import com.teamsix.firstteamproject.user.service.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ public class UserService{
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Value("${admin.key}")
     private String ADMIN_KEY;
@@ -80,6 +83,12 @@ public class UserService{
 
         //3. 인증 정보를 기반으로 JWT 토큰 생성
         JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
+
+        //4. redis에 refresh token 저장
+        RefreshToken refreshToken = new RefreshToken(dto.getEmail(), jwtToken.getRefreshToken());
+        refreshTokenRepository.save(refreshToken);
+
+
         jwtToken.setUserId(findUserByEmail(dto.getEmail()).getId());
 
         return jwtToken;
@@ -135,5 +144,27 @@ public class UserService{
                 .build();
         User savingUser = userRepository.save(admin);
         return savingUser.toDTO();
+    }
+
+    public JwtToken refreshToken(RefreshToken refreshToken, Authentication authentication) {
+        //Refresh Token  redis 서버 검증
+        if(!refreshTokenRepository.existsById(refreshToken.getUsername())){
+            throw new RuntimeException("Refresh Token is not valid.");
+        }
+
+        //Refresh Token 자체가 만료되었을 경우
+        if(!jwtTokenProvider.validateToken(refreshToken.getRefreshToken())){
+            throw new RuntimeException("Refresh Token is expired.");
+        }
+
+        // 기존 refresh token 삭제
+        refreshTokenRepository.deleteById(refreshToken.getUsername());
+
+        //JWT Token 생성 후 redis에 새로운 refreshtoken 저장
+        JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
+
+        refreshTokenRepository.save(refreshToken);
+
+        return jwtToken;
     }
 }

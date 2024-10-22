@@ -2,6 +2,15 @@ version: "3"
 
 services:
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+    networks:
+      - traffic-network
+
   traffic-app:
     build:
       context: .
@@ -28,3 +37,16 @@ services:
       - BACKEND_URL=${BACKEND_URL}
       - GPT_API_KEY=${GPT_API_KEY}
       - ADMIN_KEY=${ADMIN_KEY}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    depends_on:
+        - redis
+    networks:
+        - traffic-network
+
+networks:
+    traffic-network:
+        driver: bridge
+
+
+

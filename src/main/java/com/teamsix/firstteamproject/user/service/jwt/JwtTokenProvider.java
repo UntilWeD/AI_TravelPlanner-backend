@@ -1,10 +1,12 @@
 package com.teamsix.firstteamproject.user.service.jwt;
 
 import com.teamsix.firstteamproject.user.entity.JwtToken;
+import com.teamsix.firstteamproject.user.repository.RefreshTokenRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -51,6 +53,7 @@ public class JwtTokenProvider {
 
         //RefreshToken 생성
         String refreshToken = Jwts.builder()
+                .setSubject(authentication.getName())
                 .setExpiration(accessTokenExpiresln)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();

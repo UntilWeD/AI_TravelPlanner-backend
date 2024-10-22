@@ -6,6 +6,7 @@ import com.teamsix.firstteamproject.global.util.ApiUtils;
 import com.teamsix.firstteamproject.user.dto.UserDTO;
 import com.teamsix.firstteamproject.user.dto.UserUpdateDTO;
 import com.teamsix.firstteamproject.user.entity.JwtToken;
+import com.teamsix.firstteamproject.user.entity.RefreshToken;
 import com.teamsix.firstteamproject.user.entity.Role;
 import com.teamsix.firstteamproject.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,6 +38,12 @@ public class UserController{
     @PostMapping("/signIn")
     public ResultDTO<JwtToken> signIn(@RequestBody UserDTO dto) {
         return ApiUtils.ok(userService.signIn(dto));
+    }
+
+    @Operation(summary = "토큰재발급", description = "Access Token이 만료되었을 때 Refresh Token을 이용하여 새로운 Access Token을 발급한다.")
+    @PostMapping("/refreshToken")
+    public ResultDTO<JwtToken> refreshToken(@RequestBody RefreshToken refreshToken, Authentication authentication){
+        return ApiUtils.ok(userService.refreshToken(refreshToken, authentication));
     }
 
     //    @PostAuthorize("returnObject.getData().getEmail() == authentication.principal.username or hasRole('ROLE_ADMIN')")
