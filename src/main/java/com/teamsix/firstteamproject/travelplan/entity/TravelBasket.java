@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "TRAVEL_BASKET")
+@Table(name = "travel_basket")
 public class TravelBasket {
 
     @Id

@@ -76,9 +76,10 @@ public class PostController {
     @Operation(summary = "커뮤니티 글 좋아요", description = "특정 id의 post 좋아요 수를 올린다. ")
     @GetMapping("/lists/{postId}/likes")
     public ResultDTO<PostDTO> getLikesRequest(
-            @PathVariable Long postId
+            @PathVariable Long postId,
+            @RequestParam Long userId
     ){
-        return ApiUtils.ok(postService.addingLikesToPost(postId));
+        return ApiUtils.ok(postService.addingLikesToPost(postId, userId));
     }
 
     //해당 카테고리에 해당하는 Post들을 조회한다.

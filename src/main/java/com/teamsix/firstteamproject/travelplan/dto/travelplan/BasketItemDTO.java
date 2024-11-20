@@ -5,6 +5,8 @@ package com.teamsix.firstteamproject.travelplan.dto.travelplan;
 import com.teamsix.firstteamproject.travelplan.entity.BasketItem;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,6 +20,7 @@ public class BasketItemDTO {
     private String imageUrl;
     private String lat;
     private String lng;
+    private List<String> types;
 
 
     // 연관관계 설정 되있지 않음.
@@ -30,6 +33,7 @@ public class BasketItemDTO {
                 .imageUrl(this.imageUrl)
                 .lat(this.lat)
                 .lng(this.lng)
+                .types(this.types)
                 .build();
     }
 }

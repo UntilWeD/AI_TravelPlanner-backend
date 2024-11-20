@@ -1,8 +1,11 @@
 package com.teamsix.firstteamproject.travelplan.entity;
 
+import com.teamsix.firstteamproject.travelplan.converter.StringListConverter;
 import com.teamsix.firstteamproject.travelplan.dto.travelplan.BasketItemDTO;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 /**
  * ---BasketItem---
@@ -49,6 +52,10 @@ public class BasketItem {
     @Column(name = "lng")
     private String lng;
 
+    @Column(name = "types")
+    @Convert(converter = StringListConverter.class)
+    private List<String> types;
+
 
     public static BasketItemDTO toDto(BasketItem basketItem){
         return BasketItemDTO.builder()
@@ -59,6 +66,7 @@ public class BasketItem {
                 .imageUrl(basketItem.getImageUrl())
                 .lat(basketItem.getLat())
                 .lng(basketItem.getLng())
+                .types(basketItem.getTypes())
                 .build();
     }
 

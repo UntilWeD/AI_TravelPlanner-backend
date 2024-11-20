@@ -84,9 +84,9 @@ public class UserService{
         //3. 인증 정보를 기반으로 JWT 토큰 생성
         JwtToken jwtToken = jwtTokenProvider.generateToken(authentication);
 
-        //4. redis에 refresh token 저장
-        RefreshToken refreshToken = new RefreshToken(dto.getEmail(), jwtToken.getRefreshToken());
-        refreshTokenRepository.save(refreshToken);
+//        //4. redis에 refresh token 저장
+//        RefreshToken refreshToken = new RefreshToken(dto.getEmail(), jwtToken.getRefreshToken());
+//        refreshTokenRepository.save(refreshToken);
 
 
         jwtToken.setUserId(findUserByEmail(dto.getEmail()).getId());

@@ -46,12 +46,13 @@ public class Post {
             cascade = CascadeType.ALL,orphanRemoval = true)
     private List<PostImage> postImages;
 
+    @OneToMany(mappedBy = "post",fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Likes> likes;
+
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER,
         cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
-
-    @Column(name = "likes")
-    private int likes;
 
     @Column(name = "views")
     private int views;
@@ -127,9 +128,9 @@ public class Post {
                 .username(getUsername())
                 .title(getTitle())
                 .content(getContent())
+                .likes(getLikes() == null ? 0 : likes.size())
                 .createdAt(getCreatedAt())
                 .updatedAt(getUpdatedAt())
-                .likes(getLikes())
                 .postCategoryDTO(Optional.ofNullable(getPostCategory())
                         .map(PostCategory::toDTO).orElse(null))
                 .postImageDTOS(
@@ -154,7 +155,6 @@ public class Post {
                 .id(getId())
                 .username(getUsername())
                 .title(getTitle())
-                .likes(getLikes())
                 .createdAt(getCreatedAt())
                 .build();
     }
@@ -168,9 +168,10 @@ public class Post {
                 ", username='" + username + '\'' +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
+                ", views=" + views +
+                ", likes=" + likes +
                 ", postImages=" + postImages +
                 ", comments=" + comments +
-                ", likes=" + likes +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
@@ -180,7 +181,6 @@ public class Post {
         views++;
     }
 
-    public void addLikes(){ likes++;}
 
     public void addComments(Comment comment){
         this.comments.add(comment);

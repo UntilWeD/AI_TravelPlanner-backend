@@ -25,13 +25,13 @@ public class EmailController{
     private final EmailTokenService emailTokenService;
 
 
-    @GetMapping("/confirm-email")
+    @GetMapping("/verify")
     public ResultDTO<String> viewConfirmEmail(@RequestParam String token) {
         return ApiUtils.ok(emailService.verifyEmail(token));
     }
 
     @Operation(summary = "이메일 인증 요청", description = "해당 유저의 이메일을 파라미터로 인증이메일을 전송한다.")
-    @GetMapping ("/send-email")
+    @GetMapping ("/send")
     public ResultDTO sendEmail(@RequestParam String email){
         if(emailTokenService.sendEmailToken(email)){
             return ApiUtils.ok(null);

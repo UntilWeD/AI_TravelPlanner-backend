@@ -3,8 +3,10 @@ package com.teamsix.firstteamproject.community.service;
 import com.teamsix.firstteamproject.community.dto.PostDTO;
 import com.teamsix.firstteamproject.community.dto.SimplePostDTO;
 import com.teamsix.firstteamproject.community.entity.Comment;
+import com.teamsix.firstteamproject.community.entity.Likes;
 import com.teamsix.firstteamproject.community.entity.Post;
 import com.teamsix.firstteamproject.community.entity.PostImage;
+import com.teamsix.firstteamproject.community.repository.LikesRepository;
 import com.teamsix.firstteamproject.community.repository.PostRepository;
 import com.teamsix.firstteamproject.travelplan.service.AwsS3Service;
 import com.teamsix.firstteamproject.user.entity.User;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -26,7 +29,9 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final LikesRepository likesRepository;
     private final AwsS3Service awsS3Service;
+
 
     public PostDTO savePost(PostDTO postDTO, List<MultipartFile> images) {
         if(images != null){
@@ -118,9 +123,20 @@ public class PostService {
     }
 
     // (사용자당 하나의 좋아요 제한 로직 코드 작성하기 및 테이블 수정)
-    public PostDTO addingLikesToPost(Long postId){
+    public PostDTO addingLikesToPost(Long postId, Long userId){
+        log.info(likesRepository.findByPostIdAndUserId(userId, postId).toString());
+        if(likesRepository.findByPostIdAndUserId(userId, postId).isPresent()){
+            throw new RuntimeException("이미 좋아요를 누른 게시글입니다.");
+        }
+
+        Likes likes = Likes.builder()
+                .postId(postId)
+                .userId(userId)
+                .build();
+
+        likesRepository.save(likes);
         Post post = postRepository.findById(postId).get();
-        post.addLikes();
+
         return post.toDTO();
     }
 

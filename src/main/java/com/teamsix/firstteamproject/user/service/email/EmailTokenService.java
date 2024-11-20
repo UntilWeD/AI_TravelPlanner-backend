@@ -49,7 +49,7 @@ public class EmailTokenService{
         mailMessage.setSubject("회원가입 이메일 인증");
         mailMessage.setText("" +
                 "아래에 링크를 클릭해주셔서 이메일인증을 마무리 해주세요. \n\n\n" +
-                BACKEND_URL+ "user/email/confirm-email?token=" +
+                BACKEND_URL+ "/user/email/verify?token=" +
                 emailToken.getId() +
                 "\n\n\n\n\n 이용해주셔서 감사합니다.");
         emailSenderService.sendEmail(mailMessage);

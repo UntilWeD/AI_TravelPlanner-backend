@@ -35,9 +35,9 @@ public class PostDTO {
     @NotNull
     private String content;
 
-    private int likes;
-
     private int views;
+
+    private int likes;
 
     @NotNull
     private Date createdAt;
@@ -59,7 +59,6 @@ public class PostDTO {
                 .username(getUsername())
                 .title(getTitle())
                 .content(getContent())
-                .likes(getLikes())
                 .views(getViews())
                 .createdAt(getCreatedAt())
                 .updatedAt(getUpdatedAt())
