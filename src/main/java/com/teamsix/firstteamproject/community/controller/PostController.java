@@ -6,6 +6,8 @@ import com.teamsix.firstteamproject.community.service.PostService;
 import com.teamsix.firstteamproject.global.dto.ResultDTO;
 import com.teamsix.firstteamproject.global.util.ApiUtils;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,13 +35,13 @@ public class PostController {
     }
 
 
-    //post 조회(리스트)
-    @Operation(summary = "커뮤니티 글 리스트 조회", description = "post들에 대한 리스트를 반환한다.")
+    //post 페이지 조회(리스트)
+    @Operation(summary = "커뮤니티 글 페이지 조회", description = "post들에 대한 페이지를 반환한다.")
     @GetMapping("/lists")
-    public ResultDTO<List<SimplePostDTO>> getSimplePostDTOSRequest(
-        @RequestParam Long category
+    public ResultDTO<Page<SimplePostDTO>> getSimplePostDTOSRequest(
+            Pageable pageable, @RequestParam Long category
     ){
-        return ApiUtils.ok(postService.getSimplePostDTOS(category));
+        return ApiUtils.ok(postService.getSimplePostDTOS(pageable, category));
     }
 
     //post 세부 조회

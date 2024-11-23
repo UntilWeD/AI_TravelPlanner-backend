@@ -13,6 +13,10 @@ import com.teamsix.firstteamproject.user.entity.User;
 import com.teamsix.firstteamproject.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,9 +57,18 @@ public class PostService {
         return  postRepository.save(post).toDTO();
     }
 
-    public List<SimplePostDTO> getSimplePostDTOS(Long categoryId){
-        return  postRepository.findAllByPostCategoryIdOrderByCreatedAtDesc(categoryId)
-                .stream().map(Post::toSimpleDTO).collect(Collectors.toList());
+    // 페이징을 사용하여 page화하여 반환한다.
+    public Page<SimplePostDTO> getSimplePostDTOS(Pageable pageable, Long categoryId){
+        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() -1);
+        int size = pageable.getPageSize();
+        pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        return postRepository.findAllByPostCategoryIdOrderByCreatedAtDesc(categoryId, pageable)
+                .map(Post::toSimpleDTO);
+
+//        이전에 리스트로만 출력하던 코드
+//        return  postRepository.findAllByPostCategoryIdOrderByCreatedAtDesc(categoryId)
+//                .stream().map(Post::toSimpleDTO).collect(Collectors.toList());
     }
 
     public PostDTO getPostDTO(Long postId){

@@ -42,4 +42,4 @@ out/
 
 ### Private ###
 UserRepositoryJDBCImpl.java
-UserRowMapper.java
+UserRowMapper.java!/.env
